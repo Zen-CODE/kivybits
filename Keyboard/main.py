@@ -4,69 +4,95 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.uix.vkeyboard import VKeyboard
 from kivy.logger import Logger
-import kivy
+from kivy import kivy_data_dir
 import os
 import shutil
+from kivy.properties import ObjectProperty
+from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
+from kivy.factory import Factory
 
+
+# In your confixg.ini, in the "kivy" section, add "keyboard_mode = dock"
 Builder.load_string(
 '''
 <KeyboardTest>:
+    displayLabel: displayLabel
+    kbContainer: kbContainer
+
     orientation: 'vertical'
     Label:
         size_hint_y: 0.25
         text: "I'm glad to see you Dave."
     BoxLayout:
+        id: kbContainer
         size_hint_y: 0.25
         orientation: "horizontal"
-        TextInput:
-            id: numericInput
-            on_focus: root.on_focus_numeric(*args)
-        TextInput:
-            id: normalInputs
-    Widget:
-        size_hint_y: 0.5
-''')
+        padding: 10
 
-# In your confixg.ini, in the "kivy" section, add "keyboard_mode = dock"
+    Label:
+        id: displayLabel
+        size_hint_y: 0.5
+        markup: True
+        text: "[b]System info[/b]"
+        halign: "center"
+''')
 
 
 class KeyboardTest(BoxLayout):
+    displayLabel = ObjectProperty()
+    kbContainer = ObjectProperty()
+
     def __init__(self, **kwargs):
         super(KeyboardTest, self).__init__(**kwargs)
-        self._check_keyboard_exists()
+        self._add_numeric()
+        self._add_keyboards()
 
-    def _check_keyboard_exists(self):
+    def _add_info(self, text):
+        '''Add the supplied text to the display label'''
+        self.displayLabel.text += "\n" + text
+
+    def _add_numeric(self):
         '''Ensure that a copy of the keyboard file exists in the correct place
         '''
-        keyboard_file = kivy.kivy_data_dir + "/keyboards/numeric.json"
+        keyboard_file = kivy_data_dir + "/keyboards/numeric.json"
+        self._add_info("keyboard directory = " + kivy_data_dir + "/keyboards")
         if not os.path.exists(keyboard_file):
-            # You will need to place your json file in the same folder
             shutil.copy("./numeric.json", keyboard_file)
-            Logger.info("main.py: copying ./numeric.json to " + keyboard_file)
+            self._add_info("Copied ./numeric.json to this folder.")
+        else:
+            self._add_info("numeric.json already copied here.")
+
+    def _add_keyboards(self):
+        '''Add textboxes and labels for each available keyboard layout'''
+        vk = VKeyboard()
+        for key in vk.available_layouts.keys():
+            print "Layout ", key, "=", vk.available_layouts[key]
+            bl = BoxLayout(orientation="horizontal")
+            bl.add_widget(Label(text=key))
+            bl.add_widget(TextInput(
+                on_focus=lambda x: Logger("main.py :" + str(x))))
+            self.kbContainer.add_widget(bl)
 
     def on_focus_numeric(self, instance, value, *largs):
         # Window.release_all_keyboards()
-        # Window.keyboards = {}
-        # for kb in Window.keyboards.keys():
-         #   Logger.info("main.py: keyboard installed = " + kb)
+        vk = VKeyboard()
+        for key in vk.available_layouts.keys():
+            print "Layout ", key, "=", vk.available_layouts[key]
 
         if value:
-            print 'on_focus_numeric'
+            Logger.info('main.py: on_focus_numeric')
             numericVK = VKeyboard(layout="numeric")
             # numericVK = VKeyboard(layout="azerty")
             # numericVK = VKeyboard()
             # numericVK.layout = "azerty"
-            # Window.set_vkeyboard_class(numericVK)
+            Window.set_vkeyboard_class(numericVK)
 
         else:
-            print 'not on_focus_numeric'
+            Logger.info('main.py: lost on_focus_numeric')
             Window.set_vkeyboard_class(VKeyboard)
 
-        # return instance.on_focus(instance, value, *largs)
-        # return super(TextInput, instance).on_focus(value, *largs)
         return True
-        # return instance.on_focus.dispatch()
 
 
 class test(App):
