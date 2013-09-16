@@ -53,15 +53,14 @@ class ColorPopup(App):
                     self.popup_dismissed(popup, colorPicker.hex_color))
             popup.content = colorPicker
         else:
-            # Not we return True from the "on_dimiss" function to prevent
-            # the default dismiss behaviour and make our own in the content.
-            # popup.bind(on_dismiss=lambda popup: True)
+            # We prevent the default dismiss behaviour and roll our own in
+            # the content.
             popup.auto_dismiss = False
             popup.content = self.get_ok_cancel_content(popup)
         popup.open()
 
     def popup_dismissed(self, popup, color):
-        ''' The popup has been dimissed'''
+        ''' The popup has been dismissed'''
         self.label.text = "Colour in hex = " + color
 
     def get_ok_cancel_content(self, popup):
