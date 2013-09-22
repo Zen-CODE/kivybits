@@ -1,0 +1,46 @@
+
+
+<BorneUI>:
+	orientation:"vertical"
+	photo_grid:photo_grid
+	loader_pause_state:loader_pause_state
+
+	BoxLayout:
+		size_hint:1,None
+		
+		Button:
+			text: "Clear Images"
+			on_press: app.clear_images()
+		Button:
+			text: "Shuffle \n display images"	
+			on_press: app.dsp_image_page()
+		Button:
+			text: "Load 3 and stop"
+			on_press: app.load_one_stop()
+		Button:
+			text: "Pause Loading"
+			on_press: app.loader_resume_pause()
+			id: loader_pause_state
+		Button:
+			text: "StopLoader"
+			on_press: app.loader_stop()
+		Button:
+			text: "Quit"
+			on_press: app.stop()
+
+	GridLayout:
+		cols:3
+		rows:3
+		spacing: "10sp"
+		padding: "30sp"
+		id: photo_grid
+
+		Image:
+		Image:
+		Image:
+		Image:
+		Image:
+		Image:
+		Image:
+		Image:
+		Image:

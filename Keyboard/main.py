@@ -64,18 +64,22 @@ class KeyboardTest(BoxLayout):
             self._add_info("numeric.json already copied here.")
 
     def _add_keyboards(self):
-        '''Add textboxes and labels for each available keyboard layout'''
+        '''Add textboxes and labels for each available keyboard layout
+        '''
         vk = VKeyboard()
         for key in vk.available_layouts.keys():
-            print "Layout ", key, "=", vk.available_layouts[key]
-            bl = BoxLayout(orientation="horizontal")
+            # Add a boxlayout and label for each layout
+            bl = BoxLayout(orientation="vertical")
+            ti = TextInput()
+            ti.bind(on_focus=self.on_text_focus)
+
             bl.add_widget(Label(text=key))
-            bl.add_widget(TextInput(
-                on_focus=lambda x: Logger("main.py :" + str(x))))
+            bl.add_widget(ti)
             self.kbContainer.add_widget(bl)
 
-    def on_focus_numeric(self, instance, value, *largs):
+    def on_text_focus(self, instance, value, *largs):
         # Window.release_all_keyboards()
+        print "hello"
         vk = VKeyboard()
         for key in vk.available_layouts.keys():
             print "Layout ", key, "=", vk.available_layouts[key]
