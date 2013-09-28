@@ -146,6 +146,16 @@ Python Properties using Kivy
     It looks like a "static" class method, but Kivy magically bind values to each instance.
     Want to watch changes?
     *image
+   
+Python Properties with restrictions 
+    Using normal properties, restricting properties to certain values involves something like this:
+    *image
+    Using Kivy properties:
+    *image
+    And yes, you can create our own.
+    The really awesome thing is they do much more than normal properties...    \
+    
+Kivy Properties are Event Dispatchers
     
 Touch made easy
     Kivy's rich pedigree of experience shows.
