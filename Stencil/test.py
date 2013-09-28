@@ -13,7 +13,7 @@ Builder.load_string("""
             pos: 0, 0
             size: 200, 200
         StencilUse
-    # Uncommenting the #canvase.after below breaks things because
+    # Uncommenting the #canvas.after below breaks things because
     # it's in a different set of drawing instructions
     #canvas.after:
         Color:

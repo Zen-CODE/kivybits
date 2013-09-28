@@ -1,0 +1,388 @@
+Our Journey to Kivy
+===================
+
+Slides
+
+Background
+    Kivy evolved from PyMT, a powerful mutli-touch platform.
+    In 2010, the core devs realized things could be done better, and birthed Kivy.
+    They broke compatibility, and created a clean new design based on OpenGL ES.
+    
+What is Kivy 
+    Pic
+
+A few kivy apps
+    pics
+
+Why choose Kivy? The Official
+    Fresh
+        Different, pretty. Transitions, animations, fluid, responsive, interactive.
+        Note:
+            If you want stock standard, plain jane, rull-of-the-mill apps that look like everything else on the device/desktop, Kivy is not for you. If you want distinctive, exciting, responsive apps that look and behave exactly the same way everywhere, welcome to Kivy.
+    Fast
+        Cython + GPU
+    Flexible
+        OOP and event driven
+        Uses proven pattens
+            Observer
+            Single responsivbilitySeparation of converns
+            Separation of login and UI
+
+Why choose Kivy? The real reasons: it's awesome!
+    Kivy is much more that a complete widgets toolkit. it provides:
+        - a complete Python standard library (pyython-for-android, python-for-ios)
+        - a rich set of libraries (Factory, Clock, Atlas, Logger etc)
+        - OS and device abstraction (Metrics, InputProvers, Core providers)
+        - a powerful property/event dispatching mechanism
+        - a set of modules for debugging, inspecting
+        - extensibility though kivy exentions and the Kivy garden
+
+Why choose Kivy? More reasons
+    Also provides thoughful, easy-to-use functionality to allow costly IO to be done in background threads (using callbacks) to esnure the UI stays responsive. 
+        - UrlRequest(url, on_success=None, on_redirect=None, ...)
+        - AsyncImage().source = url
+        - Animation
+            anim = Animation(x=50, y=200, duration=2)
+            anim.bind(on_complete=callback)
+            anim.start(widget)        
+    
+    Firstly, lets go into the details of what makes kivy different.
+    To do that, it's best to first understand how the core design choices have shaped Kivy's architecture.
+
+Difference 1: Optimizing for the GPU
+    OpenGL is NOT a canvas!
+    Your Python runs on the CPU, but OpenGL runs on the GPU.
+    It's a collections of instruction groups.
+	When your widget properties change, the instruction sets do not.
+    Updating these instructions sets whenever your Python obect changes? Horribly inefficient.
+    Solution?
+    Observe!
+    Solving the gotcha's
+
+Difference 1: The gotcha
+    Why does my widget not move?
+    Because you are changing it's Python properties, not it's OpenGL drawing instructions
+    First solution: bind using python
+    Second solution: define your UI using the KV language
+    Solutions are easy, the trick is knowing why
+
+Difference 1: Solutions
+	You can bind and listen for these changes manually in Python.
+        widget.bind(on_pos=callback, on_size=callback)
+
+	But that quickly becomes clumsy. Kivy offers the KV lang as a better solution.
+    The KVLang
+        Not another language?
+        It's a good solution and a best practise for many reasons
+            performs bindings automagically for you
+            separates UI from code/logic
+            gives an clear picture of your widget heirarchy
+            once learnt, much faster to compose a UI
+        Examples later, but first, another reason Kivy is special.
+    
+Difference 2: Built for multi-touch
+	Kivy is born from PyMT
+		*pic
+	* Explaination - In 2010, the devs realized they could do things better but would need to breaks backwards compatibility. So they created Kivy: heavily optimized and based on OpenGl.
+
+Difference 2: Built for multi-touch
+    Don't think windows!
+    Idea of widget borders breaks down in a touch enviroment
+    Example
+        You want a widget to receive a swipe in event.
+        By definition, that event begins outside of the widget.
+    In a touch envronment, widget need new degrees of freedom to monitor input.
+    Solution? Observe!
+	Kivy widgets are not limited by their size and position in either output or input. They are just properties.
+
+Difference 2:  The gotcha
+    But widget A is inside widget B! Why on earth is it in the bottom corner?
+	Firstly, bottom left is (0,0), not top left.
+    Widgets heirarchy is NOT a visaul container heirarchy
+    Containers are used for layout, but widgets are not artificially constrained to areas
+	This allows for total control of layout and gives you full control of the entire screen.
+    Facilitates seamless layering
+   
+Difference 2: another gotcha
+    What? Wherever I click, all the widgets "on_touch_down" events fire?
+    In a touch environment, using "hit detection" for directing input does not work.
+    Example - Swipe in. You touch begins outside of the widget
+    So how do widgets get touch events? Observe!
+ 
+ Difference 2: the solution
+	Apply the 'Observer Pattern'
+    By binding to specific events, any widget can react to almost any event with minimal overhead.
+    Does not prescribe how events are handled.
+    Allows total flexibility and puts you in control.
+	Facilitates decoupling.
+	Facilitates separation of concerns.
+	Avoids state variables and object references.
+	 
+Before getting our hands dirty
+    All of the challenges Kivy faces are solved in an elegant, consistent way: observing.
+    The solutions actually improve the framework and increase it's flexibility.
+    And it only gets more awesome as you get deeper.
+	But enough bluster.
+    Let's get dirty! Lets dive into some details! ;-)
+    
+Touch made easy
+    Kivy's rich pedigree of experience shows.
+    Touch = mouse. Touch is just richer.
+    The touch object is a rich representation of the entire touch event (on_touch_down, on_touch_move, on_touch_up).
+    It is passed into all of these events.
+	The 'on_touch-down' event is dispatched to every widget that requests to listen. If the widget wishes to monitor the event, it can "grab" it here and will then receive all move an "touch_up" events".
+
+The Touch object
+    The touch object is a specialized instance of the MotionEvent.
+	These are ojects generated by InputProviders. Nicely abstracted, easy to use.
+    Here are some Touch object propeties:
+    * list of props
+    As you can see, the Touch object maintain detailed information about the entire interaction, so we dont' need to.
+    Special mentions: notice the Z axis? Kivy also supports 3D gesture input and support the Leap Motion.
+    
+Grabbing a touch
+    You can grab a touch if you absolutly want to receive
+on_touch_move() and on_touch_up(), even if the touch is not dispatched by your parent
+    To explain, touch events normally bubble through the widget hierarchy until one of those methods returns True, indicating the event has been handled.
+
+Grabbing a touch: an example
+    * code example
+
+From touch to gestures
+    Touch is great, but how do we use it for detecting gestures.
+    Converting input points to gestures is, err, challenging. i.e. frikken difficult.
+    But don't worry, Kivy does it all for you.
+
+Gesture recognition
+    * example
+    That's how gestures work at core, but wait, it gets easier.
+
+Gestures for dummies
+    Recording and lookup of gestures
+    Could it be made any easier?
+
+The Widgets
+    Prepare to launch the kivy showcase
+    Explain that we use the kivy portable package.
+    
+Notable widget: ScreenManager
+    By default, apps are oen "Screen".
+    The screen manager allows to to create multiple screen and switch between them
+    You get a selection of sexy transitions for free:
+        SlideTransition - slide screen in/out, from any direction
+        SwapTransition - implementation of the iOS swap transition
+        FadeTransition - shader to fade in/out the screens
+        WipeTransition - shader to wipe from right to left the screens    
+
+Notable widgets: CodeInput
+    Provides a box of editable highlited text.
+    It supports all the features supported by the textinput.
+    Proivides Code highliting for languages supported by pygments along with KivyLexer for KV Language highliting.
+
+Notable widets: Scatter
+    Scatter is used to build interactive widgets that can be translated, rotated and scaled with two or
+more fingers on a multitouch system.
+    Scatter has its own matrix transformation: the modelview matrix is changed before the children are drawn
+and the previous matrix is restored when the drawing is finished. That makes possible the rotation /
+scale / translation of the entire children tree, without changing them.
+
+        from kivy.uix.scatter import Scatter
+        # Allow translation on the x-axis only as all properties are enabled by default
+        scatter = Scatter(do_rotation=False, do_scale=False, do_translation_y=False)
+        image = Image(source=’sun.jpg’)
+        scatter.add_widget(image)    
+
+Notable widgts: PopUp
+    Creates modal popups
+    Uses lighbox effect to grey our background window
+    Very flexible: you pass it a 'content' property which can contain any widgets.
+
+        popup = Popup(title=’Test popup’,
+            content=Label(text=’Hello world’),
+            size_hint=(None, None),
+            size=(400, 400))
+        popup.open()
+
+Layouts
+Layouts - the proper way to handle UI.
+Provide very fluid and elegant mechanisms to scale UI for different screen resolutions and densities.
+Each works differently, but generally use 'pos_hint' and 'size_hint' to request placement.
+
+    
+Cusomizing widgets
+    Many options.
+    - create you own widget inheriting the EventDispatcher
+    - subclass and alter (widget.background_down, widget.background_up etc)
+    - replace the kivy atlas with your own atlas image
+    
+The kivy garden
+    Not every widget you want can or should be included with Kivy.
+    The Garden provides a repository of additional widgets that anyone can contribute to.
+    Maintained by the community, not the Kivy core team.
+    Trivially to use.
+    * example
+
+Widgets in the garden
+    * examples, including the designer + CEFPython
+
+Kivy modules
+    Provides some amazing tools for development and debugging
+    Easy to use and activate
+    Can also roll your own (simple module with start(win, ctx) and stop(win, ctx) methods)
+    Include
+        touchring: Circles each touch.
+        monitor: Show small FPS and activity graph.
+        keybinding: Bind keys to actions, such as a screenshot.
+        recorder: Record and playback events.
+        screen: Emulate different screens.
+        inspector: Examines your widget heirarchy
+        webdebugger: Realtime examination of your app internals via a web browser.
+
+Inspector module
+    Allows for interactively travesing your entire widget heirarchy.
+    Complete examination of each widgets properties
+    * screenshot
+    
+Webdebugger module
+    Realtime inspection of your apps internals.
+    Provided by an embedded micro-webframework called flask + embedded jQuery.    
+    * screenshot
+
+Onto the libraries
+    Rich set of libraries providing extra functionality
+        Animations + transitions
+        Atlas
+        Clock
+        Factory
+        Logger
+        Metrics
+        Vector
+        Adaptors
+        Core abstraction including
+            Audio
+            Camera
+            Clipboard
+            OpenGL
+            Image
+            Spelling
+            Text
+            Video
+            Window
+        Effects (ScrollEffect, DampedScrollEffect, OpacityScrollEffect + garden + roll you own)
+        Gesture recording, playback and recognition
+        Shader and Stencil instructions
+        Asynchronous data loader
+        Utils
+        UrlRequest
+        ReStructuredText
+        VKeyBoard
+    
+    Let's quickly look as some interesting libraries.
+
+Metrics
+    Provides a seamless, powerful way to work with different screens and resolutions
+    * shot from docs
+
+Font size done right
+    Font size can be challenging on many frameworks.
+    Points? So, how does that relate to my widget height? Oh, I must calculate that using x and y....
+    In Kivy, font_size cand be set using any metric and sets the height of the font. It's as simple as that.
+
+Screen metrics done right
+    Screen feature 3 core properties that determine how things appear.
+    All of these are trivial to access via the metrics module.
+    You can easily log them.
+    
+        from kivy.metrics import Metrics
+        from kivy.logger import Logger
+        
+        Logger.info("app.py: Screen density = " + str(Metrics.density()))
+        Logger.info("app.py: Screen dpi = " + str(Metrics.dpi()))
+        Logger.info("app.py: Screen fontscale = " + str(Metrics.fontscale()))
+        
+    Then use them to emulate that device. That makes it effotless to reproduce and correct layout issues across different device resolutions.
+
+Factory
+    Provides xpected factory function of easily registering and providing functions
+        
+        from kivy.factory import Factory
+        Factory.register(’Widget’, module=’kivy.uix.widget’)
+        Factory.register(’Vector’, module=’kivy.vector’)    
+
+        from kivy.factory import Factory
+        widget = Factory.Widget(pos=(456,456))
+        vector = Factory.Vector(9, 2)        
+
+    Any class names registered via the Factory are then creatable and recognized in your KV files/strings.
+
+Utils
+    Provides a few handy functions.
+
+        platform() # Returns one of: win, linux, android, macosx, ios, unknown.
+        intersection(set1, set2) # return intersection between 2 list
+        difference(set1, set2)        
+        QueryDict # A dict() that can be queried with dot.    
+        escape_markup(text) # Escape markup characters found in the text. Intended to be used when markup text is activated on the Label:
+
+Cross-platform options
+    Other platform options for Python?
+        GTK - Killed by the flop of GTK3 + Gnome 3. Breaking compatibility, ignoring community feedback.
+        Qt - Limited by licensing concerns, unstable ownership, failure of QML to make significant impact on mobile.
+        wxWigets - Version compatibility issues, slow developemnt, no Python 3.
+        PyJamas - Complicated, multiple layers of dependencies, slow, recent ownership controvery.
+     * pic
+     Compared to Kivy
+     * pic
+     Even Guido loves Kivy: 2012 saw the Python foundation donate $5000 dollars to Kivy to help the Py2-to-3 efforts. 
+     
+So, why not Kivy?
+    With all this yummmy goodness, the question should not be "Why Kivy?" but "Why not Kivy?".
+    Only 3 possible reasons that come to mind.
+        1. I want it to run in  a browser.
+            Nope, doomed to Javascript I'm afraid. (Duh!)
+
+        2. I want to leverage iOS/Windows/SharePoint/Android specific features.
+            To an extext, you can often do these things in Kivy, but does not make sense becuase you then depend on the OS anyway. Plus it can be tricky. Why then, use a cross-platform solution? Just use native.
+            Notes: 
+                Python-for-android inlcudes PyJenius for accessing Java classes. Working examples of GPS access and other android specific features exists. Use of home and back buttons, resume and pause are already supported.
+                Accessing iOS functions from Kivy-iOS? Sorry, no idea ;-)
+
+        3.  We depend heavily of high level document display and printing.
+            Kivy's support for high level document display is weak. Rst in the only supported one by deafult.
+            No HTML renderer, but Kivy Berklium and the garden's CEFPython are trying.                
+            No SVG. There might be ways of packaging and SVG renderer such as LibRSVG, but that is desktop only.
+            No PDF. Yet. Tito has got it a version working Linux + Windows, and someone else on MacOSX and there is currently an active ticket for it.
+            Note:
+                It is trivially easy to request the OS to open these documents with the default viewer. You only have an issue if you need to display them embedded inside of the application. 
+
+In summary
+    Kivy a truly portable, fast, powerful, mature full stack Python framework.
+    It allow you to produce fluid, beautiful, interactive, multi-touch capable apps that run almost everywhere.
+    Provides libraries for complete OS abstraction.
+    Has a rich history of multi-touch experience and provides dead-simple ways of using gestures.
+    Your apps look and behave the same everywhere - no need to cater for OS specific norms.
+    It's released under MIT license, so it's commerce friendly.
+    It's hosted on Github and welcomes contributions from the community.
+    It has a high quality codebase, stricly maintained by black-belt ninja Pythonista's.
+    It has a growing, vibrant and helful community with very active forums.
+
+As a developer
+    I love Kivy. Staight up. But that has been hard earned.
+    Once learnt, it's extremely producitve. So quick and easy to produce exciting applications.
+    As a well-designed, flexible and stable framework, it's pleasure to work with.
+    Personally, it's an honour to be able to learn from the devs and code.
+    The Open source license makes me fuzzy inside: to give Kivy to the entire world for free is an act of the highest nobility.
+
+In closing    
+    Kivy is an awesome, future-facing framework that deserves more attention.
+    It's epitomises the promise of Python everywhere, and adds Cython + GPU optimization for speed and fluidity.
+    But you need to see it to understand how exciting it is. 
+        http://kivy.org
+        http://kivy.org/#gallery
+
+    Huge thanks to all the Kivy devs, especially:
+        tito 
+        qua-non
+        tshirtman
+    
+    Kivy everywhere!    
