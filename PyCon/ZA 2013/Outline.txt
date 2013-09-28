@@ -153,14 +153,20 @@ Python Properties with restrictions
     Using Kivy properties:
     *image
     And yes, you can create our own.
-    The really awesome thing is they do much more than normal properties...    \
+    The really awesome thing is they do much more than normal properties...
     
 Kivy Properties are Event Dispatchers
-    
+    Kivy properties are also subscribable event dispatchers
+    * image
+    So Kivy properties provide not only a more elegant and concise property syntax, but add the ability to listen for   events.
+    Using  normal properties to create an event-driven architecture? Yes please!
+    They help in many ways: optimisation, separation of concerns, assigning single responsibilities and flexilbilty.
+    In short, they totally rock!
+
 Touch made easy
     Kivy's rich pedigree of experience shows.
     Touch = mouse. Touch is just richer.
-    The touch object is a rich representation of the entire touch event (on_touch_down, on_touch_move, on_touch_up).
+    The touch object is a complete representation of the entire touch event (on_touch_down, on_touch_move, on_touch_up).
     It is passed into all of these events.
 	The 'on_touch-down' event is dispatched to every widget that requests to listen. If the widget wishes to monitor the event, it can "grab" it here and will then receive all move an "touch_up" events".
 
