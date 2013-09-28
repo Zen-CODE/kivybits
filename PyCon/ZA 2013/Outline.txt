@@ -132,7 +132,20 @@ Python Properties using Decorators
     Err...@text.setter? Pretty cryptic.
     And two "text" methods?
     Isn't there a better way?    
-    
+
+Python Properties using property()
+    *image
+    Gee, 4 things.
+    Okay, still a hidden variable.
+    Gee, a "getter",  a "setter" and then something to combine them into a property?
+    Isn't there a better way?
+
+Python Properties using Kivy
+    *image
+    Yes, welcome to the Kivy awesome!
+    It looks like a "static" class method, but Kivy magically bind values to each instance.
+    Want to watch changes?
+    *image
     
 Touch made easy
     Kivy's rich pedigree of experience shows.
