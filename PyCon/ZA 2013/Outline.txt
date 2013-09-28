@@ -124,6 +124,15 @@ Before getting our hands dirty
     And it only gets more awesome as you get deeper.
 	But enough bluster.
     Let's get dirty! Lets dive into some details! ;-)
+
+Python Properties using Decorators
+    Properties in Python using decorators,
+    * image
+    Okay, so a hidden variable.
+    Err...@text.setter? Pretty cryptic.
+    And two "text" methods?
+    Isn't there a better way?    
+    
     
 Touch made easy
     Kivy's rich pedigree of experience shows.
