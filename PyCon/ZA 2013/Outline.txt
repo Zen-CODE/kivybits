@@ -227,7 +227,7 @@ scale / translation of the entire children tree, without changing them.
         from kivy.uix.scatter import Scatter
         # Allow translation on the x-axis only as all properties are enabled by default
         scatter = Scatter(do_rotation=False, do_scale=False, do_translation_y=False)
-        image = Image(source=’sun.jpg’)
+        image = Image(source='sun.jpg')
         scatter.add_widget(image)    
 
 Notable widgts: PopUp
@@ -235,8 +235,8 @@ Notable widgts: PopUp
     Uses lighbox effect to grey our background window
     Very flexible: you pass it a 'content' property which can contain any widgets.
 
-        popup = Popup(title=’Test popup’,
-            content=Label(text=’Hello world’),
+        popup = Popup(title='Test popup',
+            content=Label(text='Hello world'),
             size_hint=(None, None),
             size=(400, 400))
         popup.open()
@@ -344,8 +344,8 @@ Factory
     Provides xpected factory function of easily registering and providing functions
         
         from kivy.factory import Factory
-        Factory.register(’Widget’, module=’kivy.uix.widget’)
-        Factory.register(’Vector’, module=’kivy.vector’)    
+        Factory.register('Widget', module='kivy.uix.widget')
+        Factory.register('Vector', module='kivy.vector')
 
         from kivy.factory import Factory
         widget = Factory.Widget(pos=(456,456))
@@ -357,18 +357,20 @@ Utils
     Provides a few handy functions.
 
         platform() # Returns one of: win, linux, android, macosx, ios, unknown.
-        intersection(set1, set2) # return intersection between 2 list
+        intersection(set1, set2) # return intersection of 2 lists
         difference(set1, set2)        
         QueryDict # A dict() that can be queried with dot.    
         escape_markup(text) # Escape markup characters found in the text. Intended to be used when markup text is activated on the Label:
 
 Cross-platform options
-    Other platform options for Python?
+    Assuming Kivy was just a widget toolkit (wrong!), what Python options do we have?
         GTK - Killed by the flop of GTK3 + Gnome 3. Breaking compatibility, ignoring community feedback.
         Qt - Limited by licensing concerns, unstable ownership, failure of QML to make significant impact on mobile.
         wxWigets - Version compatibility issues, slow developemnt, no Python 3.
         PyJamas - Complicated, multiple layers of dependencies, slow, recent ownership controvery.
-     * pic
+    None of them come close to offering the ease-of-development, ease-of-deployment and flexibility Kivy does.
+
+Cross-patform trends
      Compared to Kivy
      * pic
      Even Guido loves Kivy: 2012 saw the Python foundation donate $5000 dollars to Kivy to help the Py2-to-3 efforts. 
