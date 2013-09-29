@@ -375,16 +375,19 @@ Cross-patform trends
      * pic
      Even Guido loves Kivy: 2012 saw the Python foundation donate $5000 dollars to Kivy to help the Py2-to-3 efforts. 
      
-So, why not Kivy?
+So, why not use Kivy?
     With all this yummmy goodness, the question should not be "Why Kivy?" but "Why not Kivy?".
     Only 3 possible reasons that come to mind.
         1. I want it to run in  a browser.
             Nope, doomed to Javascript I'm afraid. (Duh!)
 
         2. I want to leverage iOS/Windows/SharePoint/Android specific features.
-            To an extext, you can often do these things in Kivy, but does not make sense becuase you then depend on the OS anyway. Plus it can be tricky. Why then, use a cross-platform solution? Just use native.
+            You often can do these things in Kivy, but does not make sense because you then depend on the OS anyway.
+            Involves extra effort, so why use a cross-platform solution? Just use native.
             Notes: 
-                Python-for-android inlcudes PyJenius for accessing Java classes. Working examples of GPS access and other android specific features exists. Use of home and back buttons, resume and pause are already supported.
+                Python-for-android inlcudes PyJenius for accessing Java classes.
+                Working examples of android GPS access and other android specific features exists.
+                Use of home and back buttons, resume and pause are already supported.
                 Accessing iOS functions from Kivy-iOS? Sorry, no idea ;-)
 
         3.  We depend heavily of high level document display and printing.
@@ -395,9 +398,10 @@ So, why not Kivy?
             Note:
                 It is trivially easy to request the OS to open these documents with the default viewer. You only have an issue if you need to display them embedded inside of the application. 
 
-In summary
+Otherwise, use Kivy!
+    
     Kivy a truly portable, fast, powerful, mature full stack Python framework.
-    It allow you to produce fluid, beautiful, interactive, multi-touch capable apps that run almost everywhere.
+    Produces fluid, beautiful, interactive, multi-touch capable apps that run almost everywhere.
     Provides libraries for complete OS abstraction.
     Has a rich history of multi-touch experience and provides dead-simple ways of using gestures.
     Your apps look and behave the same everywhere - no need to cater for OS specific norms.
@@ -407,11 +411,12 @@ In summary
     It has a growing, vibrant and helful community with very active forums.
 
 As a developer
-    I love Kivy. Staight up. But that has been hard earned.
+    I love Kivy. Staight up. But that love has been hard earned.
     Once learnt, it's extremely producitve. So quick and easy to produce exciting applications.
-    As a well-designed, flexible and stable framework, it's pleasure to work with.
+    As a well-designed, flexible and stable framework: a pleasure to work with.
     Personally, it's an honour to be able to learn from the devs and code.
-    The Open source license makes me fuzzy inside: to give Kivy to the entire world for free is an act of the highest nobility.
+    It's really motivating for the team: free, on-my-device and sexy.
+    The Open source license makes me fuzzy inside: to give Kivy to the entire world for free is an act of the highest nobility. Respek!
 
 In closing    
     Kivy is an awesome, future-facing framework that deserves more attention.
