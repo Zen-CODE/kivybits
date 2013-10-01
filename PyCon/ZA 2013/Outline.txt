@@ -1,12 +1,14 @@
 Our Journey to Kivy
 ===================
 
-Slides
+Our Journey to Kivy
+    Nah, boring. Let's focus on something way cooler: Kivy!
 
-Background
-    Kivy evolved from PyMT, a powerful mutli-touch platform.
-    In 2010, the core devs realized things could be done better, and birthed Kivy.
-    They broke compatibility, and created a clean new design based on OpenGL ES.
+Kivy an aerial view.
+    Let's do a quick fly over of the framework.
+    Yes, I will throw too much information at you.
+    That is intentional: we want an idea of the scope on Kivy, not it's details
+    Because Kivy is special. Very special.....
     
 What is Kivy 
     Pic
@@ -114,9 +116,7 @@ Difference 2: another gotcha
     By binding to specific events, any widget can react to almost any event with minimal overhead.
     Does not prescribe how events are handled.
     Allows total flexibility and puts you in control.
-	Facilitates decoupling.
-	Facilitates separation of concerns.
-	Avoids state variables and object references.
+	The help write better code in many ways.
 	 
 Before getting our hands dirty
     All of the challenges Kivy faces are solved in an elegant, consistent way: observing.
@@ -152,7 +152,7 @@ Python Properties with restrictions
     *image
     Using Kivy properties:
     *image
-    And yes, you can create our own.
+    There are many more: StringProperty, ObjectProperty etc. And yes, you can create our own.
     The really awesome thing is they do much more than normal properties...
     
 Kivy Properties are Event Dispatchers
@@ -257,11 +257,15 @@ The kivy garden
     Not every widget you want can or should be included with Kivy.
     The Garden provides a repository of additional widgets that anyone can contribute to.
     Maintained by the community, not the Kivy core team.
-    Trivially to use.
+    Trivially easy to use.
     * example
 
-Widgets in the garden
+Widgets in the Garden
     * examples, including the designer + CEFPython
+
+Something else Exciting
+    The  Kivy-Designer – A WYSIWYG UI designer.
+    Currently being worked on by Abhinav Abhijangda as part of his Google Summer-Of-Code.
 
 Kivy modules
     Provides some amazing tools for development and debugging
@@ -322,9 +326,10 @@ Metrics
     * shot from docs
 
 Font size done right
-    Font size can be challenging on many frameworks.
-    Points? So, how does that relate to my widget height? Oh, I must calculate that using x and y....
-    In Kivy, font_size cand be set using any metric and sets the height of the font. It's as simple as that.
+    Font sizes are challenging on almost all Operating Systems and platforms.
+    Points? So, how does that relate to my widget height? Oh, I must calculate actual width and height using this API or that one....
+    In Kivy, font_size is the height of the font and be set using any metric.
+    It's as simple as that.
 
 Screen metrics done right
     Screen feature 3 core properties that determine how things appear.
@@ -341,7 +346,9 @@ Screen metrics done right
     Then use them to emulate that device. That makes it effotless to reproduce and correct layout issues across different device resolutions.
 
 Factory
-    Provides xpected factory function of easily registering and providing functions
+    The Factory is, predicatably enough, and implementation of the Factory pattern.
+    Register a class, and then use it anywhere without worrying about scope.
+    There is another bonus: any classes registered become reconizable and usable from you KV file or string.
         
         from kivy.factory import Factory
         Factory.register('Widget', module='kivy.uix.widget')
