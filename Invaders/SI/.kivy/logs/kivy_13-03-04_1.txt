@@ -1,0 +1,29 @@
+[INFO              ] Logger: Record log in /mnt/sdcard/kivy/invaders/.kivy/logs/kivy_13-03-04_1.txt
+[[1;32mINFO[0m   ] Kivy v1.5.2-dev
+[INFO              ] Factory: 137 symbols loaded
+[DEBUG             ] Cache: register <kv.lang> with limit=None, timeout=Nones
+[DEBUG             ] Cache: register <kv.image> with limit=None, timeout=60s
+[DEBUG             ] Cache: register <kv.atlas> with limit=None, timeout=Nones
+[WARNING           ] stderr: /data/data/org.kivy.pygame/files/lib/python2.7/site-packages/kivy/core/image/img_pygame.py:11: RuntimeWarning: import cdrom: No module named cdrom
+[WARNING           ] stderr: (ImportError: No module named cdrom)
+[DEBUG             ] Cache: register <kv.texture> with limit=1000, timeout=60s
+[DEBUG             ] Cache: register <kv.shader> with limit=1000, timeout=3600s
+[WARNING           ] Audio: Unable to use <gstreamer> as loader!
+[DEBUG             ] 
+[WARNING           ] Audio: Unable to use <sdl> as loader!
+[DEBUG             ] 
+[DEBUG             ] Audio: register SoundPygame
+[WARNING           ] stderr: Traceback (most recent call last):
+[WARNING           ] stderr:   File "main.py", line 26, in <module>
+[WARNING           ] stderr:     ufo_highpitch = SoundLoader.load('sounds/ufo_highpitch_long.wav'))
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/site-packages/kivy/core/audio/__init__.py", line 58, in load
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/site-packages/kivy/core/audio/audio_pygame.py", line 40, in __init__
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/site-packages/kivy/core/audio/__init__.py", line 125, in __init__
+[WARNING           ] stderr:   File "_event.pyx", line 93, in kivy._event.EventDispatcher.__init__ (kivy/_event.c:1878)
+[WARNING           ] stderr:   File "properties.pyx", line 318, in kivy.properties.Property.__set__ (kivy/properties.c:3139)
+[WARNING           ] stderr:   File "properties.pyx", line 350, in kivy.properties.Property.set (kivy/properties.c:3583)
+[WARNING           ] stderr:   File "properties.pyx", line 404, in kivy.properties.Property.dispatch (kivy/properties.c:4151)
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/site-packages/kivy/core/audio/__init__.py", line 131, in on_source
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/site-packages/kivy/core/audio/audio_pygame.py", line 71, in load
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/android_mixer.py", line 194, in __init__
+[WARNING           ] stderr: IOError: [Errno 2] No such file or directory: '/mnt/sdcard/kivy/invaders/sounds/ufo_highpitch_long.wav'

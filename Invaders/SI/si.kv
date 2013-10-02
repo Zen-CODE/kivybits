@@ -1,0 +1,199 @@
+#:kivy 1.0.9
+ 
+<Graphic>:
+	size: 50, 50
+    canvas:
+        Color: 
+        	rgba: self.lumina,self.lumina,self.lumina,self.alpha
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: self.sources[self.state]
+
+<Fragment>:
+	size: 25,50
+	spacing: 0
+	padding: 0
+    canvas:
+        Color: 
+        	rgba: 0.0,0.0,0.2,self.alpha
+        Rectangle:
+            pos: self.pos
+            size: self.size
+		
+<House>:
+	size: 100, 60
+
+<BigShip>:
+	size: 50, 20
+	
+<LilShip>:
+	size: 32, 20
+	
+<Bullet>:
+	size: 8, 24
+	delta: 25 * self.height / 2.0
+		
+<Bomb>:
+	size: 8, 24
+	lumina: 0.7
+	delta: -25 * self.height / 4.0
+		
+<Gun>:
+	size: 60, 30
+
+<AlienBox>:
+	padding: 2*int((4-self.row)/2)
+	
+<Level>:
+    spacing:20
+    orientation: 'horizontal'
+	height: 40
+
+<Levels>:
+    padding:10
+    spacing:10
+    orientation:'vertical'
+	size: self.width, self.height
+
+[MBox@BoxLayout]:
+	padding: 0
+	spacing: 0
+	orientation: 'vertical'
+    top:         ctx.root.top
+	center_x:    ctx.root.width * ctx.frac
+	    
+	Label:
+        color: ctx.color1[0], ctx.color1[1], ctx.color1[2], 1
+		font_name: 'fonts/LCD_Solid.ttf'
+        font_size: 32  
+        text:      ctx.text
+	Label:
+        color: ctx.color2[0], ctx.color2[1], ctx.color2[2], 1
+		font_name: 'fonts/LCD_Solid.ttf'
+        font_size: 32  
+        text:      ctx.root.scores[ctx.itemIdx]
+
+
+# Text color label 1: 6ed8ce
+#            hiscore: 295cdb
+#            label 2: d5d855
+# Scores are white except hiscore=295cdb
+<Score>:
+	height:80
+	MBox:
+		root:        root
+		color1:   0x6e/255.0,0xd8/255.0,0xce/255.0
+		color2:   1.0,1.0,1.0
+		text:     'SCORE<1>'
+		frac:        1.0/5.0
+		itemIdx:     0	
+	MBox:
+		root:        root
+		color1:   0x29/255.0,0x5c/255.0,0xdb/255.0
+		color2:   0x29/255.0,0x5c/255.0,0xdb/255.0
+		text: 	 'HI-SCORE'				
+        frac:        1.0 / 2.0
+		itemIdx:     1		
+	MBox:
+		root:        root
+		color1:   0xd5/255.0,0xd8/255.0,0x55/255.0
+		color2:   1.0,1.0,1.0
+		text: 	 'SCORE<2>'			
+        frac:        4.0 / 5.0
+		itemIdx:     2
+
+<GameOver>:
+	anchor_x: 'center'
+	anchor_y: 'center'		
+	Label:
+		canvas:
+			Color:
+				rgba: 0.0,0.0,0.2,root.alpha
+			Rectangle:
+	            pos: self.pos
+	            size: self.size			
+		font_color: 1.0,1.0,1.0,root.alpha
+		font_name: 'fonts/ATARCC__.TTF'
+        font_size: 34
+		text: 'Game Over'				
+		
+<GetReady>:
+	anchor_x: 'center'
+	anchor_y: 'center'		
+	Label:
+		canvas:
+			Color:
+				rgba: 0.0,0.0,0.2,1-root.alpha
+			Rectangle:
+	            pos: self.pos
+	            size: self.size			
+		font_color: 1.0,1.0,1.0,root.alpha
+		font_name: 'fonts/ATARCC__.TTF'
+        font_size: 34
+		text: 'Get Ready!'		
+
+<GunList>:
+	gunLayout: gunLayout
+	BoxLayout:
+		id: gunLayout
+		orientation: 'horizontal'
+#		size: 10*self.parent.nShooters, self.parent.height/1.5
+		pos: self.parent.x, self.parent.y
+		padding:8
+		spacing:4
+		
+<Invaders>:
+	scores:        scores
+	levelsBox:     levelsBox
+	housesBox:     housesBox
+	shooterBox:    shooterBox
+	footerBox:     footerBox
+	leftGunList:   leftGunList
+	rightGunList:  rightGunList
+	
+	height:  600
+	canvas:
+        Color: 
+        	rgb: 0.0,0.0,0.2
+        Rectangle:
+            pos: 0, 0
+            size: self.width, self.height
+            
+	AnchorLayout:
+		pos: 0, 0
+		size: root.width, root.height
+		anchor_x: 'center'
+		anchor_y: 'bottom'
+		
+		BoxLayout:			
+			orientation: 'vertical'
+			size: root.levelsBox.boxWidth+root.levelsBox.boxGap, 600
+			Score:
+				id: scores
+				size_hint: 1, 80.0/600.0            
+			FloatLayout:
+				size_hint: 1, 460.0/600.0
+				HousesBox:
+					id: housesBox		          
+					pos: self.parent.x, self.parent.y
+					size: self.parent.width, 80
+				LevelsBox:
+					id: levelsBox
+					pos: self.parent.x, self.parent.y
+					size: self.parent.width, self.parent.height
+			ShooterBox:
+				id: shooterBox		          
+				size_hint: 1, 30.0/600.0
+			FooterBox:
+				id: footerBox		          
+				size_hint: 1, 30.0/600.0
+				GunList:
+					id: leftGunList
+					pos: self.parent.x, self.parent.y
+                    size: self.gunLayout.padding[0]*2+self.nShooters*30, self.parent.height
+				GunList:
+					id: rightGunList
+					pos: self.parent.width-(self.gunLayout.padding[0]*2+self.nShooters*30), self.parent.y
+                    size: self.gunLayout.padding[0]*2+self.nShooters*30, self.parent.height
+							

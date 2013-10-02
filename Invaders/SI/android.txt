@@ -1,0 +1,3 @@
+title=Invaders
+author=PRS
+orientation=landscape

@@ -1,0 +1,8 @@
+#!/bin/bash
+cd ~/android/python-for-android/dist/default
+./build.py --package com.aptrackers.invaders --name 'Space Invaders'  --icon ~/mnt/SI/icon.png --presplash ~/mnt/SI/images/sisplash.jpg --version 1.0 --dir ~/mnt/SI debug
+./build.py --package com.aptrackers.invaders --name 'Space Invaders'  --icon ~/mnt/SI/icon.png --presplash ~/mnt/SI/images/sisplash.jpg --version 1.0 --dir ~/mnt/SI release
+cp bin/invaders-1.0-debug.apk ~/mnt
+cp bin/invaders-1.0-release-unsigned.apk ~/mnt
+cd -
+

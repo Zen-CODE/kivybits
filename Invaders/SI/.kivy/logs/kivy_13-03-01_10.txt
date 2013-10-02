@@ -1,0 +1,79 @@
+[INFO              ] Logger: Record log in /mnt/sdcard/kivy/SI/.kivy/logs/kivy_13-03-01_10.txt
+[[1;32mINFO[0m   ] Kivy v1.5.2-dev
+[INFO              ] Factory: 137 symbols loaded
+[DEBUG             ] Cache: register <kv.lang> with limit=None, timeout=Nones
+[DEBUG             ] Cache: register <kv.image> with limit=None, timeout=60s
+[DEBUG             ] Cache: register <kv.atlas> with limit=None, timeout=Nones
+[WARNING           ] stderr: /data/data/org.kivy.pygame/files/lib/python2.7/site-packages/kivy/core/image/img_pygame.py:11: RuntimeWarning: import cdrom: No module named cdrom
+[WARNING           ] stderr: (ImportError: No module named cdrom)
+[DEBUG             ] Cache: register <kv.texture> with limit=1000, timeout=60s
+[DEBUG             ] Cache: register <kv.shader> with limit=1000, timeout=3600s
+[WARNING           ] Audio: Unable to use <gstreamer> as loader!
+[DEBUG             ] 
+[WARNING           ] Audio: Unable to use <sdl> as loader!
+[DEBUG             ] 
+[DEBUG             ] Audio: register SoundPygame
+[DEBUG             ] App: Loading kv <./si.kv>
+[INFO              ] Window: using <pygame> as window provider
+[DEBUG             ] WinPygame: Set window to fullscreen mode
+[DEBUG             ] Window: Display driver android
+[DEBUG             ] Window: Actual window size: %dx%d
+[INFO              ] GL: OpenGL version <OpenGL ES 2.0 14.01002>
+[INFO              ] GL: OpenGL vendor <NVIDIA Corporation>
+[INFO              ] GL: OpenGL renderer <NVIDIA Tegra>
+[INFO              ] GL: OpenGL parsed version: 2, 0
+[INFO              ] GL: Shading version <OpenGL ES GLSL 1.00>
+[INFO              ] GL: Texture max size <2048>
+[INFO              ] GL: Texture max units <16>
+[INFO              ] Shader: fragment compiled successfully
+[INFO              ] Shader: vertex compiled successfully
+[DEBUG             ] ImagePygame: Load </data/data/org.kivy.pygame/files/lib/python2.7/site-packages/kivy/data/glsl/default.png>
+[INFO              ] Support: Android install hooks
+[INFO              ] Window: virtual keyboard not allowed, single mode, not docked
+[INFO              ] Text: using <pygame> as text provider
+[DEBUG             ] Atlas: Load <images/vaders.atlas>
+[DEBUG             ] Atlas: Need to load 1 images
+[DEBUG             ] Atlas: Load <images/vaders-0.png>
+[DEBUG             ] ImagePygame: Load <images/vaders-0.png>
+[INFO              ] OSC: using <thread> for socket
+[DEBUG             ] Base: Create provider from android
+[INFO              ] Base: Start application main loop
+[INFO              ] Android: found 17 joystick
+[INFO              ] Android: create joystick <0>
+[INFO              ] Android: discard joystick <0> cause no button
+[INFO              ] Android: create joystick <1>
+[INFO              ] Android: create joystick <2>
+[INFO              ] Android: create joystick <3>
+[INFO              ] Android: create joystick <4>
+[INFO              ] Android: create joystick <5>
+[INFO              ] Android: create joystick <6>
+[INFO              ] Android: create joystick <7>
+[INFO              ] Android: create joystick <8>
+[INFO              ] Android: create joystick <9>
+[INFO              ] Android: create joystick <10>
+[INFO              ] Android: create joystick <11>
+[INFO              ] Android: create joystick <12>
+[INFO              ] Android: create joystick <13>
+[INFO              ] Android: create joystick <14>
+[INFO              ] Android: create joystick <15>
+[INFO              ] Android: create joystick <16>
+[INFO              ] GL: NPOT texture support is available
+[INFO              ] Base: Leaving application in progress...
+[WARNING           ] stderr: Traceback (most recent call last):
+[WARNING           ] stderr:   File "main.py", line 723, in <module>
+[WARNING           ] stderr:     SIApp().run()
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/site-packages/kivy/app.py", line 546, in run
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/site-packages/kivy/base.py", line 441, in runTouchApp
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/site-packages/kivy/core/window/window_pygame.py", line 324, in mainloop
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/site-packages/kivy/core/window/window_pygame.py", line 230, in _mainloop
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/site-packages/kivy/base.py", line 289, in idle
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/site-packages/kivy/clock.py", line 313, in tick
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/site-packages/kivy/clock.py", line 420, in _process_events
+[WARNING           ] stderr:   File "/home/tito/code/python-for-android/build/python-install/lib/python2.7/site-packages/kivy/clock.py", line 232, in tick
+[WARNING           ] stderr:   File "main.py", line 699, in update
+[WARNING           ] stderr:     self.levelsBox.step(dt, self.houseTop, self.gun.bullets))
+[WARNING           ] stderr:   File "main.py", line 555, in step
+[WARNING           ] stderr:     return self.levels.step(dt, self.boxGap, houseTop, bullets)
+[WARNING           ] stderr:   File "main.py", line 340, in step
+[WARNING           ] stderr:     current = Vector(current.x+self.speed(completion), current.y)        # Add one to current
+[WARNING           ] stderr: TypeError: speed() takes exactly 1 argument (2 given)
