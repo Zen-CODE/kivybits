@@ -48,13 +48,10 @@ Builder.load_string('''
     orientation: "vertical"
     Image:
         id: ques_image
-        pos_hint_y: 0.2
     Label:
         id: header_label
-        pos_hint_y: 0.2
     BoxLayout:
         id: box_container
-        pos_hint_y: 0.6
 ''')
 
 
