@@ -1,37 +1,71 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
-from kivy.core.window import Window
 from kivy.uix.vkeyboard import VKeyboard
-from kivy.logger import Logger
-from kivy import kivy_data_dir
-import os
-import shutil
+from kivy.core.window import Window
 from kivy.properties import ObjectProperty
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
-from kivy.factory import Factory
+from kivy.uix.widget import Widget
+from functools import partial
 
+class KeyboardListener(Widget):
+    """
+    The class that binds to and obtains then keyboard callback
+    """
+    layouts = []  # List of available keyboard layouts
+    _keyboard = None  # Current keyboard layout
+    _callback = None  # Current callback
 
-# In your confixg.ini, in the "kivy" section, add "keyboard_mode = dock"
+    def __init__(self, **kwargs):
+        """ Build a list of available keyboard layouts """
+        super(KeyboardListener, self).__init__(**kwargs)
+        self.layouts = [key for key in VKeyboard().available_layouts.keys()]
+        self.layouts.append('numeric.json')
+
+    def set_callback(self, callback, text_input, layout):
+        """
+        Set the function to be called when key presses occur
+        """
+        #Window.release_all_keyboards()
+        self._keyboard = Window.request_keyboard(
+            self._keyboard_close,
+            text_input)
+
+        #if self._keyboard.widget:
+        if self._keyboard:
+            self._keyboard.layout = layout
+            self._keyboard.bind(on_key_down=callback)
+            self._callback = callback
+
+    def _keyboard_close(self):
+        """The keyboard has been closed. Clean up"""
+        if self._callback:
+            print "Keyboard closed..."
+            self._keyboard.unbind(on_key_down=self._callback)
+            self._keyboard = None
+            self._callback = None
+
+# In your config.ini, in the "kivy" section, add "keyboard_mode = dock"
 Builder.load_string(
 '''
 <KeyboardTest>:
-    displayLabel: displayLabel
-    kbContainer: kbContainer
+    #TODO: Remove
+    display_label: display_label
+    kb_container: kb_container
 
     orientation: 'vertical'
     Label:
         size_hint_y: 0.25
         text: "I'm glad to see you Dave."
     BoxLayout:
-        id: kbContainer
+        id: kb_container
         size_hint_y: 0.25
         orientation: "horizontal"
         padding: 10
 
     Label:
-        id: displayLabel
+        id: display_label
         size_hint_y: 0.5
         markup: True
         text: "[b]System info[/b]"
@@ -40,62 +74,37 @@ Builder.load_string(
 
 
 class KeyboardTest(BoxLayout):
-    displayLabel = ObjectProperty()
-    kbContainer = ObjectProperty()
+    display_label = ObjectProperty()
+    kb_container = ObjectProperty()
+    kb_listener = None
 
     def __init__(self, **kwargs):
         super(KeyboardTest, self).__init__(**kwargs)
-        self._add_numeric()
+        self._kb_listener = KeyboardListener()
         self._add_keyboards()
 
-    def _add_info(self, text):
-        '''Add the supplied text to the display label'''
-        self.displayLabel.text += "\n" + text
-
-    def _add_numeric(self):
-        '''Ensure that a copy of the keyboard file exists in the correct place
-        '''
-        keyboard_file = kivy_data_dir + "/keyboards/numeric.json"
-        self._add_info("keyboard directory = " + kivy_data_dir + "/keyboards")
-        if not os.path.exists(keyboard_file):
-            shutil.copy("./numeric.json", keyboard_file)
-            self._add_info("Copied ./numeric.json to this folder.")
-        else:
-            self._add_info("numeric.json already copied here.")
-
     def _add_keyboards(self):
-        '''Add textboxes and labels for each available keyboard layout
-        '''
-        vk = VKeyboard()
-        for key in vk.available_layouts.keys():
-            # Add a boxlayout and label for each layout
+        """
+        Add TextInputs and labels for each available keyboard layout
+        """
+        for key in self._kb_listener.layouts:
+            # Add a BoxLayout, a text input and label for each layout
             bl = BoxLayout(orientation="vertical")
             ti = TextInput()
-            ti.bind(on_focus=self.on_text_focus)
+            ti.bind(focus=partial(self.on_text_focus, layout=key))
 
             bl.add_widget(Label(text=key))
             bl.add_widget(ti)
-            self.kbContainer.add_widget(bl)
+            self.kb_container.add_widget(bl)
 
-    def on_text_focus(self, instance, value, *largs):
-        # Window.release_all_keyboards()
-        print "hello"
-        vk = VKeyboard()
-        for key in vk.available_layouts.keys():
-            print "Layout ", key, "=", vk.available_layouts[key]
-
+    def on_text_focus(self, instance, value, layout):
         if value:
-            Logger.info('main.py: on_focus_numeric')
-            numericVK = VKeyboard(layout="numeric")
-            # numericVK = VKeyboard(layout="azerty")
-            # numericVK = VKeyboard()
-            # numericVK.layout = "azerty"
-            Window.set_vkeyboard_class(numericVK)
+            print "Setting keyboard listed to ", layout
+            self._kb_listener.set_callback(self.on_key_press, instance, layout)
+        return False
 
-        else:
-            Logger.info('main.py: lost on_focus_numeric')
-            Window.set_vkeyboard_class(VKeyboard)
-
+    def on_key_press(self, *largs):
+        print "largs = ", str(largs)
         return True
 
 
