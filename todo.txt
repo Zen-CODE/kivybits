@@ -1,0 +1,30 @@
+1. From qua-non
+    you could look into testing the sdl2 provider part.
+    about the sdl2 provider had a chat with tito a few days ago, some parts are missing like keyboard support, thoughts about distribution(how sdl2 should be packaged with kivy)
+
+    Zencode if you like, you could start by testing the port on mac, windows. It's totally untested there
+
+    ZenCODE	qua-non: Using a MacBook pro @ work with 10.8.5. = XCode 4.6.3....
+    ZenCODE	How would I test the port?
+    qua-non	ZenCODE: mac tesing is needed too
+    qua-non	ZenCODE: git checkout sdl2-support
+    qua-non	ZenCODE: you have to compile kivy with USE_SDL2=1
+    qua-non	ZenCODE: env variable
+    qua-non	ZenCODE: for compilation you will need sdl2 devel libs for sld2, sdl2-ttf, sld2-image, sdl2-mixer
+    ZenCODE	qua-non: So, should I setup a virtual_env? Don't mind doing Kivy in my own time, but don't want to compromise work stuff...
+    ZenCODE	Pity, I really dislike Mac....;-)
+    qua-non	SDL@ port might be too much to just dive in
+    qua-non       for testing the sdl2-suport branch once compiled you'd need to use env variables to force the sdl2 providers like KIVY_WINDOW=SDL2 KIVY_TEXT=SDL2 KIVY_CLIPBOARD=SDL2... 
+    qua-non	ZenCODE: :), there are many different things you could help in choose
+
+2. From qua-non	
+  what you want, like the programming guide is missing a few sections
+  qua-non	at the end like nested layouts
+
+
+3. From tito
+  extract the versionadded per module/class/(method|data), and reflect it in the right side each method/class by adding a new div for it
+  
+  and then later, we can build a "filter" per version
+  and add a class for all the method/data where the documentation start with (internal)
+  and we can hide them by default
