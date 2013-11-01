@@ -17,23 +17,14 @@ class CustomButton(Button):
         super(CustomButton, self).__init__(**kwargs)
         CustomButton._instances.append(self)
 
-    def on_common_text(self, instance, value):
-        #print "on_common_text"
-        #print "dir = ", dir(CustomButton.common_text)
-        #[button.text = value for button in CustomButton._instances]
-
-        #for button in CustomButton._instances:
-        #    button.text = value
-        #self.text = value
-        #super(CustomButton, self).on_common_text(instance, value)
-        #for child in self.children[:]:
-        ##    child.text = value
+    @staticmethod
+    def on_common_text(instance, value):
+        """ For each instance of this class, change it's text """
+        for button in CustomButton._instances:
+            button.text = value
 
     def on_release(self):
         self.common_text = "Click me! " + str(self._index)
-        #print "Click me! " + str(self._index)
-         #self.on_common_text.
-        #return False
 
 
 class TestApp(App):
@@ -44,9 +35,6 @@ class TestApp(App):
             but._index = i
             layout.add_widget(but)
         return layout
-
-
-
 
 if __name__ == "__main__":
     TestApp().run()
