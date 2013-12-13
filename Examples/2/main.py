@@ -22,8 +22,10 @@ class CustomButton(Button):
         """ For each instance of this class, change it's text """
         for button in CustomButton._instances:
             button.text = value
+            button.common_text = value
 
     def on_release(self):
+        """ The button has been clicked. Set the common_text."""
         self.common_text = "Click me! " + str(self._index)
 
 
