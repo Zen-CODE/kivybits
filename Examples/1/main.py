@@ -7,6 +7,7 @@ from kivy.properties import ObjectProperty
 from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from functools import partial
+from kivy.uix.button import  Button
 from kivy.config import Config
 
 
@@ -60,20 +61,22 @@ Builder.load_string(
 
     orientation: 'vertical'
     Label:
-        size_hint_y: 0.25
+        size_hint_y: 0.125
         text: "I'm glad to see you Dave."
     BoxLayout:
         id: kb_container
-        size_hint_y: 0.25
+        size_hint_y: 0.125
         orientation: "horizontal"
         padding: 10
 
     Label:
         id: display_label
-        size_hint_y: 0.5
+        size_hint_y: 0.25
         markup: True
         text: "[b]System info[/b]"
         halign: "center"
+    Widget:
+        size_hint_y: 0.5
 ''')
 
 
@@ -89,26 +92,21 @@ class KeyboardTest(BoxLayout):
 
     def _add_keyboards(self):
         """
-        Add TextInputs and labels for each available keyboard layout
+        Add buttons for each available keyboard layout
         """
         for key in self._kb_listener.layouts:
-            # Add a BoxLayout, a text input and label for each layout
-            bl = BoxLayout(orientation="vertical")
-            ti = TextInput()
-            ti.bind(focus=partial(self.on_text_focus, layout=key))
+            button = Button(text=key,
+                            on_release=partial(self.on_button_release,
+                                               layout=key))
+            self.kb_container.add_widget(button)
 
-            bl.add_widget(Label(text=key))
-            bl.add_widget(ti)
-            self.kb_container.add_widget(bl)
-
-    def on_text_focus(self, instance, value, layout):
-        if value:
-            print "Setting keyboard listed to ", layout
-            self._kb_listener.set_callback(self.on_key_press, instance, layout)
-        return False
+    def on_button_release(self, instance, layout):
+        """ The button has been pressed """
+        print "Setting keyboard listed to ", layout
+        self._kb_listener.set_callback(self.on_key_press, instance, layout)
 
     def on_key_press(self, *largs):
-        print "largs = ", str(largs)
+        """ A key has been pressed. Display it."""
         self.display_label.text = '[b]Key pressed[/b]\n' + largs[2]
         return True
 
