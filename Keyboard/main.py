@@ -40,13 +40,13 @@ class KeyboardTest(BoxLayout):
 
     def __init__(self, **kwargs):
         super(KeyboardTest, self).__init__(**kwargs)
-        #self._add_numeric()
+        #self._add_numeric()  # Please see below
         self._add_keyboards()
 
-    # ==========================================================================
-    # Note: This method is made redundant in 1.8 as the json file can be loaded
-    # from the application folder
-    # ==========================================================================
+    # =========================================================================
+    # Note: This method is made redundant in Kivy 1.8 as the json file can be
+    # loaded from the application folder
+    # =========================================================================
     #from kivy import kivy_data_dir
     #import os
     #import shutil
@@ -72,28 +72,10 @@ class KeyboardTest(BoxLayout):
                     text=key,
                     on_release=partial(self.set_layout, key)))
 
-    def set_layout(self, layout, button):
+    @staticmethod
+    def set_layout(layout, button):
         # Window.release_all_keyboards()
         print "set_layout ", layout
-        return
-
-        vk = VKeyboard()
-        for key in vk.available_layouts.keys():
-            print "Layout ", key, "=", vk.available_layouts[key]
-
-        if value:
-            Logger.info('main.py: on_focus_numeric')
-            numericVK = VKeyboard(layout="numeric")
-            # numericVK = VKeyboard(layout="azerty")
-            # numericVK = VKeyboard()
-            # numericVK.layout = "azerty"
-            Window.set_vkeyboard_class(numericVK)
-
-        else:
-            Logger.info('main.py: lost on_focus_numeric')
-            Window.set_vkeyboard_class(VKeyboard)
-
-        return True
 
 
 class test(App):
