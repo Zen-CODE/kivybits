@@ -98,9 +98,10 @@ class KeyboardTest(BoxLayout):
         print "Key_pressed ", text
         #self.label.text = self.label.text + keycode[1]
 
-class test(App):
+
+class KeyboardDemo(App):
     def build(self):
         return KeyboardTest()
 
 if __name__ == "__main__":
-    test().run()
+    KeyboardDemo().run()
