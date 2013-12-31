@@ -67,10 +67,10 @@ class KeyboardTest(BoxLayout):
         vk = VKeyboard()
         for key in vk.available_layouts.keys():
             # Add a button for each layout
-            button = Button(
-                text=key,
-                on_release=partial(self.set_layout, key))
-            self.kbContainer.add_widget(button)
+            self.kbContainer.add_widget(
+                Button(
+                    text=key,
+                    on_release=partial(self.set_layout, key)))
 
     def set_layout(self, layout, button):
         # Window.release_all_keyboards()
