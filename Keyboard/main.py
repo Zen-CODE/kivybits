@@ -4,9 +4,6 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.uix.vkeyboard import VKeyboard
 from kivy.logger import Logger
-from kivy import kivy_data_dir
-import os
-import shutil
 from kivy.properties import ObjectProperty
 from kivy.uix.button import Button
 from functools import partial
@@ -53,6 +50,10 @@ class KeyboardTest(BoxLayout):
     # ==========================================================================
     # Note: This method is made redundant in 1.8 as the json file can be loaded
     # from the application folder
+    # ==========================================================================
+    #from kivy import kivy_data_dir
+    #import os
+    #import shutil
     #def _add_numeric(self):
     #    '''Ensure that a copy of the keyboard file exists in the correct place
     #    '''
