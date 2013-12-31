@@ -23,7 +23,7 @@ Builder.load_string(
     orientation: 'vertical'
     Label:
         size_hint_y: 0.25
-        text: "I'm glad to see you Dave."
+        text: "Available Keyboard Layouts"
     BoxLayout:
         id: kbContainer
         size_hint_y: 0.25
@@ -34,7 +34,7 @@ Builder.load_string(
         id: displayLabel
         size_hint_y: 0.5
         markup: True
-        text: "[b]System info[/b]"
+        text: "[b]Key pressed[/b] - None"
         halign: "center"
 ''')
 
@@ -45,23 +45,27 @@ class KeyboardTest(BoxLayout):
 
     def __init__(self, **kwargs):
         super(KeyboardTest, self).__init__(**kwargs)
-        self._add_numeric()
+        #self._add_numeric()
         self._add_keyboards()
 
     def _add_info(self, text):
         '''Add the supplied text to the display label'''
         self.displayLabel.text += "\n" + text
 
-    def _add_numeric(self):
-        '''Ensure that a copy of the keyboard file exists in the correct place
-        '''
-        keyboard_file = kivy_data_dir + "/keyboards/numeric.json"
-        self._add_info("keyboard directory = " + kivy_data_dir + "/keyboards")
-        if not os.path.exists(keyboard_file):
-            shutil.copy("./numeric.json", keyboard_file)
-            self._add_info("Copied ./numeric.json to this folder.")
-        else:
-            self._add_info("numeric.json already copied here.")
+    # ==========================================================================
+    # Note: This method is made redundant in 1.8 as the json file can be loaded
+    # from the application folder
+    #def _add_numeric(self):
+    #    '''Ensure that a copy of the keyboard file exists in the correct place
+    #    '''
+    #    keyboard_file = kivy_data_dir + "/keyboards/numeric.json"
+    #    self._add_info("keyboard directory = " + kivy_data_dir + "/keyboards")
+    #    if not os.path.exists(keyboard_file):
+    #        shutil.copy("./numeric.json", keyboard_file)
+    #        self._add_info("Copied ./numeric.json to this folder.")
+    #    else:
+    #        self._add_info("numeric.json already copied here.")
+    # ==========================================================================
 
     def _add_keyboards(self):
         '''Add textboxes and labels for each available keyboard layout
