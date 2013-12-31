@@ -43,10 +43,6 @@ class KeyboardTest(BoxLayout):
         #self._add_numeric()
         self._add_keyboards()
 
-    def _add_info(self, text):
-        '''Add the supplied text to the display label'''
-        self.displayLabel.text += "\n" + text
-
     # ==========================================================================
     # Note: This method is made redundant in 1.8 as the json file can be loaded
     # from the application folder
@@ -58,7 +54,6 @@ class KeyboardTest(BoxLayout):
     #    '''Ensure that a copy of the keyboard file exists in the correct place
     #    '''
     #    keyboard_file = kivy_data_dir + "/keyboards/numeric.json"
-    #    self._add_info("keyboard directory = " + kivy_data_dir + "/keyboards")
     #    if not os.path.exists(keyboard_file):
     #        shutil.copy("./numeric.json", keyboard_file)
     #        self._add_info("Copied ./numeric.json to this folder.")
