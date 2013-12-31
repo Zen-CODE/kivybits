@@ -8,12 +8,10 @@ from kivy import kivy_data_dir
 import os
 import shutil
 from kivy.properties import ObjectProperty
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
-from kivy.factory import Factory
+from kivy.uix.button import Button
+from functools import partial
 
-
-# In your confixg.ini, in the "kivy" section, add "keyboard_mode = dock"
+# In your config.ini, in the "kivy" section, add "keyboard_mode = dock"
 Builder.load_string(
 '''
 <KeyboardTest>:
@@ -72,18 +70,17 @@ class KeyboardTest(BoxLayout):
         '''
         vk = VKeyboard()
         for key in vk.available_layouts.keys():
-            # Add a boxlayout and label for each layout
-            bl = BoxLayout(orientation="vertical")
-            ti = TextInput()
-            ti.bind(on_focus=self.on_text_focus)
+            # Add a button for each layout
+            button = Button(
+                text=key,
+                on_release=partial(self.set_layout, key))
+            self.kbContainer.add_widget(button)
 
-            bl.add_widget(Label(text=key))
-            bl.add_widget(ti)
-            self.kbContainer.add_widget(bl)
-
-    def on_text_focus(self, instance, value, *largs):
+    def set_layout(self, layout, button):
         # Window.release_all_keyboards()
-        print "hello"
+        print "set_layout ", layout
+        return
+
         vk = VKeyboard()
         for key in vk.available_layouts.keys():
             print "Layout ", key, "=", vk.available_layouts[key]
