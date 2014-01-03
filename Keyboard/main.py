@@ -83,11 +83,11 @@ class KeyboardTest(BoxLayout):
         kb = Window.request_keyboard(
             self._keyboard_close, self)
         if kb.widget:
-            Logger.info("main.py: Using keyboard.widget")
+            Logger.info("main.py: Using keyboard.widget = " + str(kb.widget))
             self._keyboard = kb.widget
         else:
             Logger.info("main.py: keyboard.widget is None, "
-                        "falling back to keyboard")
+                        "falling back to keyboard = " + str(kb))
             self._keyboard = kb
 
         # TODO: Remove - For debugging
