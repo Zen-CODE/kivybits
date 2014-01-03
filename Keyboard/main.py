@@ -63,8 +63,10 @@ class KeyboardTest(BoxLayout):
     # ==========================================================================
 
     def _add_keyboards(self):
-        '''Add textboxes and labels for each available keyboard layout
-        '''
+        """
+        Add a buttons for each available keyboard layout. When clicked,
+        the buttons will change the keyboard layout to the one selected.
+        """
         vk = VKeyboard()
         for key in vk.available_layouts.keys():
             # Add a button for each layout
@@ -74,29 +76,42 @@ class KeyboardTest(BoxLayout):
                     on_release=partial(self.set_layout, key)))
 
     def set_layout(self, layout, button):
+        """
+        Change the keyboard layout to the one specified by *layout*.
+        """
         # Window.release_all_keyboards()
-        print "set_layout ", layout
-        self._keyboard = Window.request_keyboard(
+        kb = Window.request_keyboard(
             self._keyboard_close, self)
-        #if self._keyboard.widget:
-            #vkeyboard = self._keyboard.widget
-            #vkeyboard.layout = layout
-        if self._keyboard:
-            self._keyboard.layout = layout
-            self._keyboard.bind(on_key_down=self.key_down)
+        if kb.widget:
+            Logger.info("main.py: Using keyboard.widget")
+            self._keyboard = kb.widget
         else:
-            Logger.info("main.py: No keyboard widget")
+            Logger.info("main.py: keyboard.widget is None, "
+                        "falling back to keyboard")
+            self._keyboard = kb
+
+        # TODO: Remove - For debugging
+        Logger.info("main.py: dir(kb)=" + str(dir(kb)))
+        # TODO: Remove /
+        if kb:
+            kb.layout = layout
+            kb.bind(on_key_down=self.key_down)
+            self._keyboard = kb
+        else:
+            Logger.info("main.py: No keyboard found...")
 
     def _keyboard_close(self, *args):
-        """ The active keyboard is being closed """
-        Logger.info("main.py: Keyboard is being closed...")
+        """ The active keyboard is being closed. """
+        Logger.info("main.py: Keyboard is being closed.")
         if self._keyboard:
             self._keyboard.unbind(on_key_down=self.key_down)
             self._keyboard = None
 
     def key_down(self, keyboard, keycode, text, modifiers):
-        print "Key_pressed ", text
-        #self.label.text = self.label.text + keycode[1]
+        """
+        The callback function that catches keyboard events.
+        """
+        self.displayLabel.text = "Key pressed - {0}".format(text)
 
 
 class KeyboardDemo(App):
