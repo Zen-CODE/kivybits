@@ -80,6 +80,10 @@ class KeyboardTest(BoxLayout):
         Change the keyboard layout to the one specified by *layout*.
         """
         # Window.release_all_keyboards()
+        #TODO: Remove - These properties now seem to be required? Ask qua-non?
+        self.password = ""
+        self.keyboard_suggestions = None
+        #TODO: Remove
         kb = Window.request_keyboard(
             self._keyboard_close, self)
         if kb.widget:
