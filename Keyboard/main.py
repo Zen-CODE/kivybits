@@ -7,6 +7,7 @@ from kivy.logger import Logger
 from kivy.properties import ObjectProperty
 from kivy.uix.button import Button
 from functools import partial
+from kivy.config import Config
 
 # In your config.ini, in the "kivy" section, add "keyboard_mode = dock"
 Builder.load_string(
@@ -44,6 +45,15 @@ class KeyboardTest(BoxLayout):
         self._add_keyboards()
         self._keyboard = None
 
+        #TODO: Remove or document?
+        Logger.info("main.py: keyboard_mode=" +
+                    Config.get("kivy", "keyboard_mode"))
+        Config.set("kivy", "keyboard_mode", "dock")
+        Logger.info("main.py: 2. keyboard_mode=" +
+                    Config.get("kivy", "keyboard_mode"))
+        #TODO: Remove or document?
+
+
     # =========================================================================
     # Note: This method is made redundant in Kivy 1.8 as the json file can be
     # loaded from the application folder
@@ -79,8 +89,9 @@ class KeyboardTest(BoxLayout):
         """
         Change the keyboard layout to the one specified by *layout*.
         """
-        # Window.release_all_keyboards()
-        #TODO: Remove - These properties now seem to be required? Ask qua-non?
+        #TODO: Is next line required?
+        Window.release_all_keyboards()
+        #TODO: Remove - These properties now seem to be required?
         self.password = ""
         self.keyboard_suggestions = None
         #TODO: Remove
