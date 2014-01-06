@@ -49,6 +49,7 @@ class KeyboardTest(BoxLayout):
         Logger.info("main.py: keyboard_mode=" +
                     Config.get("kivy", "keyboard_mode"))
         Config.set("kivy", "keyboard_mode", "dock")
+        Config.write()
         Logger.info("main.py: 2. keyboard_mode=" +
                     Config.get("kivy", "keyboard_mode"))
         #TODO: Remove or document?
@@ -108,10 +109,9 @@ class KeyboardTest(BoxLayout):
         # TODO: Remove - For debugging
         Logger.info("main.py: dir(kb)=" + str(dir(kb)))
         # TODO: Remove /
-        if kb:
-            kb.layout = layout
-            kb.bind(on_key_down=self.key_down)
-            self._keyboard = kb
+        if self._keyboard:
+            self._keyboard.layout = layout
+            self._keyboard.bind(on_key_down=self.key_down)
         else:
             Logger.info("main.py: No keyboard found...")
 
