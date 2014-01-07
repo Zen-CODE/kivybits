@@ -8,8 +8,11 @@ from kivy.properties import ObjectProperty
 from kivy.uix.button import Button
 from functools import partial
 from kivy.config import Config
+from kivy import require
 
-# In your config.ini, in the "kivy" section, add "keyboard_mode = dock"
+# This example uses features introduced in Kivy 1.8.0
+require("1.8.0")
+
 Builder.load_string(
 '''
 <KeyboardTest>:
@@ -18,20 +21,24 @@ Builder.load_string(
 
     orientation: 'vertical'
     Label:
-        size_hint_y: 0.25
+        size_hint_y: 0.15
         text: "Available Keyboard Layouts"
     BoxLayout:
         id: kbContainer
-        size_hint_y: 0.25
+        size_hint_y: 0.2
         orientation: "horizontal"
         padding: 10
 
     Label:
         id: displayLabel
-        size_hint_y: 0.5
+        size_hint_y: 0.15
         markup: True
         text: "[b]Key pressed[/b] - None"
         halign: "center"
+
+    Widget:
+        # Just a space taker to allow for the popup keyboard
+        size_hint_y: 0.5
 ''')
 
 
@@ -78,8 +85,9 @@ class KeyboardTest(BoxLayout):
         Add a buttons for each available keyboard layout. When clicked,
         the buttons will change the keyboard layout to the one selected.
         """
-        vk = VKeyboard()
-        for key in vk.available_layouts.keys():
+        layouts = VKeyboard().available_layouts.keys()
+        layouts.append("numeric.json")  # Add the file in our app directory
+        for key in layouts:
             # Add a button for each layout
             self.kbContainer.add_widget(
                 Button(
@@ -90,30 +98,22 @@ class KeyboardTest(BoxLayout):
         """
         Change the keyboard layout to the one specified by *layout*.
         """
-        #TODO: Is next line required?
-        Window.release_all_keyboards()
         #TODO: Remove - These properties now seem to be required?
         self.password = ""
         self.keyboard_suggestions = None
         #TODO: Remove
+
         kb = Window.request_keyboard(
             self._keyboard_close, self)
         if kb.widget:
-            Logger.info("main.py: Using keyboard.widget = " + str(kb.widget))
+            # If the current configuration supports Virtual Keyboards, this
+            # widget will be a kivy.uix.vkeyboard.VKeyboard instance.
             self._keyboard = kb.widget
+            self._keyboard.layout = layout
         else:
-            Logger.info("main.py: keyboard.widget is None, "
-                        "falling back to keyboard = " + str(kb))
             self._keyboard = kb
 
-        # TODO: Remove - For debugging
-        Logger.info("main.py: dir(kb)=" + str(dir(kb)))
-        # TODO: Remove /
-        if self._keyboard:
-            self._keyboard.layout = layout
-            self._keyboard.bind(on_key_down=self.key_down)
-        else:
-            Logger.info("main.py: No keyboard found...")
+        self._keyboard.bind(on_key_down=self.key_down)
 
     def _keyboard_close(self, *args):
         """ The active keyboard is being closed. """
@@ -121,6 +121,11 @@ class KeyboardTest(BoxLayout):
         if self._keyboard:
             self._keyboard.unbind(on_key_down=self.key_down)
             self._keyboard = None
+
+    def on_keyboard_text(self, *args):
+        """ According to the docs for request_keyboard in
+        kivy/core/window/__init__.py, this method is called by the vkeyboard"""
+        Logger.info("main.py: on_keyboard_text called with " + str(args))
 
     def key_down(self, keyboard, keycode, text, modifiers):
         """
