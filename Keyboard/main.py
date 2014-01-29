@@ -8,10 +8,11 @@ from kivy.properties import ObjectProperty
 from kivy.uix.button import Button
 from functools import partial
 from kivy.config import Config
+from kivy.uix.popup import Popup
 from kivy import require
 
 # This example uses features introduced in Kivy 1.8.0
-require("1.8.0")
+#require("1.8.0")
 
 Builder.load_string(
 '''
@@ -39,7 +40,33 @@ Builder.load_string(
     Widget:
         # Just a space taker to allow for the popup keyboard
         size_hint_y: 0.5
+
 ''')
+
+
+class ModeTest(Popup):
+    """
+    Present the option to change keyboard mode and warn of system-wide
+    consequences.
+    """
+    def __init__(self, **kwargs):
+        super(ModeTest, self).__init__(
+            title="Keyboard mode",
+            content=Button(text="Test"),
+            size_hint=(0.8, 0.8)
+        )
+
+
+        #TODO: Remove or document?
+        Logger.info("main.py: keyboard_mode=" +
+                    Config.get("kivy", "keyboard_mode"))
+        Config.set("kivy", "keyboard_mode", "")
+        Config.write()
+        Logger.info("main.py: 2. keyboard_mode=" +
+                    Config.get("kivy", "keyboard_mode"))
+        #TODO: Remove or document?
+
+    pass
 
 
 class KeyboardTest(BoxLayout):
@@ -52,15 +79,7 @@ class KeyboardTest(BoxLayout):
         self._add_keyboards()
         self._keyboard = None
 
-        #TODO: Remove or document?
-        Logger.info("main.py: keyboard_mode=" +
-                    Config.get("kivy", "keyboard_mode"))
-        Config.set("kivy", "keyboard_mode", "dock")
-        Config.write()
-        Logger.info("main.py: 2. keyboard_mode=" +
-                    Config.get("kivy", "keyboard_mode"))
-        #TODO: Remove or document?
-
+        ModeTest().open()
 
     # =========================================================================
     # Note: This method is made redundant in Kivy 1.8 as the json file can be
@@ -99,8 +118,8 @@ class KeyboardTest(BoxLayout):
         Change the keyboard layout to the one specified by *layout*.
         """
         #TODO: Remove - These properties now seem to be required?
-        self.password = ""
-        self.keyboard_suggestions = None
+        #self.password = ""
+        #self.keyboard_suggestions = None
         #TODO: Remove
 
         kb = Window.request_keyboard(
@@ -113,7 +132,8 @@ class KeyboardTest(BoxLayout):
         else:
             self._keyboard = kb
 
-        self._keyboard.bind(on_key_down=self.key_down)
+        self._keyboard.bind(on_key_down=self.key_down,
+                            on_key_up=self.key_up)
 
     def _keyboard_close(self, *args):
         """ The active keyboard is being closed. """
@@ -122,16 +142,17 @@ class KeyboardTest(BoxLayout):
             self._keyboard.unbind(on_key_down=self.key_down)
             self._keyboard = None
 
-    def on_keyboard_text(self, *args):
-        """ According to the docs for request_keyboard in
-        kivy/core/window/__init__.py, this method is called by the vkeyboard"""
-        Logger.info("main.py: on_keyboard_text called with " + str(args))
-
     def key_down(self, keyboard, keycode, text, modifiers):
         """
         The callback function that catches keyboard events.
         """
         self.displayLabel.text = "Key pressed - {0}".format(text)
+
+    def key_up(self, keyboard, keycode, text, modifiers):
+        """
+        The callback function that catches keyboard events.
+        """
+        self.displayLabel.text += ", up {0}".format(text)
 
 
 class KeyboardDemo(App):
