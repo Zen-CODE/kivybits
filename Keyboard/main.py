@@ -137,27 +137,8 @@ class KeyboardScreen(Screen):
 
     def __init__(self, **kwargs):
         super(KeyboardScreen, self).__init__(**kwargs)
-        #self._add_numeric()  # Please see below
         self._add_keyboards()
         self._keyboard = None
-
-    # =========================================================================
-    # Note: This method is made redundant in Kivy 1.8 as the json file can be
-    # loaded from the application folder
-    # =========================================================================
-    #from kivy import kivy_data_dir
-    #import os
-    #import shutil
-    #def _add_numeric(self):
-    #    '''Ensure that a copy of the keyboard file exists in the correct place
-    #    '''
-    #    keyboard_file = kivy_data_dir + "/keyboards/numeric.json"
-    #    if not os.path.exists(keyboard_file):
-    #        shutil.copy("./numeric.json", keyboard_file)
-    #        self._add_info("Copied ./numeric.json to this folder.")
-    #    else:
-    #        self._add_info("numeric.json already copied here.")
-    # ==========================================================================
 
     def _add_keyboards(self):
         """
