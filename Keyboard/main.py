@@ -1,3 +1,12 @@
+"""
+Custom Keyboards
+================
+
+This demo shows how to create and display custom keyboards on screen. Note that
+the new "layout" property of the TextInput means that this is rarely needed.
+We provide this demo for the sake of completeness.
+"""
+# Author: Zen-CODE
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.core.window import Window
