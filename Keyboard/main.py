@@ -42,31 +42,45 @@ Builder.load_string(
             # Just a space taker to allow for the popup keyboard
             size_hint_y: 0.5
 
+<ModeScreen>:
+    FloatLayout:
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: 0.6, 0.6
+            pos_hint: {"x": 0.2, "y": 0.2}
+            padding: "5sp"
+            spacing: "5sp"
+            Label:
+                text: "Text"
+                size_hint_y: 0.8
+            BoxLayout:
+                orientation: "horizontal"
+                size_hint_y: 0.2
+                Button:
+                    text: "Exit"
+                Button:
+                    text: "Set to 'dock'"
+                Button:
+                    text: "Set to ''"
+
 ''')
 
 
-class ModeTest(Popup):
+class ModeScreen(Screen):
     """
     Present the option to change keyboard mode and warn of system-wide
     consequences.
     """
-    def __init__(self, **kwargs):
-        super(ModeTest, self).__init__(
-            title="Keyboard mode",
-            content=Button(text="Test"),
-            size_hint=(0.8, 0.8),
-            size=(500, 400),
-            auto_dismiss=False)
 
 
-        #TODO: Remove or document?
-        Logger.info("main.py: keyboard_mode=" +
-                    Config.get("kivy", "keyboard_mode"))
-        Config.set("kivy", "keyboard_mode", "")
-        Config.write()
-        Logger.info("main.py: 2. keyboard_mode=" +
-                    Config.get("kivy", "keyboard_mode"))
-        #TODO: Remove or document?
+        ##TODO: Remove or document?
+        #Logger.info("main.py: keyboard_mode=" +
+        #            Config.get("kivy", "keyboard_mode"))
+        #Config.set("kivy", "keyboard_mode", "")
+        #Config.write()
+        #Logger.info("main.py: 2. keyboard_mode=" +
+        #            Config.get("kivy", "keyboard_mode"))
+        ##TODO: Remove or document?
 
     pass
 
@@ -157,7 +171,8 @@ class KeyboardScreen(Screen):
 
 class KeyboardDemo(App):
     def build(self):
-        return KeyboardScreen()
+        #return KeyboardScreen()
+        return ModeScreen()
 
 if __name__ == "__main__":
     KeyboardDemo().run()
