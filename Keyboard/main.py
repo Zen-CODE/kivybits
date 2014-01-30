@@ -100,10 +100,8 @@ class ModeScreen(Screen):
     keyboard_mode = ""
 
     def on_pre_enter(self, *args):
-        """
-        Detect the current keyboard mode and set the text of the main
-        label accordingly.
-        """
+        """ Detect the current keyboard mode and set the text of the main
+        label accordingly. """
         self.keyboard_mode = Config.get("kivy", "keyboard_mode")
         p1 = "Current keyboard mode: '{0}'\n\n".format(self.keyboard_mode)
         if self.keyboard_mode == "dock":
@@ -147,10 +145,8 @@ class KeyboardScreen(Screen):
         self._keyboard = None
 
     def _add_keyboards(self):
-        """
-        Add a buttons for each available keyboard layout. When clicked,
-        the buttons will change the keyboard layout to the one selected.
-        """
+        """ Add a buttons for each available keyboard layout. When clicked,
+        the buttons will change the keyboard layout to the one selected. """
         layouts = VKeyboard().available_layouts.keys()
         layouts.append("numeric.json")  # Add the file in our app directory
                                         # Note the .json extension is required
@@ -161,9 +157,7 @@ class KeyboardScreen(Screen):
                     on_release=partial(self.set_layout, key)))
 
     def set_layout(self, layout, button):
-        """
-        Change the keyboard layout to the one specified by *layout*.
-        """
+        """ Change the keyboard layout to the one specified by *layout*. """
         kb = Window.request_keyboard(
             self._keyboard_close, self)
         if kb.widget:
@@ -184,15 +178,11 @@ class KeyboardScreen(Screen):
             self._keyboard = None
 
     def key_down(self, keyboard, keycode, text, modifiers):
-        """
-        The callback function that catches keyboard events.
-        """
+        """ The callback function that catches keyboard events. """
         self.displayLabel.text = "Key pressed - {0}".format(text)
 
     def key_up(self, keyboard, keycode, text, modifiers):
-        """
-        The callback function that catches keyboard events.
-        """
+        """ The callback function that catches keyboard events. """
         self.displayLabel.text += ", up {0}".format(text)
 
 
