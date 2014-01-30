@@ -1,7 +1,5 @@
 from kivy.app import App
 from kivy.lang import Builder
-from kivy.properties import ObjectProperty
-from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.uix.vkeyboard import VKeyboard
 from kivy.logger import Logger
@@ -9,11 +7,11 @@ from kivy.properties import ObjectProperty
 from kivy.uix.button import Button
 from functools import partial
 from kivy.config import Config
-from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy import require
 
-# This example uses features introduced in Kivy 1.8.0
+# This example uses features introduced in Kivy 1.8.0, namely being able to load
+# custom json files from the app folder
 #require("1.8.0")
 
 Builder.load_string(
