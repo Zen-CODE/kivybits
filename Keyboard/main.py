@@ -64,17 +64,22 @@ Builder.load_string(
                 size_hint_y: 0.1
             Label:
                 id: center_label
-                text: "Text"
+                markup: True
                 size_hint_y: 0.8
             BoxLayout:
                 orientation: "horizontal"
                 size_hint_y: 0.1
                 Button:
                     text: "Exit"
+                    on_release: exit()
                 Button:
                     text: "Set to 'dock'"
+                    on_release: root.set_mode('dock')
                 Button:
                     text: "Set to ''"
+                    on_release: root.set_mode('')
+                Button:
+                    text: "Continue"
 
 ''')
 
@@ -85,26 +90,36 @@ class ModeScreen(Screen):
     consequences.
     """
     center_label = ObjectProperty()
-    keyboard_mode = ''
+    keyboard_mode = ""
 
     def on_pre_enter(self, *args):
         """ Detect the current keyboard mode and set the text accordingly """
 
-        #Config.set("kivy", "keyboard_mode", "")
         self.keyboard_mode = Config.get("kivy", "keyboard_mode")
-        self.center_label.text = "Current keyboard mode: '{0}'".format(
-            self.keyboard_mode)
+        p1 = "Current keyboard mode: '{0}'\n\n".format(self.keyboard_mode)
+        if self.keyboard_mode == "dock":
+            p2 = "You have the right setting to use this demo.\n\n"
+        elif self.keyboard_mode == "":
+            p2 = "You need the keyboard mode to 'dock' (below) in order for\n" \
+                 "this demo to run.\n\n"
+        else:
+            p2 = "Custom setting detected! To use the demo, you must set the " \
+                 "keyboard mode to dock but will\nneed to restore your" \
+                " setting manually.\n\n"
 
-        ##TODO: Remove or document?
-        #Logger.info("main.py: keyboard_mode=" +
-        #            Config.get("kivy", "keyboard_mode"))
-        #Config.set("kivy", "keyboard_mode", "")
-        #Config.write()
-        #Logger.info("main.py: 2. keyboard_mode=" +
-        #            Config.get("kivy", "keyboard_mode"))
-        ##TODO: Remove or document?
+        p3 = "[b][color=#ff0000]Warning:[/color][/b] This is a system-wide " \
+            "setting and will affect all Kivy apps. Please\nuse this app" \
+            " to reset this value."
+
+        self.center_label.text = "".join([p1, p2, p3])
 
 
+    def set_mode(self, mode):
+        """ Sets the keyboard mode to the one specified """
+        Config.set("kivy", "keyboard_mode", mode)
+        Config.write()
+        self.center_label.text = "Please restart the application for this\n" \
+            "setting to take effect."
 
 
 class KeyboardScreen(Screen):
