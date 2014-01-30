@@ -1,5 +1,6 @@
 from kivy.app import App
 from kivy.lang import Builder
+from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.uix.vkeyboard import VKeyboard
@@ -9,7 +10,7 @@ from kivy.uix.button import Button
 from functools import partial
 from kivy.config import Config
 from kivy.uix.popup import Popup
-from kivy.uix.screenmanager import Screen
+from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy import require
 
 # This example uses features introduced in Kivy 1.8.0
@@ -43,11 +44,12 @@ Builder.load_string(
             size_hint_y: 0.5
 
 <ModeScreen>:
+    center_label: center_label
     FloatLayout:
         BoxLayout:
             orientation: "vertical"
-            size_hint: 0.6, 0.6
-            pos_hint: {"x": 0.2, "y": 0.2}
+            size_hint: 0.8, 0.8
+            pos_hint: {"x": 0.1, "y": 0.1}
             padding: "5sp"
             spacing: "5sp"
             Label:
@@ -61,6 +63,7 @@ Builder.load_string(
                 text: "Keyboard demo"
                 size_hint_y: 0.1
             Label:
+                id: center_label
                 text: "Text"
                 size_hint_y: 0.8
             BoxLayout:
@@ -81,7 +84,16 @@ class ModeScreen(Screen):
     Present the option to change keyboard mode and warn of system-wide
     consequences.
     """
+    center_label = ObjectProperty()
+    keyboard_mode = ''
 
+    def on_pre_enter(self, *args):
+        """ Detect the current keyboard mode and set the text accordingly """
+
+        #Config.set("kivy", "keyboard_mode", "")
+        self.keyboard_mode = Config.get("kivy", "keyboard_mode")
+        self.center_label.text = "Current keyboard mode: '{0}'".format(
+            self.keyboard_mode)
 
         ##TODO: Remove or document?
         #Logger.info("main.py: keyboard_mode=" +
@@ -92,7 +104,7 @@ class ModeScreen(Screen):
         #            Config.get("kivy", "keyboard_mode"))
         ##TODO: Remove or document?
 
-    pass
+
 
 
 class KeyboardScreen(Screen):
@@ -181,8 +193,9 @@ class KeyboardScreen(Screen):
 
 class KeyboardDemo(App):
     def build(self):
-        #return KeyboardScreen()
-        return ModeScreen()
+        sm = ScreenManager()
+        sm.switch_to(ModeScreen())
+        return sm
 
 if __name__ == "__main__":
     KeyboardDemo().run()
