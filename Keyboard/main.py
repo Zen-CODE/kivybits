@@ -9,6 +9,7 @@ from kivy.uix.button import Button
 from functools import partial
 from kivy.config import Config
 from kivy.uix.popup import Popup
+from kivy.uix.screenmanager import Screen
 from kivy import require
 
 # This example uses features introduced in Kivy 1.8.0
@@ -16,30 +17,30 @@ from kivy import require
 
 Builder.load_string(
 '''
-<KeyboardTest>:
+<KeyboardScreen>:
     displayLabel: displayLabel
     kbContainer: kbContainer
-
-    orientation: 'vertical'
-    Label:
-        size_hint_y: 0.15
-        text: "Available Keyboard Layouts"
     BoxLayout:
-        id: kbContainer
-        size_hint_y: 0.2
-        orientation: "horizontal"
-        padding: 10
+        orientation: 'vertical'
+        Label:
+            size_hint_y: 0.15
+            text: "Available Keyboard Layouts"
+        BoxLayout:
+            id: kbContainer
+            size_hint_y: 0.2
+            orientation: "horizontal"
+            padding: 10
 
-    Label:
-        id: displayLabel
-        size_hint_y: 0.15
-        markup: True
-        text: "[b]Key pressed[/b] - None"
-        halign: "center"
+        Label:
+            id: displayLabel
+            size_hint_y: 0.15
+            markup: True
+            text: "[b]Key pressed[/b] - None"
+            halign: "center"
 
-    Widget:
-        # Just a space taker to allow for the popup keyboard
-        size_hint_y: 0.5
+        Widget:
+            # Just a space taker to allow for the popup keyboard
+            size_hint_y: 0.5
 
 ''')
 
@@ -53,8 +54,9 @@ class ModeTest(Popup):
         super(ModeTest, self).__init__(
             title="Keyboard mode",
             content=Button(text="Test"),
-            size_hint=(0.8, 0.8)
-        )
+            size_hint=(0.8, 0.8),
+            size=(500, 400),
+            auto_dismiss=False)
 
 
         #TODO: Remove or document?
@@ -69,17 +71,15 @@ class ModeTest(Popup):
     pass
 
 
-class KeyboardTest(BoxLayout):
+class KeyboardScreen(Screen):
     displayLabel = ObjectProperty()
     kbContainer = ObjectProperty()
 
     def __init__(self, **kwargs):
-        super(KeyboardTest, self).__init__(**kwargs)
+        super(KeyboardScreen, self).__init__(**kwargs)
         #self._add_numeric()  # Please see below
         self._add_keyboards()
         self._keyboard = None
-
-        ModeTest().open()
 
     # =========================================================================
     # Note: This method is made redundant in Kivy 1.8 as the json file can be
@@ -157,7 +157,7 @@ class KeyboardTest(BoxLayout):
 
 class KeyboardDemo(App):
     def build(self):
-        return KeyboardTest()
+        return KeyboardScreen()
 
 if __name__ == "__main__":
     KeyboardDemo().run()
