@@ -11,7 +11,6 @@ from kivy.app import App
 from kivy.lang import Builder
 from kivy.core.window import Window
 from kivy.uix.vkeyboard import VKeyboard
-from kivy.logger import Logger
 from kivy.properties import ObjectProperty
 from kivy.uix.button import Button
 from functools import partial
@@ -154,8 +153,8 @@ class KeyboardScreen(Screen):
         """
         layouts = VKeyboard().available_layouts.keys()
         layouts.append("numeric.json")  # Add the file in our app directory
+                                        # Note the .json extension is required
         for key in layouts:
-            # Add a button for each layout
             self.kbContainer.add_widget(
                 Button(
                     text=key,
@@ -165,11 +164,6 @@ class KeyboardScreen(Screen):
         """
         Change the keyboard layout to the one specified by *layout*.
         """
-        #TODO: Remove - These properties now seem to be required?
-        #self.password = ""
-        #self.keyboard_suggestions = None
-        #TODO: Remove
-
         kb = Window.request_keyboard(
             self._keyboard_close, self)
         if kb.widget:
@@ -185,7 +179,6 @@ class KeyboardScreen(Screen):
 
     def _keyboard_close(self, *args):
         """ The active keyboard is being closed. """
-        Logger.info("main.py: Keyboard is being closed.")
         if self._keyboard:
             self._keyboard.unbind(on_key_down=self.key_down)
             self._keyboard = None
