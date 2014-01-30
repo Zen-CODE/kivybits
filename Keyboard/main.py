@@ -51,11 +51,21 @@ Builder.load_string(
             padding: "5sp"
             spacing: "5sp"
             Label:
+                canvas:
+                    Color:
+                        rgba: 0, 0, 1, 0.3
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                text: "Keyboard demo"
+                size_hint_y: 0.1
+            Label:
                 text: "Text"
                 size_hint_y: 0.8
             BoxLayout:
                 orientation: "horizontal"
-                size_hint_y: 0.2
+                size_hint_y: 0.1
                 Button:
                     text: "Exit"
                 Button:
