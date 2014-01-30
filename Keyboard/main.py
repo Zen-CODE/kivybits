@@ -51,6 +51,7 @@ Builder.load_string(
 
 <ModeScreen>:
     center_label: center_label
+    mode_spinner: mode_spinner
     FloatLayout:
         BoxLayout:
             orientation: "vertical"
@@ -71,19 +72,25 @@ Builder.load_string(
             Label:
                 id: center_label
                 markup: True
-                size_hint_y: 0.8
+                size_hint_y: 0.7
+            BoxLayout:
+                orientation: "horizontal"
+                size_hint_y: 0.1
+                padding: "5sp"
+                Label:
+                    text: "Current keyboard mode :"
+                Spinner:
+                    id: mode_spinner
+                    values: '', 'dock', 'system', 'systemanddock', 'systemandmulti'
+                Button:
+                    text: "Set"
+                    on_release: root.set_mode(mode_spinner.text)
             BoxLayout:
                 orientation: "horizontal"
                 size_hint_y: 0.1
                 Button:
                     text: "Exit"
                     on_release: exit()
-                Button:
-                    text: "Set to 'dock'"
-                    on_release: root.set_mode('dock')
-                Button:
-                    text: "Set to ''"
-                    on_release: root.set_mode('')
                 Button:
                     text: "Continue"
                     on_release: root.next()
@@ -97,12 +104,17 @@ class ModeScreen(Screen):
     consequences.
     """
     center_label = ObjectProperty()
+    mode_spinner = ObjectProperty()
+
     keyboard_mode = ""
 
     def on_pre_enter(self, *args):
         """ Detect the current keyboard mode and set the text of the main
         label accordingly. """
+
         self.keyboard_mode = Config.get("kivy", "keyboard_mode")
+        self.mode_spinner.text = self.keyboard_mode
+
         p1 = "Current keyboard mode: '{0}'\n\n".format(self.keyboard_mode)
         if self.keyboard_mode == "dock":
             p2 = "You have the right setting to use this demo.\n\n"
@@ -122,6 +134,10 @@ class ModeScreen(Screen):
     def set_mode(self, mode):
         """ Sets the keyboard mode to the one specified """
         Config.set("kivy", "keyboard_mode", mode)
+        #dock - works
+        #system -works
+        #systemanddock - works
+        #systemandmulti - not working
         Config.write()
         self.center_label.text = "Please restart the application for this\n" \
             "setting to take effect."
