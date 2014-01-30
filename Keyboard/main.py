@@ -60,7 +60,7 @@ Builder.load_string(
                         pos: self.pos
                         size: self.size
 
-                text: "Keyboard demo"
+                text: "Custom Keyboard Demo"
                 size_hint_y: 0.1
             Label:
                 id: center_label
@@ -124,7 +124,7 @@ class ModeScreen(Screen):
 
     def next(self):
         """ Continue to the main screen """
-        print "manager=", str(self.manager)
+        self.manager.switch_to(KeyboardScreen())
 
 
 class KeyboardScreen(Screen):
