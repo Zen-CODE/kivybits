@@ -103,8 +103,8 @@ class ModeScreen(Screen):
         if self.keyboard_mode == "dock":
             p2 = "You have the right setting to use this demo.\n\n"
         elif self.keyboard_mode == "":
-            p2 = "You need the keyboard mode to 'dock' (below) in order for\n" \
-                 "this demo to run.\n\n"
+            p2 = "You need the keyboard mode to 'dock' (below) in order to\n" \
+                 "use custom onscreen keyboards.\n\n"
         else:
             p2 = "Custom setting detected! To use the demo, you must set the " \
                  "keyboard mode to dock but will\nneed to restore your" \
@@ -128,6 +128,10 @@ class ModeScreen(Screen):
 
 
 class KeyboardScreen(Screen):
+    """
+    Screen containing all the available keyboard layouts. Clicking the buttons
+    switches to these layouts.
+    """
     displayLabel = ObjectProperty()
     kbContainer = ObjectProperty()
 
