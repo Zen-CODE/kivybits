@@ -80,6 +80,7 @@ Builder.load_string(
                     on_release: root.set_mode('')
                 Button:
                     text: "Continue"
+                    on_release: root.next()
 
 ''')
 
@@ -93,8 +94,10 @@ class ModeScreen(Screen):
     keyboard_mode = ""
 
     def on_pre_enter(self, *args):
-        """ Detect the current keyboard mode and set the text accordingly """
-
+        """
+        Detect the current keyboard mode and set the text of the main
+        label accordingly.
+        """
         self.keyboard_mode = Config.get("kivy", "keyboard_mode")
         p1 = "Current keyboard mode: '{0}'\n\n".format(self.keyboard_mode)
         if self.keyboard_mode == "dock":
@@ -106,13 +109,11 @@ class ModeScreen(Screen):
             p2 = "Custom setting detected! To use the demo, you must set the " \
                  "keyboard mode to dock but will\nneed to restore your" \
                 " setting manually.\n\n"
-
         p3 = "[b][color=#ff0000]Warning:[/color][/b] This is a system-wide " \
             "setting and will affect all Kivy apps. Please\nuse this app" \
             " to reset this value."
 
         self.center_label.text = "".join([p1, p2, p3])
-
 
     def set_mode(self, mode):
         """ Sets the keyboard mode to the one specified """
@@ -120,6 +121,10 @@ class ModeScreen(Screen):
         Config.write()
         self.center_label.text = "Please restart the application for this\n" \
             "setting to take effect."
+
+    def next(self):
+        """ Continue to the main screen """
+        print "manager=", str(self.manager)
 
 
 class KeyboardScreen(Screen):
