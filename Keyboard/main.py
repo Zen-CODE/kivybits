@@ -37,14 +37,12 @@ Builder.load_string(
             size_hint_y: 0.2
             orientation: "horizontal"
             padding: 10
-
         Label:
             id: displayLabel
             size_hint_y: 0.15
             markup: True
             text: "[b]Key pressed[/b] - None"
             halign: "center"
-
         Widget:
             # Just a space taker to allow for the popup keyboard
             size_hint_y: 0.5
@@ -119,18 +117,16 @@ class ModeScreen(Screen):
         self.mode_spinner.text = "'{0}'".format(self.keyboard_mode)
 
         p1 = "Current keyboard mode: '{0}'\n\n".format(self.keyboard_mode)
-        if self.keyboard_mode == "dock":
+        if self.keyboard_mode in ['dock', 'system', 'systemanddock']:
             p2 = "You have the right setting to use this demo.\n\n"
-        elif self.keyboard_mode == "":
-            p2 = "You need the keyboard mode to 'dock' (below) in order to\n" \
-                 "use custom onscreen keyboards.\n\n"
         else:
-            p2 = "Custom setting detected! To use the demo, you must set the " \
-                 "keyboard mode to dock but will\nneed to restore your" \
-                " setting manually.\n\n"
+            p2 = "You need the keyboard mode to 'dock', 'system' or '"\
+                 "'systemanddock'(below)\n in order to "\
+                 "use custom onscreen keyboards.\n\n"
+
         p3 = "[b][color=#ff0000]Warning:[/color][/b] This is a system-wide " \
             "setting and will affect all Kivy apps. Please\nuse this app" \
-            " to reset this value."
+            " to reset this value to it's original one."
 
         self.center_label.text = "".join([p1, p2, p3])
 
