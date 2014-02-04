@@ -72,7 +72,7 @@ Builder.load_string(
             Label:
                 id: center_label
                 markup: True
-                size_hint_y: 0.7
+                size_hint_y: 0.6
             BoxLayout:
                 orientation: "horizontal"
                 size_hint_y: 0.1
@@ -81,10 +81,13 @@ Builder.load_string(
                     text: "Current keyboard mode :"
                 Spinner:
                     id: mode_spinner
-                    values: '', 'dock', 'system', 'systemanddock', 'systemandmulti'
+                    values: "''", "'dock'", "'system'", "'systemanddock'",\
+                            "'systemandmulti'"
                 Button:
                     text: "Set"
                     on_release: root.set_mode(mode_spinner.text)
+            Widget:
+                size_hint_y: 0.1
             BoxLayout:
                 orientation: "horizontal"
                 size_hint_y: 0.1
@@ -113,7 +116,7 @@ class ModeScreen(Screen):
         label accordingly. """
 
         self.keyboard_mode = Config.get("kivy", "keyboard_mode")
-        self.mode_spinner.text = self.keyboard_mode
+        self.mode_spinner.text = "'{0}'".format(self.keyboard_mode)
 
         p1 = "Current keyboard mode: '{0}'\n\n".format(self.keyboard_mode)
         if self.keyboard_mode == "dock":
@@ -133,7 +136,7 @@ class ModeScreen(Screen):
 
     def set_mode(self, mode):
         """ Sets the keyboard mode to the one specified """
-        Config.set("kivy", "keyboard_mode", mode)
+        Config.set("kivy", "keyboard_mode", mode.replace("'", ""))
         #dock - works
         #system -works
         #systemanddock - works
