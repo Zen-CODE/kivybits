@@ -20,7 +20,7 @@ from kivy import require
 
 # This example uses features introduced in Kivy 1.8.0, namely being able to load
 # custom json files from the app folder
-#require("1.8.0")
+require("1.8.0")
 
 Builder.load_string(
 '''
