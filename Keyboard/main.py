@@ -138,10 +138,6 @@ class ModeScreen(Screen):
     def set_mode(self, mode):
         """ Sets the keyboard mode to the one specified """
         Config.set("kivy", "keyboard_mode", mode.replace("'", ""))
-        #dock - works
-        #system -works
-        #systemanddock - works
-        #systemandmulti - not working
         Config.write()
         self.center_label.text = "Please restart the application for this\n" \
             "setting to take effect."
