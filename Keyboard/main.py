@@ -75,6 +75,8 @@ Builder.load_string(
                 orientation: "horizontal"
                 size_hint_y: 0.1
                 padding: "5sp"
+                Widget:
+                    size_hint_x: 0.2
                 Label:
                     text: "Current keyboard mode :"
                 Spinner:
@@ -84,6 +86,8 @@ Builder.load_string(
                 Button:
                     text: "Set"
                     on_release: root.set_mode(mode_spinner.text)
+                Widget:
+                    size_hint_x: 0.2
             Widget:
                 size_hint_y: 0.1
             BoxLayout:
