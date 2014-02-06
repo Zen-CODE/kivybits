@@ -43,6 +43,9 @@ Builder.load_string(
             markup: True
             text: "[b]Key pressed[/b] - None"
             halign: "center"
+        Button:
+            text: "Back"
+            size_hint_y: 0.1
         Widget:
             # Just a space taker to allow for the popup keyboard
             size_hint_y: 0.5
@@ -204,10 +207,14 @@ class KeyboardScreen(Screen):
 
 
 class KeyboardDemo(App):
+    sm = None  # The root screen manager
+
     def build(self):
-        sm = ScreenManager()
-        sm.switch_to(ModeScreen())
-        return sm
+        self.sm = ScreenManager()
+        self.sm.add_widget(ModeScreen(name="mode"))
+        self.sm.add_widget(KeyboardScreen(name="keyboard"))
+        self.sm.current = "mode"
+        return self.sm
 
 if __name__ == "__main__":
     KeyboardDemo().run()
