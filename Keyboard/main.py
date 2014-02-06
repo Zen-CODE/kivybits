@@ -194,6 +194,7 @@ class KeyboardScreen(Screen):
         """ The active keyboard is being closed. """
         if self._keyboard:
             self._keyboard.unbind(on_key_down=self.key_down)
+            self._keyboard.unbind(on_key_up=self.key_up)
             self._keyboard = None
 
     def key_down(self, keyboard, keycode, text, modifiers):
@@ -202,7 +203,7 @@ class KeyboardScreen(Screen):
 
     def key_up(self, keyboard, keycode, text, modifiers):
         """ The callback function that catches keyboard events. """
-        self.displayLabel.text += ", up {0}".format(text)
+        self.displayLabel.text += " (up {0})".format(text)
 
 
 class KeyboardDemo(App):
