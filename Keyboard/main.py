@@ -46,6 +46,7 @@ Builder.load_string(
         Button:
             text: "Back"
             size_hint_y: 0.1
+            on_release: root.parent.current = "mode"
         Widget:
             # Just a space taker to allow for the popup keyboard
             size_hint_y: 0.5
