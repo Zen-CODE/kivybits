@@ -74,8 +74,14 @@ class PlayingScreen(Screen):
         if len(self.queue) > 0:
             print "playing ", self.queue[0]
             self.sound = SoundLoader.load(self.queue[0])
+            self.sound.bind(on_stop=self._on_stop)
             self.sound.play()
             #self.player.start(self.queue[0])
+
+    def _on_stop(self, *args):
+        print "sound has stopped. args=", str(args)
+        # output: sound has stopped. args=
+        # (<kivy.core.audio.audio_pygame.SoundPygame object at 0xa106a7c>,)
 
 
 class ZenPlayer(App):

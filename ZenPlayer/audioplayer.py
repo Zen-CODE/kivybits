@@ -5,7 +5,7 @@ pygst.require('0.10')
 import gst
 import gst.interfaces
 from kivy.clock import Clock
-
+from kivy.event import EventDispatcher
 
 class SoundLoader():
     """
@@ -23,11 +23,11 @@ class SoundLoader():
             SoundLoader._player = _AudioPlayer(filename)
         return SoundLoader._player
 
-class _AudioPlayer(object):
+class _AudioPlayer(EventDispatcher):
     def __init__(self, filename, **kwargs):
         super(_AudioPlayer, self).__init__(**kwargs)
         self.player = gst.element_factory_make("playbin2", "player")
-        fakesink = gst.element_factory_make("fakesink", "fakesink")
+        #ssfakesink = gst.element_factory_make("fakesink", "fakesink")
         self.bus = self.player.get_bus()
         self.bus.set_sync_handler(self.on_message)
         self.filename = filename
