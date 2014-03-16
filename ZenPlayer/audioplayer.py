@@ -18,7 +18,7 @@ class SoundLoader():
     @staticmethod
     def load(filename):
         """
-        Load and start playing the audiofile specified.
+        Load and start playing the specified *filename*.
         """
         if not SoundLoader._player:
             SoundLoader._player = _AudioPlayer(filename)
@@ -62,3 +62,5 @@ class _AudioPlayer(EventDispatcher):
         self.player.set_state(gst.STATE_PLAYING)
         self.state = 'play'
 
+    def on_state(self, widget, value):
+        print "on_state=", value
