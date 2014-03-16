@@ -15,7 +15,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from os import path, listdir
 #from kivy.core.audio import SoundLoader
-from audioplayer import AudioPlayer
+from audioplayer import SoundLoader
 
 Builder.load_string('''
 <PlayingScreen>:
@@ -39,13 +39,13 @@ class PlayingScreen(Screen):
     The main screen that shows whats currently playing
     """
     album_image = ObjectProperty()
-    player = AudioPlayer()
+    player = None
     queue = []
 
     def play_folder(self, folder):
         self._set_albumart(folder)
         self._add_to_queue(folder)
-        if not self.player.playing():
+        if not self.player:
             self._start_play()
 
     def _set_albumart(self, folder):
@@ -73,9 +73,9 @@ class PlayingScreen(Screen):
         """
         if len(self.queue) > 0:
             print "playing ", self.queue[0]
-            #self.sound = SoundLoader.load(self.queue[0])
-            #self.sound.play()
-            self.player.start(self.queue[0])
+            self.sound = SoundLoader.load(self.queue[0])
+            self.sound.play()
+            #self.player.start(self.queue[0])
 
 
 class ZenPlayer(App):
