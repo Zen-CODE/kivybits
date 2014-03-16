@@ -14,8 +14,8 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from os import path, listdir
-#from kivy.core.audio import SoundLoader
-from audioplayer import SoundLoader
+from kivy.core.audio import SoundLoader
+#from audioplayer import SoundLoader
 
 Builder.load_string('''
 <PlayingScreen>:
@@ -39,14 +39,19 @@ class PlayingScreen(Screen):
     The main screen that shows whats currently playing
     """
     album_image = ObjectProperty()
-    player = None
+    sound = None
     queue = []
 
     def play_folder(self, folder):
         self._set_albumart(folder)
         self._add_to_queue(folder)
-        if not self.player:
+        if not self.sound:
             self._start_play()
+
+    def stop(self):
+        """ Stop any any playing audio """
+        if self.sound:
+            self.sound.stop()
 
     def _set_albumart(self, folder):
         """
@@ -76,7 +81,6 @@ class PlayingScreen(Screen):
             self.sound = SoundLoader.load(self.queue[0])
             self.sound.bind(on_stop=self._on_stop)
             self.sound.play()
-            #self.player.start(self.queue[0])
 
     def _on_stop(self, *args):
         print "sound has stopped. args=", str(args)
@@ -89,10 +93,22 @@ class ZenPlayer(App):
         sm = ScreenManager()
         playing = PlayingScreen()
         #TODO: Remove
-        playing.play_folder('/media/Zen320/Zen/Music/MP3/In Flames/Colony')
-        #playing.play_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
+        #playing.play_folder('/media/Zen320/Zen/Music/MP3/In Flames/Colony')
+        playing.play_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
+
+        def stop(dt):
+            print "About to stop"
+            playing.stop()
+
+        from kivy.clock import Clock
+        Clock.schedule_once(stop, 5.0)
+
+        #TODO: Remove
 
         sm.switch_to(playing)
+
+
+
         return sm
 
 ZenPlayer().run()
