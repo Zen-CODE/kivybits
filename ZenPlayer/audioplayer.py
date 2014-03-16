@@ -7,6 +7,7 @@ import gst.interfaces
 from kivy.clock import Clock
 from kivy.event import EventDispatcher
 
+
 class SoundLoader():
     """
     And 'kivy.core.audio.SoundPlayer' compatible class with mp3 audio format
@@ -23,16 +24,22 @@ class SoundLoader():
             SoundLoader._player = _AudioPlayer(filename)
         return SoundLoader._player
 
+
 class _AudioPlayer(EventDispatcher):
+    """
+    This class mimics the functionality of the 'kivy.core.audio.Sound' class
+    but uses an alternative implementation to support mp3 on linux and android.
+    """
     def __init__(self, filename, **kwargs):
         super(_AudioPlayer, self).__init__(**kwargs)
         self.player = gst.element_factory_make("playbin2", "player")
         #ssfakesink = gst.element_factory_make("fakesink", "fakesink")
         self.bus = self.player.get_bus()
-        self.bus.set_sync_handler(self.on_message)
+        self.bus.set_sync_handler(self._on_message)
         self.filename = filename
 
-    def on_message(self, bus, message):
+    def _on_message(self, bus, message):
+        """ Callback for the self.bus.set_sync_handler message handler """
         t = message.type
         if t == gst.MESSAGE_EOS:
             self.player.set_state(gst.STATE_NULL)
