@@ -38,9 +38,12 @@ class PlayingScreen(Screen):
     """
     The main screen that shows whats currently playing
     """
+    #TODO : Document properties once stable
     album_image = ObjectProperty()
     sound = None
     queue = []
+    advance = True  # This flag indicates whether to advance to the next track
+                    # once the currently playing one had ended
 
     def play_folder(self, folder):
         self._set_albumart(folder)
@@ -49,8 +52,9 @@ class PlayingScreen(Screen):
             self._start_play()
 
     def stop(self):
-        """ Stop any any playing audio """
+        """ Stop any playing audio """
         if self.sound:
+            self.advance = False
             self.sound.stop()
 
     def _set_albumart(self, folder):
@@ -84,6 +88,9 @@ class PlayingScreen(Screen):
 
     def _on_stop(self, *args):
         print "sound has stopped. args=", str(args)
+        if self.advance:
+            self.queue.pop(0)
+            self._start_play()
         # output: sound has stopped. args=
         # (<kivy.core.audio.audio_pygame.SoundPygame object at 0xa106a7c>,)
 
@@ -100,15 +107,12 @@ class ZenPlayer(App):
             print "About to stop"
             playing.stop()
 
-        from kivy.clock import Clock
-        Clock.schedule_once(stop, 5.0)
+        #from kivy.clock import Clock
+        #Clock.schedule_once(stop, 5.0)
 
         #TODO: Remove
 
         sm.switch_to(playing)
-
-
-
         return sm
 
 ZenPlayer().run()

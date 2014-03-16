@@ -62,5 +62,10 @@ class _AudioPlayer(EventDispatcher):
         self.player.set_state(gst.STATE_PLAYING)
         self.state = 'play'
 
+    def stop(self):
+        """ Stop any currently playing audio"""
+        self.player.set_state(gst.STATE_PAUSED)
+        self.state = 'stop'
+
     def on_state(self, widget, value):
         print "on_state=", value
