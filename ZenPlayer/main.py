@@ -49,7 +49,7 @@ class PlayingScreen(Screen):
         artwork = self._get_albumart(folder)
         for f in listdir(folder):
             if ".mp3" in f or ".ogg" in f or ".wav" in f:
-                self.queue.append([path.join(folder, f), artwork])
+                self.queue.append((path.join(folder, f), artwork))
 
     def play(self, index=0):
         if not self.sound:
