@@ -10,18 +10,22 @@ __author__ = 'ZenCODE'
 
 from kivy.app import App
 from kivy.lang import Builder
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, StringProperty
 from os import path, listdir
 #from kivy.core.audio import SoundLoader
 from audioplayer import SoundLoader
 
 Builder.load_string('''
-<MediaButton@FloatLayout>:
-    Button:
-        pos_hint: {'x': 0, 'y': 0}
-        size_hint: 1, 1
+<MediaButton>:
+    image: image
+
+#    Button:
+#        pos_hint: {'x': 0, 'y': 0}
+#        size_hint: 1, 1
     Image:
+        id: image
         pos_hint: {'x': 0, 'y': 0}
         size_hint: 1, 1
         source:
@@ -32,7 +36,6 @@ Builder.load_string('''
     but_stop: stop
     but_playpause: playpause
     but_next: next
-
 
     album_image: album_image
     BoxLayout:
@@ -53,18 +56,30 @@ Builder.load_string('''
                 orientation: "horizontal"
                 MediaButton:
                     id: previous
+                    source: 'images/previous.png'
                 MediaButton:
                     id: stop
+                    source: 'images/stop.png'
                 MediaButton:
                     id: playpause
+                    source: 'images/play.png'
                 MediaButton:
                     id: next
+                    source: 'images/next.png'
 
         BoxLayout:
             # Right sidebar
             orientation: "vertical"
             size_hint_x: 0.1
 ''')
+
+
+class MediaButton(FloatLayout):
+    source = StringProperty('')
+    image = ObjectProperty()
+
+    def on_source(self, widget, value):
+        self.image.source = value
 
 
 class PlayingScreen(Screen):
