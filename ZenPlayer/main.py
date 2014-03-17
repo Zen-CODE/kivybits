@@ -9,13 +9,12 @@ Kivy framework.
 __author__ = 'ZenCODE'
 
 from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from os import path, listdir
-from kivy.core.audio import SoundLoader
-#from audioplayer import SoundLoader
+#from kivy.core.audio import SoundLoader
+from audioplayer import SoundLoader
 
 Builder.load_string('''
 <PlayingScreen>:
@@ -41,13 +40,18 @@ class PlayingScreen(Screen):
     #TODO : Document properties once stable
     album_image = ObjectProperty()
     sound = None
-    queue = []
+    queue = []  # contains a list of (filename, albumart) pairs
     advance = True  # This flag indicates whether to advance to the next track
                     # once the currently playing one had ended
 
-    def play_folder(self, folder):
-        self._set_albumart(folder)
-        self._add_to_queue(folder)
+    def add_folder(self, folder):
+        """ Add the specified folder to the queue """
+        artwork = self._get_albumart(folder)
+        for f in listdir(folder):
+            if ".mp3" in f or ".ogg" in f or ".wav" in f:
+                self.queue.append([path.join(folder, f), artwork])
+
+    def play(self, index=0):
         if not self.sound:
             self._start_play()
 
@@ -57,34 +61,27 @@ class PlayingScreen(Screen):
             self.advance = False
             self.sound.stop()
 
-    def _set_albumart(self, folder):
+    def _get_albumart(self, folder):
         """
-        Extracts the image from the folder and displays any cover images in the
-        center image placeholder
+        Return the full image filename from the folder
         """
         for file in ["cover.jpg", "cover.png", "cover.bmp", "cover.jpeg"]:
             full_name = path.join(folder, file)
             if path.exists(full_name):
-                self.album_image.source = full_name
-                break
+                return full_name
+        return ""
 
-    def _add_to_queue(self, folder):
-        """
-        Add any suitable files to the queue for playback when done
-        """
-        for file in listdir(folder):
-            if ".mp3" in file or ".ogg" in file or ".wav" in file:
-                self.queue.append(path.join(folder, file))
 
     def _start_play(self):
         """
         Start playing any files in the queue
         """
         if len(self.queue) > 0:
-            print "playing ", self.queue[0]
-            self.sound = SoundLoader.load(self.queue[0])
+            print "playing ", self.queue[0][0]
+            self.sound = SoundLoader.load(self.queue[0][0])
             self.sound.bind(on_stop=self._on_stop)
             self.sound.play()
+            self.album_image.source = self.queue[0][1]
 
     def _on_stop(self, *args):
         print "sound has stopped. args=", str(args)
@@ -101,7 +98,8 @@ class ZenPlayer(App):
         playing = PlayingScreen()
         #TODO: Remove
         #playing.play_folder('/media/Zen320/Zen/Music/MP3/In Flames/Colony')
-        playing.play_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
+        playing.add_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
+        playing.play()
 
         def stop(dt):
             print "About to stop"
