@@ -17,17 +17,51 @@ from os import path, listdir
 from audioplayer import SoundLoader
 
 Builder.load_string('''
+<MediaButton@FloatLayout>:
+    Button:
+        pos_hint: {'x': 0, 'y': 0}
+        size_hint: 1, 1
+    Image:
+        pos_hint: {'x': 0, 'y': 0}
+        size_hint: 1, 1
+        source:
+
 <PlayingScreen>:
+    # Define the buttons
+    but_previous: previous
+    but_stop: stop
+    but_playpause: playpause
+    but_next: next
+
+
     album_image: album_image
     BoxLayout:
         orientation: "horizontal"
         BoxLayout:
+            # Left Sidebar
             orientation: "vertical"
             size_hint_x: 0.1
-        Image:
-            id: album_image
-            size_hint_x: 0.8
         BoxLayout:
+            # Center column
+            size_hint_x: 0.8
+            orientation: "vertical"
+            Image:
+                size_hint_y: 0.9
+                id: album_image
+            BoxLayout:
+                size_hint_y: 0.1
+                orientation: "horizontal"
+                MediaButton:
+                    id: previous
+                MediaButton:
+                    id: stop
+                MediaButton:
+                    id: playpause
+                MediaButton:
+                    id: next
+
+        BoxLayout:
+            # Right sidebar
             orientation: "vertical"
             size_hint_x: 0.1
 ''')
@@ -43,6 +77,10 @@ class PlayingScreen(Screen):
     queue = []  # contains a list of (filename, albumart) pairs
     advance = True  # This flag indicates whether to advance to the next track
                     # once the currently playing one had ended
+    but_previous = ObjectProperty()
+    but_stop = ObjectProperty()
+    but_playpause = ObjectProperty()
+    but_next = ObjectProperty()
 
     def add_folder(self, folder):
         """ Add the specified folder to the queue """
