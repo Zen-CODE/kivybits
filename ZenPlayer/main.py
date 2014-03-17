@@ -52,6 +52,7 @@ class PlayingScreen(Screen):
                 self.queue.append((path.join(folder, f), artwork))
 
     def play(self, index=0):
+        """ Start playing any audio if nothing is playing """
         if not self.sound:
             self._start_play()
 
@@ -61,16 +62,16 @@ class PlayingScreen(Screen):
             self.advance = False
             self.sound.stop()
 
-    def _get_albumart(self, folder):
+    @staticmethod
+    def _get_albumart(folder):
         """
         Return the full image filename from the folder
         """
-        for file in ["cover.jpg", "cover.png", "cover.bmp", "cover.jpeg"]:
-            full_name = path.join(folder, file)
+        for f in ["cover.jpg", "cover.png", "cover.bmp", "cover.jpeg"]:
+            full_name = path.join(folder, f)
             if path.exists(full_name):
                 return full_name
         return ""
-
 
     def _start_play(self):
         """
