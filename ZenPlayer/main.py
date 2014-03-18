@@ -20,15 +20,11 @@ from audioplayer import SoundLoader
 Builder.load_string('''
 <MediaButton>:
     image: image
-
-#    Button:
-#        pos_hint: {'x': 0, 'y': 0}
-#        size_hint: 1, 1
     Image:
         id: image
         pos_hint: {'x': 0, 'y': 0}
         size_hint: 1, 1
-        source:
+        on_touch_down: self.collide_point(*args[1].pos) and root.dispatch('on_click')
 
 <PlayingScreen>:
     # Define the buttons
@@ -48,6 +44,7 @@ Builder.load_string('''
             # Center column
             size_hint_x: 0.8
             orientation: "vertical"
+            padding: 10, 10, 10, 10
             Image:
                 size_hint_y: 0.9
                 id: album_image
@@ -63,6 +60,7 @@ Builder.load_string('''
                 MediaButton:
                     id: playpause
                     source: 'images/play.png'
+                    on_click: root.playpause()
                 MediaButton:
                     id: next
                     source: 'images/next.png'
@@ -75,11 +73,24 @@ Builder.load_string('''
 
 
 class MediaButton(FloatLayout):
+    """
+    A pretty, shiny button showing the player controls
+    """
     source = StringProperty('')
     image = ObjectProperty()
 
+    def __init__(self, **kwargs):
+        """ Override the constructor so we can register an event """
+        super(MediaButton, self).__init__(**kwargs)
+        self.register_event_type("on_click")
+
     def on_source(self, widget, value):
+        """ The 'source' property for the image has changed. Change it. """
         self.image.source = value
+
+    def on_click(self):
+        """ The button has been clicked. """
+        pass
 
 
 class PlayingScreen(Screen):
@@ -104,10 +115,18 @@ class PlayingScreen(Screen):
             if ".mp3" in f or ".ogg" in f or ".wav" in f:
                 self.queue.append((path.join(folder, f), artwork))
 
-    def play(self, index=0):
+    def playpause(self, index=0):
         """ Start playing any audio if nothing is playing """
         if not self.sound:
-            self._start_play()
+            if len(self.queue) > 0:
+                print "playing ", self.queue[0][0]
+                self.sound = SoundLoader.load(self.queue[0][0])
+                self.sound.bind(on_stop=self._on_stop)
+                self.sound.play()
+                self.album_image.source = self.queue[0][1]
+        else:
+            #TODO
+            pass
 
     def stop(self):
         """ Stop any playing audio """
@@ -126,17 +145,6 @@ class PlayingScreen(Screen):
                 return full_name
         return ""
 
-    def _start_play(self):
-        """
-        Start playing any files in the queue
-        """
-        if len(self.queue) > 0:
-            print "playing ", self.queue[0][0]
-            self.sound = SoundLoader.load(self.queue[0][0])
-            self.sound.bind(on_stop=self._on_stop)
-            self.sound.play()
-            self.album_image.source = self.queue[0][1]
-
     def _on_stop(self, *args):
         print "sound has stopped. args=", str(args)
         if self.advance:
@@ -153,11 +161,11 @@ class ZenPlayer(App):
         #TODO: Remove
         #playing.play_folder('/media/Zen320/Zen/Music/MP3/In Flames/Colony')
         playing.add_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
-        playing.play()
+        #playing.play()
 
-        def stop(dt):
-            print "About to stop"
-            playing.stop()
+        #def stop(dt):
+        #    print "============= About to stop"
+        #    playing.stop()
 
         #from kivy.clock import Clock
         #Clock.schedule_once(stop, 5.0)
