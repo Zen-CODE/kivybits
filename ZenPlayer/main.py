@@ -57,6 +57,9 @@ Builder.load_string('''
     but_stop: stop
     but_playpause: playpause
     but_next: next
+    info_label1: info_label1
+    info_label2: info_label2
+    info_label3: info_label3
 
     album_image: album_image
     BoxLayout:
@@ -70,8 +73,17 @@ Builder.load_string('''
             size_hint_x: 0.8
             orientation: "vertical"
             padding: 10, 10, 10, 10
+            Label:
+                id: info_label1
+                size_hint_y: 0.05
+            Label:
+                id: info_label2
+                size_hint_y: 0.05
+            Label:
+                id: info_label3
+                size_hint_y: 0.05
             Image:
-                size_hint_y: 0.9
+                size_hint_y: 0.75
                 id: album_image
             BoxLayout:
                 size_hint_y: 0.1
@@ -113,11 +125,16 @@ class PlayingScreen(Screen):
     but_stop = ObjectProperty()
     but_playpause = ObjectProperty()
     but_next = ObjectProperty()
+    info_label = ObjectProperty()
 
     def init(self):
         """ Initialize the display """
         if len(self.queue) > self.current:
             self.album_image.source = self.queue[self.current][1]
+            info = self._get_current_info()
+            self.info_label1.text = info["artist"]
+            self.info_label2.text = info["album"]
+            self.info_label3.text = info["file"]
 
     def add_folder(self, folder):
         """ Add the specified folder to the queue """
@@ -161,6 +178,18 @@ class PlayingScreen(Screen):
             if path.exists(full_name):
                 return full_name
         return ""
+
+    def _get_current_info(self):
+        """
+        Return a dictionary containing the metadata on the track """
+        if len(self.queue) > self.current:
+            parts = self.queue[self.current][0].split("/")
+            return {
+                "artist": parts[-3],
+                "album": parts[-2],
+                "file": parts[-1]}
+        else:
+            return {}
 
     def _on_stop(self, *args):
         print "sound has stopped. args=", str(args)
