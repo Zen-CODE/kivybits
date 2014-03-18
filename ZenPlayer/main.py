@@ -57,6 +57,8 @@ Builder.load_string('''
     but_stop: stop
     but_playpause: playpause
     but_next: next
+    volume: volume
+    progress: progress
     info_label1: info_label1
     info_label2: info_label2
     info_label3: info_label3
@@ -73,6 +75,9 @@ Builder.load_string('''
             size_hint_x: 0.8
             orientation: "vertical"
             padding: 10, 10, 10, 10
+            Slider:
+                size_hint_y: 0.1
+                id: progress
             Label:
                 id: info_label1
                 size_hint_y: 0.05
@@ -83,7 +88,7 @@ Builder.load_string('''
                 id: info_label3
                 size_hint_y: 0.05
             Image:
-                size_hint_y: 0.75
+                size_hint_y: 0.65
                 id: album_image
             BoxLayout:
                 size_hint_y: 0.1
@@ -107,6 +112,15 @@ Builder.load_string('''
             # Right sidebar
             orientation: "vertical"
             size_hint_x: 0.1
+            padding: 10
+            spacing: 10
+            Slider:
+                id: volume
+                size_hint_y: 0.9
+                orientation: "vertical"
+            Image:
+                size_hint_y: 0.1
+                source: 'images/speaker.png'
 ''')
 
 
@@ -126,6 +140,7 @@ class PlayingScreen(Screen):
     but_playpause = ObjectProperty()
     but_next = ObjectProperty()
     info_label = ObjectProperty()
+    volume = ObjectProperty()
 
     def init(self):
         """ Initialize the display """
@@ -182,14 +197,17 @@ class PlayingScreen(Screen):
     def _get_current_info(self):
         """
         Return a dictionary containing the metadata on the track """
-        if len(self.queue) > self.current:
+        try:
             parts = self.queue[self.current][0].split("/")
             return {
                 "artist": parts[-3],
                 "album": parts[-2],
                 "file": parts[-1]}
-        else:
-            return {}
+        except:
+            return {
+                "artist": "-",
+                "album": "-",
+                "file": "-"}
 
     def _on_stop(self, *args):
         print "sound has stopped. args=", str(args)
