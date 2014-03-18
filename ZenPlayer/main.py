@@ -118,6 +118,8 @@ Builder.load_string('''
                 id: volume
                 size_hint_y: 0.9
                 orientation: "vertical"
+                max: 1
+                on_value: root.set_volume()
             Image:
                 size_hint_y: 0.1
                 source: 'images/speaker.png'
@@ -182,6 +184,11 @@ class PlayingScreen(Screen):
             self.advance = False
             self.sound.stop()
             self.but_playpause.source = "images/play.png"
+
+    def set_volume(self):
+        """ Set the volume of the currently playing track if there is one. """
+        if self.sound:
+            self.sound.volume = self.volume.value
 
     @staticmethod
     def _get_albumart(folder):
