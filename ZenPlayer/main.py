@@ -82,6 +82,7 @@ Builder.load_string('''
                 MediaButton:
                     id: stop
                     source: 'images/stop.png'
+                    on_click: root.stop()
                 MediaButton:
                     id: playpause
                     source: 'images/play.png'
@@ -142,6 +143,7 @@ class PlayingScreen(Screen):
         if self.sound:
             self.advance = False
             self.sound.stop()
+            self.but_playpause.source = "images/play.png"
 
     @staticmethod
     def _get_albumart(folder):
