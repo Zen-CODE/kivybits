@@ -108,10 +108,16 @@ class PlayingScreen(Screen):
     queue = []  # contains a list of (filename, albumart) pairs
     advance = True  # This flag indicates whether to advance to the next track
                     # once the currently playing one had ended
+    current = 0  # The index of the currently playing track in the queue
     but_previous = ObjectProperty()
     but_stop = ObjectProperty()
     but_playpause = ObjectProperty()
     but_next = ObjectProperty()
+
+    def init(self):
+        """ Initialize the display """
+        if len(self.queue) > self.current:
+            self.album_image.source = self.queue[self.current][1]
 
     def add_folder(self, folder):
         """ Add the specified folder to the queue """
@@ -120,15 +126,15 @@ class PlayingScreen(Screen):
             if ".mp3" in f or ".ogg" in f or ".wav" in f:
                 self.queue.append((path.join(folder, f), artwork))
 
-    def playpause(self, index=0):
+    def playpause(self):
         """ Start playing any audio if nothing is playing """
         if not self.sound:
-            if len(self.queue) > 0:
-                print "playing ", self.queue[0][0]
-                self.sound = SoundLoader.load(self.queue[0][0])
+            if len(self.queue) > self.current:
+                print "playing ", self.queue[self.current][0]
+                self.sound = SoundLoader.load(self.queue[self.current][0])
                 self.sound.bind(on_stop=self._on_stop)
                 self.sound.play()
-                self.album_image.source = self.queue[0][1]
+                self.album_image.source = self.queue[self.current][1]
                 self.but_playpause.source = "images/pause.png"
         elif self.sound.state == "play":
             self.advance = False
@@ -172,6 +178,7 @@ class ZenPlayer(App):
         #TODO: Remove
         #playing.play_folder('/media/Zen320/Zen/Music/MP3/In Flames/Colony')
         playing.add_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
+        playing.init()
         #playing.play()
 
         #def stop(dt):
@@ -187,5 +194,3 @@ class ZenPlayer(App):
         return sm
 
 ZenPlayer().run()
-
-
