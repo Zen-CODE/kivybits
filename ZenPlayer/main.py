@@ -14,8 +14,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty, StringProperty
 from os import path, listdir
-#from kivy.core.audio import SoundLoader
-from audioplayer import SoundLoader
+from kivy.core.audio import SoundLoader
+#from audioplayer import SoundLoader
 
 Builder.load_string('''
 <MediaButton>:
@@ -25,6 +25,31 @@ Builder.load_string('''
         pos_hint: {'x': 0, 'y': 0}
         size_hint: 1, 1
         on_touch_down: self.collide_point(*args[1].pos) and root.dispatch('on_click')
+''')
+
+
+class MediaButton(FloatLayout):
+    """
+    A pretty, shiny button showing the player controls
+    """
+    source = StringProperty('')
+    image = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        """ Override the constructor so we can register an event """
+        super(MediaButton, self).__init__(**kwargs)
+        self.register_event_type("on_click")
+
+    def on_source(self, widget, value):
+        """ The 'source' property for the image has changed. Change it. """
+        self.image.source = value
+
+    def on_click(self):
+        """ The button has been clicked. """
+        pass
+
+
+Builder.load_string('''
 
 <PlayingScreen>:
     # Define the buttons
@@ -72,27 +97,6 @@ Builder.load_string('''
 ''')
 
 
-class MediaButton(FloatLayout):
-    """
-    A pretty, shiny button showing the player controls
-    """
-    source = StringProperty('')
-    image = ObjectProperty()
-
-    def __init__(self, **kwargs):
-        """ Override the constructor so we can register an event """
-        super(MediaButton, self).__init__(**kwargs)
-        self.register_event_type("on_click")
-
-    def on_source(self, widget, value):
-        """ The 'source' property for the image has changed. Change it. """
-        self.image.source = value
-
-    def on_click(self):
-        """ The button has been clicked. """
-        pass
-
-
 class PlayingScreen(Screen):
     """
     The main screen that shows whats currently playing
@@ -124,9 +128,14 @@ class PlayingScreen(Screen):
                 self.sound.bind(on_stop=self._on_stop)
                 self.sound.play()
                 self.album_image.source = self.queue[0][1]
+                self.but_playpause.source = "images/pause.png"
+        elif self.sound.state == "play":
+            self.advance = False
+            self.sound.stop()
+            self.but_playpause.source = "images/play.png"
         else:
-            #TODO
-            pass
+            self.sound.play()
+            self.but_playpause.source = "images/pause.png"
 
     def stop(self):
         """ Stop any playing audio """
@@ -149,7 +158,7 @@ class PlayingScreen(Screen):
         print "sound has stopped. args=", str(args)
         if self.advance:
             self.queue.pop(0)
-            self._start_play()
+            self.playpause()
         # output: sound has stopped. args=
         # (<kivy.core.audio.audio_pygame.SoundPygame object at 0xa106a7c>,)
 
