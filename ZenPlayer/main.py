@@ -14,8 +14,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty, StringProperty
 from os import path, listdir
-from kivy.core.audio import SoundLoader
-#from audioplayer import SoundLoader
+#from kivy.core.audio import SoundLoader
+from audioplayer import SoundLoader
 
 Builder.load_string('''
 <MediaButton>:
@@ -143,6 +143,7 @@ class PlayingScreen(Screen):
     but_next = ObjectProperty()
     info_label = ObjectProperty()
     volume = ObjectProperty()
+    progress = ObjectProperty()
 
     def init(self):
         """ Initialize the display """
@@ -152,6 +153,7 @@ class PlayingScreen(Screen):
             self.info_label1.text = info["artist"]
             self.info_label2.text = info["album"]
             self.info_label3.text = info["file"]
+            self.volume.value = 0.5   # TODO: Remove
 
     def add_folder(self, folder):
         """ Add the specified folder to the queue """
@@ -170,6 +172,7 @@ class PlayingScreen(Screen):
                 self.sound.play()
                 self.album_image.source = self.queue[self.current][1]
                 self.but_playpause.source = "images/pause.png"
+                self.sound.volume = self.volume.value
         elif self.sound.state == "play":
             self.advance = False
             self.sound.stop()
@@ -230,10 +233,9 @@ class ZenPlayer(App):
         sm = ScreenManager()
         playing = PlayingScreen()
         #TODO: Remove
-        #playing.play_folder('/media/Zen320/Zen/Music/MP3/In Flames/Colony')
-        playing.add_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
+        playing.add_folder('/media/Zen320/Zen/Music/MP3/In Flames/Colony')
+        #playing.add_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
         playing.init()
-        #playing.play()
 
         #def stop(dt):
         #    print "============= About to stop"
