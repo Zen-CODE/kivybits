@@ -5,6 +5,7 @@ pygst.require('0.10')
 import gst
 import gst.interfaces
 from kivy.core.audio import Sound
+from kivy.clock import Clock
 
 
 class SoundLoader():
@@ -31,6 +32,38 @@ class _AudioPlayer(Sound):
 
     Please see from kivy.core.audio.Sound class for details
     """
+    # =================  Methods of the abstract Sound class ==================
+    #source = StringProperty(None)  # Read only
+    #volume = NumericProperty(1.)
+    #state = OptionProperty('stop', options=('stop', 'play'))# read-only
+    #loop = BooleanProperty(False)
+    #
+    #__events__ = ('on_play', 'on_stop')
+    #
+    #def on_source(self, instance, filename):
+    #    self.unload()
+    #    if filename is None:
+    #        return
+    #    self.load()
+    #
+    #def get_pos(self):
+    #
+    #def _get_length(self):
+    #    return 0
+    #
+    #length = property(lambda self: self._get_length(),
+    #                  doc='Get length of the sound (in seconds).')
+    #
+    #def seek(self, position):
+    #    '''Go to the <position> (in seconds).'''
+    #    pass
+    #
+    #def on_play(self):
+    #    pass
+    #
+    #def on_stop(self):
+    #    pass
+
     def __init__(self, filename, **kwargs):
         super(_AudioPlayer, self).__init__(**kwargs)
         self.player = gst.element_factory_make("playbin2", "player")
@@ -39,13 +72,12 @@ class _AudioPlayer(Sound):
         self.bus = self.player.get_bus()
         self.bus.set_sync_handler(self._on_message)
         self.source = filename
-        print "playbin has", dir(self.player)
 
     def _on_message(self, bus, message):
         """ Callback for the self.bus.set_sync_handler message handler """
         t = message.type.numerator
-        print "t=", str(t)
-        print "state=", self.state
+        #print "t=", str(t)
+        #print "state=", self.state
 
         #t = message.type
         #print "t=", str(t)
@@ -58,18 +90,17 @@ class _AudioPlayer(Sound):
             #from kivy.clock import Clock
             #Clock.schedule_once(lambda dt: self.stop(), 1)
         elif t == gst.MESSAGE_ERROR:
-            print 'error'
             self.player.set_state(gst.STATE_NULL)
             err, debug = message.parse_error()
             print "Player Error: %s" % err, debug
-        else:
-            print 'niether'
         return gst.BUS_PASS
 
     def play(self):
+        """ Begin playing the file specified by the *source* property. """
         self.player.set_property('uri', "file://{0}".format(self.source))
         self.player.set_state(gst.STATE_PLAYING)
         self.state = 'play'
+        self.player.set_property("volume", self.volume)
 
     def stop(self):
         """ Stop any currently playing audio"""
