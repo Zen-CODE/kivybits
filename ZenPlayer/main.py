@@ -67,23 +67,33 @@ Builder.load_string('''
 
     album_image: album_image
     BoxLayout:
-        orientation: "horizontal"
-        StackLayout:
-            # Left Sidebar
-            orientation: "tb-lr"
+        BoxLayout:
+            orientation: "vertical"
             size_hint_x: 0.1
-            padding: 10, 10, 10, 10
+            padding: 10
+            spacing: 10
+            Slider:
+                id: progress
+                size_hint_y: 0.9
+                orientation: "vertical"
+                max: 1
+                #on_value: root.set_volume()
             Image:
-                source: 'images/zencode.jpg'
-            Widget:
+                size_hint_y: 0.075
+                source: 'images/progress.png'
         BoxLayout:
             # Center column
             size_hint_x: 0.8
             orientation: "vertical"
             padding: 10, 10, 10, 10
-            Slider:
-                size_hint_y: 0.1
-                id: progress
+            BoxLayout:
+                size_hint_y: 0.05
+                Button:
+                    text: "Add files"
+                Image:
+                    source: 'images/zencode.jpg'
+                Button:
+                    text: "Playlist"
             Label:
                 id: info_label1
                 size_hint_y: 0.05
@@ -93,11 +103,13 @@ Builder.load_string('''
             Label:
                 id: info_label3
                 size_hint_y: 0.05
-            Image:
-                size_hint_y: 0.65
-                id: album_image
             BoxLayout:
-                size_hint_y: 0.1
+                size_hint_y: 0.65
+                padding: 10, 10, 10, 10
+                Image:
+                    id: album_image
+            BoxLayout:
+                size_hint_y: 0.075
                 orientation: "horizontal"
                 MediaButton:
                     id: previous
@@ -128,7 +140,7 @@ Builder.load_string('''
                 max: 1
                 on_value: root.set_volume()
             Image:
-                size_hint_y: 0.1
+                size_hint_y: 0.075
                 source: 'images/speaker.png'
 ''')
 
@@ -181,6 +193,7 @@ class PlayingScreen(Screen):
         else:
             self.sound.play()
             self.but_playpause.source = "images/pause.png"
+            self.sound.volume = self.volume.value
 
     def play_next(self):
         """ Play the next track. """
@@ -219,14 +232,17 @@ class PlayingScreen(Screen):
     def _update_progress(self, dt):
         """ Update the progressbar  """
         if self.sound:
-            self.progress.value = self.sound.get_pos()
+            #self.progress.value = self.sound.get_pos()
+            if self.sound._get_length() > 0:
+                self.progress.value = self.sound.get_pos() / self.sound._get_length()
+
 
 class ZenPlayer(App):
     def build(self):
         sm = ScreenManager()
         playing = PlayingScreen()
         #TODO: Remove
-        playing.playlist.add_folder('/media/Zen320/Zen/Music/MP3/In Flames/Colony')
+        playing.playlist.add_folder('/media/Zen320/Zen/Music/MP3/Various/Cafe Del Mar - Chillhouse Mix 4 (Disc 1)')
         #playing.playlist.add_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
         playing.init()
 
