@@ -13,16 +13,13 @@ class SoundLoader():
     And 'kivy.core.audio.SoundPlayer' compatible class with mp3 audio format
     support.
     """
-    _player = None
 
     @staticmethod
     def load(filename):
         """
         Load and start playing the specified *filename*.
         """
-        if not SoundLoader._player:
-            SoundLoader._player = _AudioPlayer(filename)
-        return SoundLoader._player
+        return _AudioPlayer(filename)
 
 
 class _AudioPlayer(Sound):

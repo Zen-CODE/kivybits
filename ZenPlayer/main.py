@@ -109,6 +109,7 @@ Builder.load_string('''
                 MediaButton:
                     id: next
                     source: 'images/next.png'
+                    on_click: root.play_next()
 
         BoxLayout:
             # Right sidebar
@@ -149,7 +150,6 @@ class PlayingScreen(Screen):
     def init(self):
         """ Initialize the display """
         self.album_image.source = self.playlist.get_current_art()
-        print "self.album_image.source=", self.playlist.get_current_art()
         info = self.playlist.get_current_info()
         if info:
             self.info_label1.text = info["artist"]
@@ -164,7 +164,7 @@ class PlayingScreen(Screen):
             if audiof:
                 print "playing ", audiof
                 self.sound = SoundLoader.load(audiof)
-                self.sound.bind(on_stop=self._on_stop)
+                self.sound.bind(on_stop=self._on_sound_stop)
                 self.sound.play()
                 self.album_image.source = self.playlist.get_current_art()
                 self.but_playpause.source = "images/pause.png"
@@ -177,23 +177,38 @@ class PlayingScreen(Screen):
             self.sound.play()
             self.but_playpause.source = "images/pause.png"
 
+    def play_next(self):
+        """ Play the next track. """
+        if self.sound:
+            self.stop()
+            self.sound = None
+        self.playlist.move_next()
+        print "self.playlist.move_next()=", self.playlist.get_current_file()
+        if self.playlist.get_current_file():
+            self.init()
+            self.playpause()
+
     def stop(self):
         """ Stop any playing audio """
+        self.advance = False
         if self.sound:
-            self.advance = False
             self.sound.stop()
             self.but_playpause.source = "images/play.png"
+            self.sound = None
+            self.advance = True
 
     def set_volume(self):
         """ Set the volume of the currently playing track if there is one. """
         if self.sound:
             self.sound.volume = self.volume.value
 
-    def _on_stop(self, *args):
+    def _on_sound_stop(self, *args):
         print "sound has stopped. args=", str(args)
+        self.sound = None
         if self.advance:
-            self.queue.pop(0)
+            self.playlist.move_next()
             self.playpause()
+
         # output: sound has stopped. args=
         # (<kivy.core.audio.audio_pygame.SoundPygame object at 0xa106a7c>,)
 
