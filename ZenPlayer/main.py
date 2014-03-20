@@ -13,7 +13,6 @@ from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty, StringProperty
-from os import path, listdir
 #from kivy.core.audio import SoundLoader
 from audioplayer import SoundLoader
 from playlist import PlayList
@@ -179,6 +178,7 @@ class PlayingScreen(Screen):
 
     def play_next(self):
         """ Play the next track. """
+        print "PlayingScreen.play_next"
         if self.sound:
             self.stop()
             self.sound = None
@@ -207,7 +207,9 @@ class PlayingScreen(Screen):
         self.sound = None
         if self.advance:
             self.playlist.move_next()
+            self.init()
             self.playpause()
+
 
         # output: sound has stopped. args=
         # (<kivy.core.audio.audio_pygame.SoundPygame object at 0xa106a7c>,)
@@ -219,7 +221,7 @@ class ZenPlayer(App):
         playing = PlayingScreen()
         #TODO: Remove
         playing.playlist.add_folder('/media/Zen320/Zen/Music/MP3/In Flames/Colony')
-        #playing.add_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
+        #playing.playlist.add_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
         playing.init()
 
         #def stop(dt):
