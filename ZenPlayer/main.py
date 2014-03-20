@@ -16,6 +16,7 @@ from kivy.properties import ObjectProperty, StringProperty
 #from kivy.core.audio import SoundLoader
 from audioplayer import SoundLoader
 from playlist import PlayList
+from kivy.clock import Clock
 
 
 Builder.load_string('''
@@ -67,10 +68,14 @@ Builder.load_string('''
     album_image: album_image
     BoxLayout:
         orientation: "horizontal"
-        BoxLayout:
+        StackLayout:
             # Left Sidebar
-            orientation: "vertical"
+            orientation: "tb-lr"
             size_hint_x: 0.1
+            padding: 10, 10, 10, 10
+            Image:
+                source: 'images/zencode.jpg'
+            Widget:
         BoxLayout:
             # Center column
             size_hint_x: 0.8
@@ -155,6 +160,7 @@ class PlayingScreen(Screen):
             self.info_label2.text = info["album"]
             self.info_label3.text = info["file"]
             self.volume.value = 0.5   # TODO: Initialize to half or previous
+        Clock.schedule_interval(self._update_progress, 1/25)
 
     def playpause(self):
         """ Start playing any audio if nothing is playing """
@@ -210,10 +216,10 @@ class PlayingScreen(Screen):
             self.init()
             self.playpause()
 
-
-        # output: sound has stopped. args=
-        # (<kivy.core.audio.audio_pygame.SoundPygame object at 0xa106a7c>,)
-
+    def _update_progress(self, dt):
+        """ Update the progressbar  """
+        if self.sound:
+            self.progress.value = self.sound.get_pos()
 
 class ZenPlayer(App):
     def build(self):
