@@ -63,6 +63,7 @@ class _AudioPlayer(Sound):
     #
     #def on_stop(self):
     #    pass
+    _length = 0
 
     def __init__(self, filename, **kwargs):
         super(_AudioPlayer, self).__init__(**kwargs)
@@ -73,22 +74,15 @@ class _AudioPlayer(Sound):
         self.bus.set_sync_handler(self._on_message)
         self.source = filename
 
+    def _get_length(self):
+        return self._length
+
     def _on_message(self, bus, message):
         """ Callback for the self.bus.set_sync_handler message handler """
         t = message.type.numerator
-        #print "t=", str(t)
-        #print "state=", self.state
-
-        #t = message.type
-        #print "t=", str(t)
         # t= <flags GST_MESSAGE_EOS of type GstMessageType>
         if t == gst.MESSAGE_EOS:  # MESSAGE_EOS = 1
-            print 'stopping'
-            #self.player.set_state(gst.STATE_NULL)
-            #self.state = 'stop'
             self.stop()
-            #from kivy.clock import Clock
-            #Clock.schedule_once(lambda dt: self.stop(), 1)
         elif t == gst.MESSAGE_ERROR:
             self.player.set_state(gst.STATE_NULL)
             err, debug = message.parse_error()
@@ -102,8 +96,15 @@ class _AudioPlayer(Sound):
         self.state = 'play'
         self.player.set_property("volume", self.volume)
 
+        def get_status(dt):
+            self._length = self.player.get_last_stream_time()
+            print "len=", str(self._length)
+
+        Clock.schedule_once(get_status, 1)
+        print "playe has=", dir(self.player)
+
     def stop(self):
-        """ Stop any currently playing audio"""
+        """ Stop any currently playing audio """
         self.player.set_state(gst.STATE_NULL)
         self.state = 'stop'
 

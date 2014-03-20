@@ -16,6 +16,8 @@ from kivy.properties import ObjectProperty, StringProperty
 from os import path, listdir
 #from kivy.core.audio import SoundLoader
 from audioplayer import SoundLoader
+from playlist import PlayList
+
 
 Builder.load_string('''
 <MediaButton>:
@@ -133,10 +135,9 @@ class PlayingScreen(Screen):
     #TODO : Document properties once stable
     album_image = ObjectProperty()
     sound = None
-    queue = []  # contains a list of (filename, albumart) pairs
     advance = True  # This flag indicates whether to advance to the next track
                     # once the currently playing one had ended
-    current = 0  # The index of the currently playing track in the queue
+    playlist = PlayList()
     but_previous = ObjectProperty()
     but_stop = ObjectProperty()
     but_playpause = ObjectProperty()
@@ -147,30 +148,25 @@ class PlayingScreen(Screen):
 
     def init(self):
         """ Initialize the display """
-        if len(self.queue) > self.current:
-            self.album_image.source = self.queue[self.current][1]
-            info = self._get_current_info()
+        self.album_image.source = self.playlist.get_current_art()
+        print "self.album_image.source=", self.playlist.get_current_art()
+        info = self.playlist.get_current_info()
+        if info:
             self.info_label1.text = info["artist"]
             self.info_label2.text = info["album"]
             self.info_label3.text = info["file"]
-            self.volume.value = 0.5   # TODO: Remove
-
-    def add_folder(self, folder):
-        """ Add the specified folder to the queue """
-        artwork = self._get_albumart(folder)
-        for f in listdir(folder):
-            if ".mp3" in f or ".ogg" in f or ".wav" in f:
-                self.queue.append((path.join(folder, f), artwork))
+            self.volume.value = 0.5   # TODO: Initialize to half or previous
 
     def playpause(self):
         """ Start playing any audio if nothing is playing """
         if not self.sound:
-            if len(self.queue) > self.current:
-                print "playing ", self.queue[self.current][0]
-                self.sound = SoundLoader.load(self.queue[self.current][0])
+            audiof = self.playlist.get_current_file()
+            if audiof:
+                print "playing ", audiof
+                self.sound = SoundLoader.load(audiof)
                 self.sound.bind(on_stop=self._on_stop)
                 self.sound.play()
-                self.album_image.source = self.queue[self.current][1]
+                self.album_image.source = self.playlist.get_current_art()
                 self.but_playpause.source = "images/pause.png"
                 self.sound.volume = self.volume.value
         elif self.sound.state == "play":
@@ -193,32 +189,6 @@ class PlayingScreen(Screen):
         if self.sound:
             self.sound.volume = self.volume.value
 
-    @staticmethod
-    def _get_albumart(folder):
-        """
-        Return the full image filename from the folder
-        """
-        for f in ["cover.jpg", "cover.png", "cover.bmp", "cover.jpeg"]:
-            full_name = path.join(folder, f)
-            if path.exists(full_name):
-                return full_name
-        return ""
-
-    def _get_current_info(self):
-        """
-        Return a dictionary containing the metadata on the track """
-        try:
-            parts = self.queue[self.current][0].split("/")
-            return {
-                "artist": parts[-3],
-                "album": parts[-2],
-                "file": parts[-1]}
-        except:
-            return {
-                "artist": "-",
-                "album": "-",
-                "file": "-"}
-
     def _on_stop(self, *args):
         print "sound has stopped. args=", str(args)
         if self.advance:
@@ -233,7 +203,7 @@ class ZenPlayer(App):
         sm = ScreenManager()
         playing = PlayingScreen()
         #TODO: Remove
-        playing.add_folder('/media/Zen320/Zen/Music/MP3/In Flames/Colony')
+        playing.playlist.add_folder('/media/Zen320/Zen/Music/MP3/In Flames/Colony')
         #playing.add_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
         playing.init()
 
