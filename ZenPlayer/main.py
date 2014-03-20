@@ -88,12 +88,12 @@ Builder.load_string('''
             padding: 10, 10, 10, 10
             BoxLayout:
                 size_hint_y: 0.05
-                Button:
-                    text: "Add files"
+                Image:
+                    source: 'images/add.png'
                 Image:
                     source: 'images/zencode.jpg'
-                Button:
-                    text: "Playlist"
+                Image:
+                    source: 'images/playlist.png'
             Label:
                 id: info_label1
                 size_hint_y: 0.05
