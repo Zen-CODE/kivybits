@@ -4,6 +4,7 @@ This class houses the PlayList class for ZenPlayer
 from os import path, listdir
 from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
+from kivy.properties import ObjectProperty
 
 
 class PlayList(object):
@@ -78,9 +79,12 @@ class PlayList(object):
 
 Builder.load_string('''
 <PlayListScreen>:
+    listview: listview
+
     BoxLayout:
         orientation: 'vertical'
         ListView:
+            id: listview
             size_hint_y: 0.9
         BoxLayout:
             size_hint_y: 0.1
@@ -100,9 +104,15 @@ class PlayListScreen(Screen):
     """
     Displays the playlist along with some simple editing options.
     """
-    def __init__(self, sm, **kwargs):
+    listview = ObjectProperty()
+
+
+    def __init__(self, sm, playlist, **kwargs):
         self.sm = sm
+        self.playlist = None  # Reference to the current PlayList
         super(PlayListScreen, self).__init__(**kwargs)
+        for f in playlist.queue:
+            print "f=", f
 
     def back(self):
         """ Return to the main playing screen """

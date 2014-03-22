@@ -228,7 +228,9 @@ class PlayingScreen(Screen):
     def show_playlist(self):
         """ Switch to the playlist screen """
         if "playlist" not in self.sm.screen_names:
-            self.sm.add_widget(PlayListScreen(self.sm, name="playlist"))
+            self.sm.add_widget(PlayListScreen(self.sm,
+                                              self.playlist,
+                                              name="playlist"))
         self.sm.current = "playlist"
 
     def _on_sound_stop(self, *args):
