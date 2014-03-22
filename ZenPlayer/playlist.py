@@ -93,10 +93,6 @@ Builder.load_string('''
             Button:
                 text: 'Back'
                 on_release: root.back()
-            Button
-                text: 'Add and replace'
-            Button
-                text: 'Add'
 ''')
 
 

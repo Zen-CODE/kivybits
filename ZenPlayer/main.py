@@ -16,6 +16,7 @@ from kivy.properties import ObjectProperty, StringProperty
 from audioplayer import SoundLoader
 from playlist import PlayList, PlayListScreen
 from kivy.clock import Clock
+from filebrowser import ZenFileBrowser
 
 
 Builder.load_string('''
@@ -89,11 +90,12 @@ Builder.load_string('''
                 size_hint_y: 0.05
                 Image:
                     source: 'images/add.png'
-                    on_touch_down: self.collide_point(*args[1].pos) and root.show_playlist()
+                    on_touch_down: self.collide_point(*args[1].pos) and root.show_filebrowser()
                 Image:
                     source: 'images/zencode.jpg'
                 Image:
                     source: 'images/playlist.png'
+                    on_touch_down: self.collide_point(*args[1].pos) and root.show_playlist()
             Label:
                 id: info_label1
                 size_hint_y: 0.05
@@ -232,6 +234,14 @@ class PlayingScreen(Screen):
                                               self.playlist,
                                               name="playlist"))
         self.sm.current = "playlist"
+
+    def show_filebrowser(self):
+        """ Switch to the playlist screen """
+        if "filebrowser" not in self.sm.screen_names:
+            self.sm.add_widget(ZenFileBrowser(self.sm,
+                                              self.playlist,
+                                              name="filebrowser"))
+        self.sm.current = "filebrowser"
 
     def _on_sound_stop(self, *args):
         print "sound has stopped. args=", str(args)
