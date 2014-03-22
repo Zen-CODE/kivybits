@@ -13,9 +13,8 @@ from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty, StringProperty
-#from kivy.core.audio import SoundLoader
 from audioplayer import SoundLoader
-from playlist import PlayList
+from playlist import PlayList, PlayListScreen
 from kivy.clock import Clock
 
 
@@ -90,6 +89,7 @@ Builder.load_string('''
                 size_hint_y: 0.05
                 Image:
                     source: 'images/add.png'
+                    on_touch_down: self.collide_point(*args[1].pos) and root.show_playlist()
                 Image:
                     source: 'images/zencode.jpg'
                 Image:
@@ -163,6 +163,10 @@ class PlayingScreen(Screen):
     volume = ObjectProperty()
     progress = ObjectProperty()
 
+    def __init__(self, sm, **kwargs):
+        self.sm = sm
+        super(PlayingScreen, self).__init__(**kwargs)
+
     def init(self):
         """ Initialize the display """
         self.album_image.source = self.playlist.get_current_art()
@@ -221,6 +225,12 @@ class PlayingScreen(Screen):
         if self.sound:
             self.sound.volume = self.volume.value
 
+    def show_playlist(self):
+        """ Switch to the playlist screen """
+        if "playlist" not in self.sm.screen_names:
+            self.sm.add_widget(PlayListScreen(self.sm, name="playlist"))
+        self.sm.current = "playlist"
+
     def _on_sound_stop(self, *args):
         print "sound has stopped. args=", str(args)
         self.sound = None
@@ -240,7 +250,7 @@ class PlayingScreen(Screen):
 class ZenPlayer(App):
     def build(self):
         sm = ScreenManager()
-        playing = PlayingScreen()
+        playing = PlayingScreen(sm, name="main")
         #TODO: Remove
         playing.playlist.add_folder('/media/Zen320/Zen/Music/MP3/Various/Cafe Del Mar - Chillhouse Mix 4 (Disc 1)')
         #playing.playlist.add_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
@@ -255,7 +265,9 @@ class ZenPlayer(App):
 
         #TODO: Remove
 
-        sm.switch_to(playing)
+        sm.add_widget(playing)
+        sm.current = "main"
+        #sm.switch_to(playing)
         return sm
 
 ZenPlayer().run()

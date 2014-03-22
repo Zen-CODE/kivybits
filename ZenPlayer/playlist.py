@@ -3,7 +3,7 @@ This class houses the PlayList class for ZenPlayer
 """
 from os import path, listdir
 from kivy.uix.screenmanager import Screen
-from kvy.lang import Builder
+from kivy.lang import Builder
 
 
 class PlayList(object):
@@ -81,11 +81,11 @@ Builder.load_string('''
     BoxLayout:
         orientation: 'vertical'
         ListView:
-            size_hint_y: 0.95
+            size_hint_y: 0.9
         BoxLayout:
-            size_hint_y: 0.05
+            size_hint_y: 0.1
             orientation: 'horizontal'
-            Padding: 10, 10, 10, 10
+            padding: 10, 10, 10, 10
             Button:
                 text: 'Back'
                 on_release: root.back()
@@ -102,7 +102,7 @@ class PlayListScreen(Screen):
     """
     def __init__(self, sm, **kwargs):
         self.sm = sm
-        super(PlayListScreen, self).__init(**kwargs)
+        super(PlayListScreen, self).__init__(**kwargs)
 
     def back(self):
         """ Return to the main playing screen """
