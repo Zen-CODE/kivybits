@@ -106,13 +106,11 @@ class PlayListScreen(Screen):
     """
     listview = ObjectProperty()
 
-
     def __init__(self, sm, playlist, **kwargs):
         self.sm = sm
         self.playlist = None  # Reference to the current PlayList
         super(PlayListScreen, self).__init__(**kwargs)
-        for f in playlist.queue:
-            print "f=", f
+        self.listview.item_strings = [f[0] for f in playlist.queue]
 
     def back(self):
         """ Return to the main playing screen """
