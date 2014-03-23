@@ -13,10 +13,14 @@ from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty, StringProperty
-from audioplayer import SoundLoader
 from playlist import PlayList, PlayListScreen
 from kivy.clock import Clock
 from filebrowser import ZenFileBrowser
+from kivy.utils import platform
+if platform == 'linux':  # Enable Mp3
+    from audioplayer import SoundLoader
+else:
+    from kivy.core.audio import SoundLoader
 
 
 Builder.load_string('''
@@ -261,26 +265,15 @@ class PlayingScreen(Screen):
 
 
 class ZenPlayer(App):
+    """
+    The App initialisation class
+    """
     def build(self):
         sm = ScreenManager()
         playing = PlayingScreen(sm, name="main")
-        #TODO: Remove
-        #playing.playlist.add_files('/media/Zen320/Zen/Music/MP3/Various/Cafe Del Mar - Chillhouse Mix 4 (Disc 1)')
-        #playing.playlist.add_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
         playing.init()
-
-        #def stop(dt):
-        #    print "============= About to stop"
-        #    playing.stop()
-
-        #from kivy.clock import Clock
-        #Clock.schedule_once(stop, 5.0)
-
-        #TODO: Remove
-
         sm.add_widget(playing)
         sm.current = "main"
-        #sm.switch_to(playing)
         return sm
 
 ZenPlayer().run()
