@@ -68,6 +68,7 @@ Builder.load_string('''
     info_label1: info_label1
     info_label2: info_label2
     info_label3: info_label3
+    time_label: time_label
 
     album_image: album_image
     BoxLayout:
@@ -115,6 +116,9 @@ Builder.load_string('''
                 Image:
                     id: album_image
                     source: "images/zencode.jpg"
+            Label:
+                id: time_label
+                size_hint_y: 0.05
             BoxLayout:
                 size_hint_y: 0.075
                 orientation: "horizontal"
@@ -169,6 +173,7 @@ class PlayingScreen(Screen):
     info_label = ObjectProperty()
     volume = ObjectProperty()
     progress = ObjectProperty()
+    time_label = ObjectProperty()
 
     def __init__(self, sm, **kwargs):
         self.sm = sm
@@ -260,8 +265,15 @@ class PlayingScreen(Screen):
         """ Update the progressbar  """
         if self.sound:
             #self.progress.value = self.sound.get_pos()
-            if self.sound._get_length() > 0:
-                self.progress.value = self.sound.get_pos() / self.sound._get_length()
+            length = self.sound._get_length()
+            if length > 0:
+                self.progress.value = self.sound.get_pos() / length
+
+                mins, secs = int(length / 60), int(length % 60)
+                self.time_label.text = "{0}s / {1}m {2:02d}s".format(
+                    int(self.sound.get_pos()),
+                    mins,
+                    secs)
 
 
 class ZenPlayer(App):
@@ -271,6 +283,7 @@ class ZenPlayer(App):
     def build(self):
         sm = ScreenManager()
         playing = PlayingScreen(sm, name="main")
+        playing.playlist.add_files(r'/media/Zen320/Zen/Music/MP3/Various/Dions hits')
         playing.init()
         sm.add_widget(playing)
         sm.current = "main"
