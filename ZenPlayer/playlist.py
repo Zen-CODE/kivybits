@@ -29,7 +29,7 @@ class PlayList(object):
         if len(self.queue) > self.current:
             return self.queue[self.current][1]
         else:
-            return ""
+            return "images/zencode.jpg"
 
     def get_current_info(self):
         """ Return a dictionary of information on the current track"""
@@ -64,7 +64,7 @@ class PlayList(object):
             full_name = path.join(folder, art)
             if path.exists(full_name):
                 return full_name
-        return ""
+        return "images/zencode.jpg"
 
     def _get_current_info(self):
         """

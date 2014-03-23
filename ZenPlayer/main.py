@@ -110,6 +110,7 @@ Builder.load_string('''
                 padding: 10, 10, 10, 10
                 Image:
                     id: album_image
+                    source: "images/zencode.jpg"
             BoxLayout:
                 size_hint_y: 0.075
                 orientation: "horizontal"
@@ -264,7 +265,7 @@ class ZenPlayer(App):
         sm = ScreenManager()
         playing = PlayingScreen(sm, name="main")
         #TODO: Remove
-        playing.playlist.add_files('/media/Zen320/Zen/Music/MP3/Various/Cafe Del Mar - Chillhouse Mix 4 (Disc 1)')
+        #playing.playlist.add_files('/media/Zen320/Zen/Music/MP3/Various/Cafe Del Mar - Chillhouse Mix 4 (Disc 1)')
         #playing.playlist.add_folder('/media/Zen320/Zen/Music/MP3/Ace of base/Da capo')
         playing.init()
 
