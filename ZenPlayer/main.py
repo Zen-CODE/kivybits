@@ -169,6 +169,7 @@ class PlayingScreen(Screen):
     def __init__(self, sm, **kwargs):
         self.sm = sm
         super(PlayingScreen, self).__init__(**kwargs)
+        Clock.schedule_interval(self._update_progress, 1/25)
 
     def init(self):
         """ Initialize the display """
@@ -179,7 +180,6 @@ class PlayingScreen(Screen):
             self.info_label2.text = info["album"]
             self.info_label3.text = info["file"]
             self.volume.value = 0.5   # TODO: Initialize to half or previous
-        Clock.schedule_interval(self._update_progress, 1/25)
 
     def playpause(self):
         """ Start playing any audio if nothing is playing """
@@ -190,7 +190,7 @@ class PlayingScreen(Screen):
                 self.sound = SoundLoader.load(audiof)
                 self.sound.bind(on_stop=self._on_sound_stop)
                 self.sound.play()
-                self.album_image.source = self.playlist.get_current_art()
+                self.init()
                 self.but_playpause.source = "images/pause.png"
                 self.sound.volume = self.volume.value
         elif self.sound.state == "play":
