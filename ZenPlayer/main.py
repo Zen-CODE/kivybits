@@ -280,10 +280,18 @@ class ZenPlayer(App):
     """
     The App initialisation class
     """
+    def on_pause(self):
+        # Enable support for pause
+        return True
+
+    def on_resume(self):
+        # Enable support for resume
+        pass
+
     def build(self):
         sm = ScreenManager()
         playing = PlayingScreen(sm, name="main")
-        playing.playlist.add_files(r'/media/Zen320/Zen/Music/MP3/Various/Dions hits')
+        #playing.playlist.add_files(r'/media/Zen320/Zen/Music/MP3/Various/Dions hits')
         playing.init()
         sm.add_widget(playing)
         sm.current = "main"

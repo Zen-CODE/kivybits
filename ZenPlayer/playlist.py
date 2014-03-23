@@ -6,7 +6,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from os import sep, path
-
+from kivy.logger import Logger
 
 class PlayList(object):
     """
@@ -40,6 +40,7 @@ class PlayList(object):
 
     def add_files(self, filefolder):
         """ Add the specified folder to the queue """
+        Logger.info("playlist.py: processing {0}".format(filefolder))
         if path.isdir(filefolder):
             for f in sorted(listdir(filefolder)):
                 self.add_files(path.join(filefolder, f))

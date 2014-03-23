@@ -26,7 +26,7 @@ Builder.load_string('''
             dirselect: True
             multiselect: True
             #TODO: Remove
-            path: '/media/Zen320/Zen/Music'
+            #path: '/media/Zen320/Zen/Music'
         BoxLayout:
             orientation: 'horizontal'
             padding: 10, 10, 10, 10
