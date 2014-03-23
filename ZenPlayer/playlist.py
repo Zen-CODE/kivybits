@@ -109,9 +109,12 @@ class PlayListScreen(Screen):
 
     def __init__(self, sm, playlist, **kwargs):
         self.sm = sm
-        self.playlist = None  # Reference to the current PlayList
+        self.playlist = playlist
         super(PlayListScreen, self).__init__(**kwargs)
-        self.listview.item_strings = [f[0] for f in playlist.queue]
+
+    def on_enter(self):
+        """ Repopulate the listview """
+        self.listview.item_strings = [f[0] for f in self.playlist.queue]
 
     def back(self):
         """ Return to the main playing screen """
