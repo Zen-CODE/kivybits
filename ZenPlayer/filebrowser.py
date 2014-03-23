@@ -51,4 +51,6 @@ class ZenFileBrowser(Screen):
 
     def print_status(self):
         #TODO: Remove
+        print "path=", self.filechooser.path
+        print "selection=", str(self.filechooser.selection)
         print "fired"

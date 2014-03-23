@@ -5,6 +5,7 @@ from os import path, listdir
 from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
+from os import sep, path
 
 
 class PlayList(object):
@@ -13,6 +14,7 @@ class PlayList(object):
     """
     current = 0  # The index of the currently playing track in the queue
     queue = []  # contains a list of (filename, albumart) pairs
+    art_names = ["cover.jpg", "cover.png", "cover.bmp", "cover.jpeg"]
 
     def get_current_file(self):
         """Returns the filename of the current audio file."""
@@ -36,14 +38,14 @@ class PlayList(object):
         else:
             return {}
 
-    def add_folder(self, folder):
+    def add_files(self, filefolder):
         """ Add the specified folder to the queue """
-        artwork = self._get_albumart(folder)
-        for f in listdir(folder):
-            if path.isdir(file):
-                self.add_folder(path.join(folder, f))
-            elif ".mp3" in f or ".ogg" in f or ".wav" in f:
-                self.queue.append((path.join(folder, f), artwork))
+        if path.isdir(filefolder):
+            for f in listdir(filefolder):
+                self.add_files(path.join(filefolder, f))
+        elif ".mp3" in filefolder or ".ogg" in filefolder or\
+                ".wav" in filefolder:
+            self.queue.append((filefolder, self._get_albumart(filefolder)))
 
     def move_next(self):
         """ Move the selected track to the next"""
@@ -53,12 +55,13 @@ class PlayList(object):
             self.current = -1
 
     @staticmethod
-    def _get_albumart(folder):
+    def _get_albumart(audiofile):
         """
         Return the full image filename from the folder
         """
-        for f in ["cover.jpg", "cover.png", "cover.bmp", "cover.jpeg"]:
-            full_name = path.join(folder, f)
+        folder = audiofile[0: audiofile.rfind(sep)]
+        for art in PlayList.art_names:
+            full_name = path.join(folder, art)
             if path.exists(full_name):
                 return full_name
         return ""
