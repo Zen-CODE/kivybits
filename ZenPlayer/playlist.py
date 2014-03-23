@@ -59,6 +59,13 @@ class PlayList(object):
         else:
             self.current = -1
 
+    def move_previous(self):
+        """ Move the selected trach to the previous"""
+        if 0 < self.current:
+            self.current += -1
+
+
+
     @staticmethod
     def _get_albumart(audiofile):
         """

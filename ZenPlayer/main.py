@@ -125,6 +125,7 @@ Builder.load_string('''
                 MediaButton:
                     id: previous
                     source: 'images/previous.png'
+                    on_click: root.play_previous()
                 MediaButton:
                     id: stop
                     source: 'images/stop.png'
@@ -222,6 +223,18 @@ class PlayingScreen(Screen):
         if self.playlist.get_current_file():
             self.init()
             self.playpause()
+
+    def play_previous(self):
+        """ Ply the previous track. """
+        if self.sound:
+            self.stop()
+            self.sound = None
+        self.playlist.move_previous()
+        print "self.playlist.move_previous()=", self.playlist.get_current_file()
+        if self.playlist.get_current_file():
+            self.init()
+            self.playpause()
+
 
     def stop(self):
         """ Stop any playing audio """
