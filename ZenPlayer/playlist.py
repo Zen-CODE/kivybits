@@ -47,6 +47,10 @@ class PlayList(object):
                 ".wav" in filefolder:
             self.queue.append((filefolder, self._get_albumart(filefolder)))
 
+    def clear_files(self):
+        """ Clear the existing playlist"""
+        self.queue = []
+
     def move_next(self):
         """ Move the selected track to the next"""
         if len(self.queue) > self.current:

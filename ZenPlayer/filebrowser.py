@@ -39,7 +39,7 @@ Builder.load_string('''
                 on_release: root.add_replace()
             Button:
                 text: "Add"
-                on_release: root.add()
+                on_release: root.add_files()
 ''')
 
 
@@ -55,7 +55,7 @@ class ZenFileBrowser(Screen):
         self.playlist = playlist
         super(ZenFileBrowser, self).__init__(**kwargs)
 
-    def add(self):
+    def add_files(self):
         #TODO: Remove
         #print "path=", self.filechooser.path
         for filefolder in self.filechooser.selection:
@@ -64,5 +64,6 @@ class ZenFileBrowser(Screen):
 
     def add_replace(self):
         # TODO
-        print "add_replace fired"
+        self.playlist.clear_files()
+        self.add_files()
 
