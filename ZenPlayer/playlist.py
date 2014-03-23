@@ -41,7 +41,7 @@ class PlayList(object):
     def add_files(self, filefolder):
         """ Add the specified folder to the queue """
         if path.isdir(filefolder):
-            for f in listdir(filefolder):
+            for f in sorted(listdir(filefolder)):
                 self.add_files(path.join(filefolder, f))
         elif ".mp3" in filefolder or ".ogg" in filefolder or\
                 ".wav" in filefolder:
