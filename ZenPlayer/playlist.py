@@ -40,7 +40,9 @@ class PlayList(object):
         """ Add the specified folder to the queue """
         artwork = self._get_albumart(folder)
         for f in listdir(folder):
-            if ".mp3" in f or ".ogg" in f or ".wav" in f:
+            if path.isdir(file):
+                self.add_folder(path.join(folder, f))
+            elif ".mp3" in f or ".ogg" in f or ".wav" in f:
                 self.queue.append((path.join(folder, f), artwork))
 
     def move_next(self):
