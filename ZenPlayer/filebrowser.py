@@ -4,6 +4,8 @@ Displays the file browsing screen for ZenPlayer
 from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
+#from kivy.uix.popup import Popup
+#from kivy.clock import Clock
 
 
 Builder.load_string('''
@@ -23,6 +25,8 @@ Builder.load_string('''
             size_hint_y: 0.8
             dirselect: True
             multiselect: True
+            #TODO: Remove
+            path: '/media/Zen320/Zen/Music'
         BoxLayout:
             orientation: 'horizontal'
             padding: 10, 10, 10, 10
@@ -32,8 +36,10 @@ Builder.load_string('''
                 on_release: root.sm.current = "main"
             Button:
                 text: "Add and replace"
+                on_release: root.add_replace()
             Button:
                 text: "Add"
+                on_release: root.add()
 ''')
 
 
@@ -49,8 +55,14 @@ class ZenFileBrowser(Screen):
         self.playlist = playlist
         super(ZenFileBrowser, self).__init__(**kwargs)
 
-    def print_status(self):
+    def add(self):
         #TODO: Remove
-        print "path=", self.filechooser.path
-        print "selection=", str(self.filechooser.selection)
-        print "fired"
+        #print "path=", self.filechooser.path
+        for filefolder in self.filechooser.selection:
+            print "Adding ", filefolder
+            self.playlist.add_files(filefolder)
+
+    def add_replace(self):
+        # TODO
+        print "add_replace fired"
+
