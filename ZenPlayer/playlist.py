@@ -7,6 +7,7 @@ from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from os import sep, path
 from kivy.logger import Logger
+from kivy.adapters.dictadapter import DictAdapter
 
 
 class PlayList(object):
@@ -96,6 +97,15 @@ class PlayList(object):
 
 
 Builder.load_string('''
+[ZenListItem@SelectableView+BoxLayout]:
+    orientation: 'horizontal'
+    size_hint_y: ctx.size_hint_y
+    height: ctx.height
+    Image:
+        source: ctx.source
+    Label:
+        text: ctx.text
+
 <PlayListScreen>:
     listview: listview
 
@@ -129,10 +139,19 @@ class PlayListScreen(Screen):
         """ Repopulate the listview """
         print "playlist=", str(self.playlist.queue)
         self.listview.item_strings = [f[0] for f in self.playlist.queue]
-        data = {str(i): {'text': item[0], 'source': item[1]}
+        data = {str(i - 1): {'text': item[0], 'source': item[1]}
                 for i, item in enumerate(self.playlist.queue)}
         print "data=", str(data)
-
+        list_item_args_converter = lambda row_index, rec: {'text': rec['text'],
+                                'source': rec['source'],
+                                'size_hint_y': None,
+                                'height': 25}
+        dict_adapter = DictAdapter(
+            sorted_keys=[str(i - 1) for i in range(len(self.playlist.queue))],
+            data=data,
+            args_converter=list_item_args_converter,
+            template='ZenListItem')
+        self.listview.adapter = dict_adapter
 
     def back(self):
         """ Return to the main playing screen """
