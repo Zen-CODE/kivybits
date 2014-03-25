@@ -16,10 +16,18 @@ Builder.load_string('''
         orientation: 'vertical'
         #FileChooserIconView:
         BoxLayout:
+            orientation: 'vertical'
             size_hint_y: 0.1
-            Button:
-                text: "Status"
-                on_release: root.print_status()
+            Label:
+                text: "Select the file or folder"
+                canvas:
+                    Color:
+                        rgba: 0, 0, 0.75, 0.5
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                text: "Current selection - None"
         FileChooserListView:
             id: filechooser
             size_hint_y: 0.8

@@ -8,6 +8,7 @@ from kivy.properties import ObjectProperty
 from os import sep, path
 from kivy.logger import Logger
 
+
 class PlayList(object):
     """
     Holds the current playlist class.
