@@ -102,8 +102,10 @@ Builder.load_string('''
     size_hint_y: ctx.size_hint_y
     height: ctx.height
     Image:
+        size_hint_x: 0.1
         source: ctx.source
     Label:
+        size_hint_x: 0.9
         text: ctx.text
 
 <PlayListScreen>:
