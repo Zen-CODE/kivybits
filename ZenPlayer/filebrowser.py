@@ -11,6 +11,7 @@ from kivy.properties import ObjectProperty
 Builder.load_string('''
 <ZenFileBrowser>:
     filechooser: filechooser
+    label_sel: label_sel
 
     BoxLayout:
         orientation: 'vertical'
@@ -22,17 +23,18 @@ Builder.load_string('''
                 text: "Select the file or folder"
                 canvas:
                     Color:
-                        rgba: 0, 0, 0.75, 0.5
+                        rgba: 0.25, 0.25, 0.75, 0.5
                     Rectangle:
                         pos: self.pos
                         size: self.size
             Label:
-                text: "Current selection - None"
+                id: label_sel
+                text: "Selection - None"
         FileChooserListView:
             id: filechooser
             size_hint_y: 0.8
             dirselect: True
-            multiselect: True
+            on_selection: label_sel.text = "Selection - " + str(self.selection)
             #TODO: Remove
             #path: '/media/Zen320/Zen/Music'
         BoxLayout:
@@ -57,21 +59,19 @@ class ZenFileBrowser(Screen):
     """
     filechooser = ObjectProperty()
 
-
     def __init__(self, sm, playlist, **kwargs):
         self.sm = sm
         self.playlist = playlist
         super(ZenFileBrowser, self).__init__(**kwargs)
 
     def add_files(self):
-        #TODO: Remove
-        #print "path=", self.filechooser.path
+        """ Add any selected files/folders to the playlist"""
         for filefolder in self.filechooser.selection:
-            print "Adding ", filefolder
             self.playlist.add_files(filefolder)
 
     def add_replace(self):
-        # TODO
+        """ Add amy selected files/folders to the playlist removing any that
+        already exist """
         self.playlist.clear_files()
         self.add_files()
 
