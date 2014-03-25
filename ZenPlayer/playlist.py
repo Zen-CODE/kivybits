@@ -127,7 +127,12 @@ class PlayListScreen(Screen):
 
     def on_enter(self):
         """ Repopulate the listview """
+        print "playlist=", str(self.playlist.queue)
         self.listview.item_strings = [f[0] for f in self.playlist.queue]
+        data = {str(i): {'text': item[0], 'source': item[1]}
+                for i, item in enumerate(self.playlist.queue)}
+        print "data=", str(data)
+
 
     def back(self):
         """ Return to the main playing screen """
