@@ -35,7 +35,7 @@ class PlayList(object):
     def get_current_info(self):
         """ Return a dictionary of information on the current track"""
         if len(self.queue) > self.current:
-            return self._get_info(self.queue[self.current])
+            return self._get_info(self.queue[self.current][0])
         else:
             return {}
 

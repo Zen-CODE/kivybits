@@ -235,7 +235,6 @@ class PlayingScreen(Screen):
             self.init()
             self.playpause()
 
-
     def stop(self):
         """ Stop any playing audio """
         self.advance = False
