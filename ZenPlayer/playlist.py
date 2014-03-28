@@ -1,7 +1,7 @@
 """
 This class houses the PlayList class for ZenPlayer
 """
-from os import path, listdir
+from os import path, listdir, sep
 from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
@@ -62,11 +62,9 @@ class PlayList(object):
             self.current = -1
 
     def move_previous(self):
-        """ Move the selected trach to the previous"""
+        """ Move the selected track to the previous entry"""
         if 0 < self.current:
             self.current += -1
-
-
 
     @staticmethod
     def _get_albumart(audiofile):
@@ -84,7 +82,7 @@ class PlayList(object):
         """
         Return a dictionary containing the metadata on the track """
         try:
-            parts = self.queue[self.current][0].split("/")
+            parts = self.queue[self.current][0].split(sep)
             return {
                 "artist": parts[-3],
                 "album": parts[-2],
@@ -100,13 +98,16 @@ Builder.load_string('''
 [ZenListItem@SelectableView+BoxLayout]:
     orientation: 'horizontal'
     size_hint_y: ctx.size_hint_y
-    height: ctx.height
+    height: "25sp"
     Image:
         size_hint_x: 0.1
         source: ctx.source
     Label:
-        size_hint_x: 0.9
-        text: ctx.text
+        size_hint_x: 0.4
+        text: ctx.album
+    Label
+        size_hint_x: 0.5
+        text: ctx.file
 
 <PlayListScreen>:
     listview: listview
@@ -140,14 +141,19 @@ class PlayListScreen(Screen):
     def on_enter(self):
         """ Repopulate the listview """
         print "playlist=", str(self.playlist.queue)
-        self.listview.item_strings = [f[0] for f in self.playlist.queue]
-        data = {str(i - 1): {'text': item[0], 'source': item[1]}
+        info = self.playlist._get_current_info
+        data = {str(i - 1): {'text': item[0],
+                             'source': item[1],
+                             'album': info()["album"],
+                             'file': info()["file"]}
                 for i, item in enumerate(self.playlist.queue)}
         print "data=", str(data)
         list_item_args_converter = lambda row_index, rec: {'text': rec['text'],
                                 'source': rec['source'],
+                                'album': rec['album'],
+                                'file': rec['file'],
                                 'size_hint_y': None,
-                                'height': 25}
+                                'height': "25sp"}
         dict_adapter = DictAdapter(
             sorted_keys=[str(i - 1) for i in range(len(self.playlist.queue))],
             data=data,
