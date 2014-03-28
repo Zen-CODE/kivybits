@@ -36,7 +36,7 @@ class PlayList(object):
     def get_current_info(self):
         """ Return a dictionary of information on the current track"""
         if len(self.queue) > self.current:
-            return self._get_current_info()
+            return self._get_info(self.queue[self.current])
         else:
             return {}
 
@@ -78,11 +78,12 @@ class PlayList(object):
                 return full_name
         return "images/zencode.jpg"
 
-    def _get_current_info(self):
+    @staticmethod
+    def _get_info(filename):
         """
         Return a dictionary containing the metadata on the track """
         try:
-            parts = self.queue[self.current][0].split(sep)
+            parts = filename.split(sep)
             return {
                 "artist": parts[-3],
                 "album": parts[-2],
@@ -140,14 +141,12 @@ class PlayListScreen(Screen):
 
     def on_enter(self):
         """ Repopulate the listview """
-        print "playlist=", str(self.playlist.queue)
-        info = self.playlist._get_current_info
+        info = self.playlist._get_info
         data = {str(i - 1): {'text': item[0],
                              'source': item[1],
-                             'album': info()["album"],
-                             'file': info()["file"]}
+                             'album': info(item[0])["album"],
+                             'file': info(item[0])["file"]}
                 for i, item in enumerate(self.playlist.queue)}
-        print "data=", str(data)
         list_item_args_converter = lambda row_index, rec: {'text': rec['text'],
                                 'source': rec['source'],
                                 'album': rec['album'],
