@@ -1,11 +1,10 @@
 """
 This class houses the PlayList class for ZenPlayer
 """
-from os import path, listdir, sep
 from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
-from os import sep, path
+from os import sep, path, listdir
 from kivy.logger import Logger
 from kivy.adapters.dictadapter import DictAdapter
 
