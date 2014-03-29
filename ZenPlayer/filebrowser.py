@@ -4,6 +4,8 @@ Displays the file browsing screen for ZenPlayer
 from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
+from kivy.storage.jsonstore import JsonStore
+from os.path import exists
 #from kivy.uix.popup import Popup
 #from kivy.clock import Clock
 
@@ -77,10 +79,13 @@ class ZenFileBrowser(Screen):
 
     def on_enter(self):
         """ The filebrowser screen is bieng opened """
-        print "filebrowser.on_enter"
+        store = JsonStore("zenplayer.json")
+        if store.exists("filebrowser"):
+            if "path" in store.get("filebrowser").keys():
+                self.filechooser.path = store.get("filebrowser")["path"]
 
     def on_leave(self):
         """ The filebrowser screen is being closed """
-        print "filebrowser.on_leave"
-
-
+        if len(self.filechooser.path) > 0:
+            store = JsonStore("zenplayer.json")
+            store.put("filebrowser", path=self.filechooser.path)
