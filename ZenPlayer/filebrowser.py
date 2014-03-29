@@ -86,6 +86,6 @@ class ZenFileBrowser(Screen):
 
     def on_leave(self):
         """ The filebrowser screen is being closed """
-        if len(self.filechooser.path) > 0:
+        if len(self.filechooser.selection) > 0:
             store = JsonStore("zenplayer.json")
-            store.put("filebrowser", path=self.filechooser.path)
+            store.put("filebrowser", path=self.filechooser.selection[0])
