@@ -78,7 +78,7 @@ class ZenFileBrowser(Screen):
         self.add_files()
 
     def on_enter(self):
-        """ The filebrowser screen is bieng opened """
+        """ The filebrowser screen is being opened """
         store = JsonStore("zenplayer.json")
         if store.exists("filebrowser"):
             if "path" in store.get("filebrowser").keys():
