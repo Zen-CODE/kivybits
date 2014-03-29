@@ -75,3 +75,12 @@ class ZenFileBrowser(Screen):
         self.playlist.clear_files()
         self.add_files()
 
+    def on_enter(self):
+        """ The filebrowser screen is bieng opened """
+        print "filebrowser.on_enter"
+
+    def on_leave(self):
+        """ The filebrowser screen is being closed """
+        print "filebrowser.on_leave"
+
+
