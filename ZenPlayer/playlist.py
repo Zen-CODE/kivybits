@@ -7,6 +7,7 @@ from kivy.properties import ObjectProperty
 from os import sep, path, listdir
 from kivy.logger import Logger
 from kivy.adapters.dictadapter import DictAdapter
+from kivy.storage.jsonstore import JsonStore
 
 
 class PlayList(object):
@@ -137,6 +138,29 @@ class PlayListScreen(Screen):
         self.sm = sm
         self.playlist = playlist
         super(PlayListScreen, self).__init__(**kwargs)
+
+        # See if there is an existing playlist to restore
+        store = JsonStore("zenplayer.json")
+        if store.exists("playlist"):
+            k = 1
+            while "item" + str(k) in store.get("playlist").keys():
+                self.playlist.queue.append("item" + str(k))
+                k += 1
+            self.current = store.get("playlist")["current"]
+            if self.current > len(self.playlist.queue):
+                self.current = -1
+
+    def on_leave(self):
+        """ The playlist screen is being closed """
+        if len(self.playlist.queue) > -1:
+            store = JsonStore("zenplayer.json")
+            all_items = {}
+            for k, item in enumerate(self.playlist.queue):
+                all_items.update({"item" + str(k): item[0],
+                             "itemart" + str(k): item[1]})
+            store.put("playlist", current=self.playlist.current,
+                      items=all_items)
+            print "saving ", str(store.get("playlist"))
 
     def on_enter(self):
         """ Repopulate the listview """
