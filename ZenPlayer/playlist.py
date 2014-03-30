@@ -124,7 +124,7 @@ Builder.load_string('''
 [ZenListItem@SelectableView+BoxLayout]:
     orientation: 'horizontal'
     size_hint_y: ctx.size_hint_y
-    height: "25sp"
+    height: "100sp"
     Image:
         size_hint_x: 0.1
         source: ctx.source
