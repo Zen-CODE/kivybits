@@ -297,6 +297,9 @@ class ZenPlayer(App):
     """
     The App initialisation class
     """
+    playing = None  # Reference to the main screen (for saving)
+
+
     def on_pause(self):
         # Enable support for pause
         return True
@@ -308,7 +311,6 @@ class ZenPlayer(App):
     def build(self):
         sm = ScreenManager()
         self.playing = PlayingScreen(sm, name="main")
-        #playing.playlist.add_files(r'/media/Zen320/Zen/Music/MP3/Various/Dions hits')
         self.playing.init()
         sm.add_widget(self.playing)
         sm.current = "main"
