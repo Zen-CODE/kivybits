@@ -75,8 +75,6 @@ class PlayList(object):
                 all_items.update({"item" + str(k + 1): item[0]})
             self.store.put("playlist", current=self.current,
                       items=all_items)
-            print "saving ", str(len(self.store.get("playlist")["items"]))
-            #print "saving len=", str(len(all_tems))
 
     def load(self):
         """ Initialize and load previous state """
@@ -89,7 +87,6 @@ class PlayList(object):
                     self.add_files(items["item" + str(k)])
                     k += 1
             self.current = self.store.get("playlist")["current"]
-            print "load len=", str(len(self.store.get("playlist")["items"]))
             if self.current > len(self.queue):
                 self.current = -1
 
