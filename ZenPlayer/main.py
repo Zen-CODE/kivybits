@@ -180,6 +180,7 @@ class PlayingScreen(Screen):
         self.sm = sm
         super(PlayingScreen, self).__init__(**kwargs)
         Clock.schedule_interval(self._update_progress, 1/25)
+        self.playlist.load()
 
     def init(self):
         """ Initialize the display """
@@ -244,6 +245,10 @@ class PlayingScreen(Screen):
             self.sound = None
             self.advance = True
 
+    def save(self):
+        """ Save the current playlist state """
+        self.playlist.save()
+
     def set_volume(self):
         """ Set the volume of the currently playing track if there is one. """
         if self.sound:
@@ -302,11 +307,15 @@ class ZenPlayer(App):
 
     def build(self):
         sm = ScreenManager()
-        playing = PlayingScreen(sm, name="main")
+        self.playing = PlayingScreen(sm, name="main")
         #playing.playlist.add_files(r'/media/Zen320/Zen/Music/MP3/Various/Dions hits')
-        playing.init()
-        sm.add_widget(playing)
+        self.playing.init()
+        sm.add_widget(self.playing)
         sm.current = "main"
         return sm
+
+    def on_stop(self):
+        """The app is closing. Save the state."""
+        self.playing.save()
 
 ZenPlayer().run()
