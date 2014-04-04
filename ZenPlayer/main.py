@@ -21,7 +21,7 @@ if platform == 'linux':  # Enable Mp3
     from audioplayer import SoundLoader
 else:
     from kivy.core.audio import SoundLoader
-
+#from kivy.core.audio import SoundLoader
 
 Builder.load_string('''
 <MediaButton>:
