@@ -287,13 +287,14 @@ class PlayingScreen(Screen):
             #self.progress.value = self.sound.get_pos()
             length = self.sound._get_length()
             if length > 0:
-                self.progress.value = self.sound.get_pos() / length
+                pos = self.sound.get_pos()
+                self.progress.value = pos / length
 
-                mins, secs = int(length / 60), int(length % 60)
-                self.time_label.text = "{0}s / {1}m {2:02d}s".format(
-                    int(self.sound.get_pos()),
-                    mins,
-                    secs)
+                self.time_label.text = "{0}m {1:02d}s / {2}m {3:02d}s".format(
+                    int(pos / 60),
+                    int(pos % 60),
+                    int(length / 60),
+                    int(length % 60))
 
 
 class ZenPlayer(App):
