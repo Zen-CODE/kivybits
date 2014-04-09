@@ -151,6 +151,7 @@ Builder.load_string('''
                 id: volume
                 size_hint_y: 0.9
                 orientation: "vertical"
+                value: 0.5
                 max: 1
                 on_value: root.set_volume()
             Image:
@@ -188,11 +189,14 @@ class PlayingScreen(Screen):
         """ Initialize the display """
         self.album_image.source = self.playlist.get_current_art()
         info = self.playlist.get_current_info()
+        if self.playlist.store.exists('state'):
+            state = self.playlist.store.get("state")
+            if state and "volume" in state.keys():
+                self.volume.value = state["volume"]
         if info:
             self.info_label1.text = info["artist"]
             self.info_label2.text = info["album"]
             self.info_label3.text = info["file"]
-            self.volume.value = 0.5   # TODO: Initialize to half or previous
 
     def playpause(self):
         """ Start playing any audio if nothing is playing """
@@ -234,7 +238,7 @@ class PlayingScreen(Screen):
             self.stop()
             self.sound = None
         self.playlist.move_previous()
-        Logger.info("mian.py: self.playlist.move_previous()=" +
+        Logger.info("main.py: self.playlist.move_previous()=" +
                     str(self.playlist.get_current_file()))
         if self.playlist.get_current_file():
             self.init()
@@ -251,6 +255,7 @@ class PlayingScreen(Screen):
     def save(self):
         """ Save the current playlist state """
         self.playlist.save()
+        self.playlist.store.put("state", volume=self.volume.value)
 
     def set_volume(self):
         """ Set the volume of the currently playing track if there is one. """
