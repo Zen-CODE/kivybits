@@ -73,8 +73,9 @@ class PlayList(object):
             all_items = {}
             for k, item in enumerate(self.queue):
                 all_items.update({"item" + str(k + 1): item[0]})
-            self.store.put("playlist", current=self.current,
-                      items=all_items)
+            self.store.put("playlist",
+                           current=self.current,
+                           items=all_items)
 
     def load(self):
         """ Initialize and load previous state """
@@ -92,7 +93,6 @@ class PlayList(object):
                     self.current = 0
                 else:
                     self.current = -1
-
 
     @staticmethod
     def _get_albumart(audiofile):
