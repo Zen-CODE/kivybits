@@ -184,15 +184,15 @@ class PlayingScreen(Screen):
         super(PlayingScreen, self).__init__(**kwargs)
         Clock.schedule_interval(self._update_progress, 1/25)
         self.playlist.load()
+        if self.playlist.store.exists('state'):
+            state = self.playlist.store.get("state")
+            if state and "volume" in state.keys():
+                self.volume.value = state["volume"]
 
     def init(self):
         """ Initialize the display """
         self.album_image.source = self.playlist.get_current_art()
         info = self.playlist.get_current_info()
-        if self.playlist.store.exists('state'):
-            state = self.playlist.store.get("state")
-            if state and "volume" in state.keys():
-                self.volume.value = state["volume"]
         if info:
             self.info_label1.text = info["artist"]
             self.info_label2.text = info["album"]
