@@ -87,8 +87,11 @@ class PlayList(object):
                     self.add_files(items["item" + str(k)])
                     k += 1
             self.current = self.store.get("playlist")["current"]
-            if self.current > len(self.queue):
-                self.current = -1
+            if self.current >= len(self.queue):
+                if len(self.queue) > 0:
+                    self.current = 0
+                else:
+                    self.current = -1
 
 
     @staticmethod
