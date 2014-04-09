@@ -186,7 +186,7 @@ class PlayingScreen(Screen):
         self.playlist.load()
         if self.playlist.store.exists('state'):
             state = self.playlist.store.get("state")
-            if state and "volume" in state.keys():
+            if "volume" in state.keys():
                 self.volume.value = state["volume"]
 
     def init(self):
