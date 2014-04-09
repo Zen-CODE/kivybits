@@ -196,6 +196,7 @@ class PlayingScreen(Screen):
 
     def playpause(self):
         """ Start playing any audio if nothing is playing """
+        self.advance = True
         if not self.sound:
             audiof = self.playlist.get_current_file()
             if audiof:
@@ -207,10 +208,8 @@ class PlayingScreen(Screen):
                 self.but_playpause.source = "images/pause.png"
                 self.sound.volume = self.volume.value
         elif self.sound.state == "play":
-            self.advance = False
             self.sound.stop()
             self.but_playpause.source = "images/play.png"
-            self.advance = True
         else:
             self.sound.play()
             self.but_playpause.source = "images/pause.png"
@@ -223,7 +222,7 @@ class PlayingScreen(Screen):
             self.stop()
             self.sound = None
         self.playlist.move_next()
-        Logger.info("main.py: self.playlist.move_next()=",
+        Logger.info("main.py: self.playlist.move_next()=" +
                     str(self.playlist.get_current_file()))
         if self.playlist.get_current_file():
             self.init()
@@ -235,7 +234,7 @@ class PlayingScreen(Screen):
             self.stop()
             self.sound = None
         self.playlist.move_previous()
-        Logger.info("mian.py: self.playlist.move_previous()=",
+        Logger.info("mian.py: self.playlist.move_previous()=" +
                     str(self.playlist.get_current_file()))
         if self.playlist.get_current_file():
             self.init()
@@ -243,6 +242,7 @@ class PlayingScreen(Screen):
 
     def stop(self):
         """ Stop any playing audio """
+        self.advance = False
         if self.sound:
             self.sound.stop()
             self.but_playpause.source = "images/play.png"
@@ -274,7 +274,7 @@ class PlayingScreen(Screen):
         self.sm.current = "filebrowser"
 
     def _on_sound_stop(self, *args):
-        Logger.info("main.py: sound has stopped. args=", str(args))
+        Logger.info("main.py: sound has stopped. args=" + str(args))
         self.sound = None
         if self.advance:
             self.playlist.move_next()
