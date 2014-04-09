@@ -210,6 +210,7 @@ class PlayingScreen(Screen):
             self.advance = False
             self.sound.stop()
             self.but_playpause.source = "images/play.png"
+            self.advance = True
         else:
             self.sound.play()
             self.but_playpause.source = "images/pause.png"
@@ -242,12 +243,10 @@ class PlayingScreen(Screen):
 
     def stop(self):
         """ Stop any playing audio """
-        self.advance = False
         if self.sound:
             self.sound.stop()
             self.but_playpause.source = "images/play.png"
             self.sound = None
-            self.advance = True
 
     def save(self):
         """ Save the current playlist state """
