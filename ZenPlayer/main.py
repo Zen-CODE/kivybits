@@ -22,6 +22,8 @@ if platform == 'linux':  # Enable Mp3
 else:
     from kivy.core.audio import SoundLoader
 #from kivy.core.audio import SoundLoader
+from kivy.logger import Logger
+
 
 Builder.load_string('''
 <MediaButton>:
@@ -197,7 +199,7 @@ class PlayingScreen(Screen):
         if not self.sound:
             audiof = self.playlist.get_current_file()
             if audiof:
-                print "playing ", audiof
+                Logger.info("main.py: playing " + audiof)
                 self.sound = SoundLoader.load(audiof)
                 self.sound.bind(on_stop=self._on_sound_stop)
                 self.sound.play()
@@ -215,12 +217,13 @@ class PlayingScreen(Screen):
 
     def play_next(self):
         """ Play the next track. """
-        print "PlayingScreen.play_next"
+        Logger.info("main.py: PlayingScreen.play_next")
         if self.sound:
             self.stop()
             self.sound = None
         self.playlist.move_next()
-        print "self.playlist.move_next()=", self.playlist.get_current_file()
+        Logger.info("main.py: self.playlist.move_next()=",
+                    str(self.playlist.get_current_file()))
         if self.playlist.get_current_file():
             self.init()
             self.playpause()
@@ -231,7 +234,8 @@ class PlayingScreen(Screen):
             self.stop()
             self.sound = None
         self.playlist.move_previous()
-        print "self.playlist.move_previous()=", self.playlist.get_current_file()
+        Logger.info("mian.py: self.playlist.move_previous()=",
+                    str(self.playlist.get_current_file()))
         if self.playlist.get_current_file():
             self.init()
             self.playpause()
@@ -271,7 +275,7 @@ class PlayingScreen(Screen):
         self.sm.current = "filebrowser"
 
     def _on_sound_stop(self, *args):
-        print "sound has stopped. args=", str(args)
+        Logger.info("main.py: sound has stopped. args=", str(args))
         self.sound = None
         if self.advance:
             self.playlist.move_next()
