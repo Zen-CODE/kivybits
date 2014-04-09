@@ -284,7 +284,6 @@ class PlayingScreen(Screen):
     def _update_progress(self, dt):
         """ Update the progressbar  """
         if self.sound:
-            #self.progress.value = self.sound.get_pos()
             length = self.sound._get_length()
             if length > 0:
                 pos = self.sound.get_pos()
