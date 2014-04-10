@@ -23,6 +23,7 @@ else:
     from kivy.core.audio import SoundLoader
 #from kivy.core.audio import SoundLoader
 from kivy.logger import Logger
+from kivy.storage.jsonstore import JsonStore
 
 
 Builder.load_string('''
@@ -178,14 +179,15 @@ class PlayingScreen(Screen):
     volume = ObjectProperty()
     progress = ObjectProperty()
     time_label = ObjectProperty()
+    store = JsonStore("zenplayer.json")
 
     def __init__(self, sm, **kwargs):
         self.sm = sm
         super(PlayingScreen, self).__init__(**kwargs)
         Clock.schedule_interval(self._update_progress, 1/25)
-        self.playlist.load()
-        if self.playlist.store.exists('state'):
-            state = self.playlist.store.get("state")
+        self.playlist.load(self.store)
+        if self.store.exists('state'):
+            state = self.store.get("state")
             if "volume" in state.keys():
                 self.volume.value = state["volume"]
 
@@ -254,8 +256,8 @@ class PlayingScreen(Screen):
 
     def save(self):
         """ Save the current playlist state """
-        self.playlist.save()
-        self.playlist.store.put("state", volume=self.volume.value)
+        self.playlist.save(self.store)
+        self.store.put("state", volume=self.volume.value)
 
     def set_volume(self):
         """ Set the volume of the currently playing track if there is one. """

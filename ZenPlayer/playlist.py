@@ -7,7 +7,6 @@ from kivy.properties import ObjectProperty
 from os import sep, path, listdir
 from kivy.logger import Logger
 from kivy.adapters.dictadapter import DictAdapter
-from kivy.storage.jsonstore import JsonStore
 
 
 class PlayList(object):
@@ -17,7 +16,6 @@ class PlayList(object):
     current = 0  # The index of the currently playing track in the queue
     queue = []  # contains a list of (filename, albumart) pairs
     art_names = ["cover.jpg", "cover.png", "cover.bmp", "cover.jpeg"]
-    store = JsonStore("zenplayer.json")
 
     def get_current_file(self):
         """Returns the filename of the current audio file."""
@@ -67,27 +65,27 @@ class PlayList(object):
         if 0 < self.current:
             self.current += -1
 
-    def save(self):
+    def save(self, store):
         """ The playlist screen is being closed """
         if len(self.queue) > -1:
             all_items = {}
             for k, item in enumerate(self.queue):
                 all_items.update({"item" + str(k + 1): item[0]})
-            self.store.put("playlist",
-                           current=self.current,
-                           items=all_items)
+            store.put("playlist",
+                      current=self.current,
+                      items=all_items)
 
-    def load(self):
+    def load(self, store):
         """ Initialize and load previous state """
         # See if there is an existing playlist to restore
-        if self.store.exists("playlist"):
-            if "items" in self.store.get("playlist"):
-                items = self.store.get("playlist")["items"]
+        if store.exists("playlist"):
+            if "items" in store.get("playlist"):
+                items = store.get("playlist")["items"]
                 k = 1
                 while "item" + str(k) in items.keys():
                     self.add_files(items["item" + str(k)])
                     k += 1
-            self.current = self.store.get("playlist")["current"]
+            self.current = store.get("playlist")["current"]
             if self.current >= len(self.queue):
                 if len(self.queue) > 0:
                     self.current = 0
