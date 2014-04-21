@@ -1,0 +1,5 @@
+To force doc build via IRC:
+    bbkv: force build doc
+
+To update the clone
+  git pull kivy master
