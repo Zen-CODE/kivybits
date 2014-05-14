@@ -47,13 +47,22 @@ class DemoBox(BoxLayout):
         for but in [btn, btn2, btn3, btn4, btn5]:
             self.add_widget(but)
 
-    def on_property(self, obj, value):
-        print("Typical property change from", obj, "to", value)
-
     def on_event(self, obj):
+        """
+        Example callback for a typical event
+        """
         print("Typical event from", obj)
 
+    def on_property(self, obj, value):
+        """
+        Example callback for a typical 'property change' event
+        """
+        print("Typical property change from", obj, "to", value)
+
     def on_anything(self, *args, **kwargs):
+        """
+        Example of a generic function that accepts arbitrary arguments
+        """
         print('The flexible function has *args of', str(args),
               "and **kwargs of", str(kwargs))
 
