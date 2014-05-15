@@ -48,21 +48,15 @@ class DemoBox(BoxLayout):
             self.add_widget(but)
 
     def on_event(self, obj):
-        """
-        Example callback for a typical event
-        """
+        """ Example callback for a typical event """
         print("Typical event from", obj)
 
     def on_property(self, obj, value):
-        """
-        Example callback for a typical 'property change' event
-        """
+        """ Example callback for a typical 'property change' event """
         print("Typical property change from", obj, "to", value)
 
     def on_anything(self, *args, **kwargs):
-        """
-        Example of a generic function that accepts arbitrary arguments
-        """
+        """ Example of a generic function that accepts arbitrary arguments """
         print('The flexible function has *args of', str(args),
               "and **kwargs of", str(kwargs))
 
@@ -70,7 +64,6 @@ class DemoBox(BoxLayout):
 class DemoApp(App):
     def build(self):
         return DemoBox()
-
 
 if __name__ == "__main__":
     DemoApp().run()
