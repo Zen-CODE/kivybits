@@ -64,6 +64,7 @@ class ZenFileBrowser(Screen):
     def __init__(self, sm, playlist, **kwargs):
         self.sm = sm
         self.playlist = playlist
+        self.initailized = False
         super(ZenFileBrowser, self).__init__(**kwargs)
 
     def add_files(self):
@@ -79,10 +80,12 @@ class ZenFileBrowser(Screen):
 
     def on_enter(self):
         """ The filebrowser screen is being opened """
-        store = JsonStore("zenplayer.json")
-        if store.exists("filebrowser"):
-            if "path" in store.get("filebrowser").keys():
-                self.filechooser.path = store.get("filebrowser")["path"]
+        if not self.initailized:
+            self.initailized = True
+            store = JsonStore("zenplayer.json")
+            if store.exists("filebrowser"):
+                if "path" in store.get("filebrowser").keys():
+                    self.filechooser.path = store.get("filebrowser")["path"]
 
     def on_leave(self):
         """ The filebrowser screen is being closed """
