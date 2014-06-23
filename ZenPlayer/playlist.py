@@ -27,14 +27,14 @@ class PlayList(object):
     def get_current_art(self):
         """Return the filename for the artwork associated with the currently
         playing file."""
-        if self.current>= 0 and len(self.queue) > self.current:
+        if len(self.queue) > self.current:
             return self.queue[self.current][1]
         else:
             return "images/zencode.jpg"
 
     def get_current_info(self):
         """ Return a dictionary of information on the current track"""
-        if self.current >= 0 and  len(self.queue) > self.current:
+        if len(self.queue) > self.current:
             return self._get_info(self.queue[self.current][0])
         else:
             return {}
@@ -57,8 +57,10 @@ class PlayList(object):
         """ Move the selected track to the next"""
         if len(self.queue) > self.current:
             self.current += 1
+        elif len(self.queue) > 0:
+            self.current = 1
         else:
-            self.current = -1
+            self.current = 0
 
     def move_previous(self):
         """ Move the selected track to the previous entry"""
@@ -88,9 +90,9 @@ class PlayList(object):
             self.current = store.get("playlist")["current"]
             if self.current >= len(self.queue):
                 if len(self.queue) > 0:
-                    self.current = 0
+                    self.current = 1
                 else:
-                    self.current = -1
+                    self.current = 0
 
     @staticmethod
     def _get_albumart(audiofile):
