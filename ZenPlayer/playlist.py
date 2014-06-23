@@ -27,14 +27,14 @@ class PlayList(object):
     def get_current_art(self):
         """Return the filename for the artwork associated with the currently
         playing file."""
-        if len(self.queue) > self.current:
+        if self.current>= 0 and len(self.queue) > self.current:
             return self.queue[self.current][1]
         else:
             return "images/zencode.jpg"
 
     def get_current_info(self):
         """ Return a dictionary of information on the current track"""
-        if len(self.queue) > self.current:
+        if self.current >= 0 and  len(self.queue) > self.current:
             return self._get_info(self.queue[self.current][0])
         else:
             return {}
