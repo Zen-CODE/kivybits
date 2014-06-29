@@ -35,7 +35,7 @@ class PlayList(object):
     def get_current_info(self):
         """ Return a dictionary of information on the current track"""
         if len(self.queue) > self.current:
-            return self._get_info(self.queue[self.current][0])
+            return self.get_info(self.queue[self.current][0])
         else:
             return {}
 
@@ -69,13 +69,12 @@ class PlayList(object):
 
     def save(self, store):
         """ The playlist screen is being closed """
-        if len(self.queue) > -1:
-            all_items = {}
-            for k, item in enumerate(self.queue):
-                all_items.update({"item" + str(k + 1): item[0]})
-            store.put("playlist",
-                      current=self.current,
-                      items=all_items)
+        all_items = {}
+        for k, item in enumerate(self.queue):
+            all_items.update({"item" + str(k + 1): item[0]})
+        store.put("playlist",
+                  current=self.current,
+                  items=all_items)
 
     def load(self, store):
         """ Initialize and load previous state """
@@ -88,11 +87,8 @@ class PlayList(object):
                     self.add_files(items["item" + str(k)])
                     k += 1
             self.current = store.get("playlist")["current"]
-            if self.current >= len(self.queue):
-                if len(self.queue) > 0:
-                    self.current = 1
-                else:
-                    self.current = 0
+            if self.current >= len(self.queue) - 1:
+                self.current = 0
 
     @staticmethod
     def _get_albumart(audiofile):
@@ -107,7 +103,7 @@ class PlayList(object):
         return "images/zencode.jpg"
 
     @staticmethod
-    def _get_info(filename):
+    def get_info(filename):
         """
         Return a dictionary containing the metadata on the track """
         try:
@@ -169,18 +165,19 @@ class PlayListScreen(Screen):
 
     def on_enter(self):
         """ Repopulate the listview """
-        info = self.playlist._get_info
+        info = self.playlist.get_info
         data = {str(i - 1): {'text': item[0],
                              'source': item[1],
                              'album': info(item[0])["album"],
                              'file': info(item[0])["file"]}
                 for i, item in enumerate(self.playlist.queue)}
-        list_item_args_converter = lambda row_index, rec: {'text': rec['text'],
-                                'source': rec['source'],
-                                'album': rec['album'],
-                                'file': rec['file'],
-                                'size_hint_y': None,
-                                'height': "25sp"}
+        list_item_args_converter = lambda row_index, rec: \
+            {'text': rec['text'],
+             'source': rec['source'],
+             'album': rec['album'],
+             'file': rec['file'],
+             'size_hint_y': None,
+             'height': "25sp"}
         dict_adapter = DictAdapter(
             sorted_keys=[str(i - 1) for i in range(len(self.playlist.queue))],
             data=data,
