@@ -7,6 +7,7 @@ from kivy.properties import ObjectProperty
 from os import sep, path, listdir
 from kivy.logger import Logger
 from kivy.adapters.dictadapter import DictAdapter
+from kivy.uix.listview import ListItemLabel
 
 
 class PlayList(object):
@@ -120,20 +121,6 @@ class PlayList(object):
 
 
 Builder.load_string('''
-[ZenListItem@SelectableView+BoxLayout]:
-    orientation: 'horizontal'
-    size_hint_y: ctx.size_hint_y
-    height: "100sp"
-    Image:
-        size_hint_x: 0.1
-        source: ctx.source
-    Label:
-        size_hint_x: 0.4
-        text: ctx.album
-    Label
-        size_hint_x: 0.5
-        text: ctx.file
-
 <PlayListScreen>:
     listview: listview
 
@@ -171,20 +158,59 @@ class PlayListScreen(Screen):
                              'album': info(item[0])["album"],
                              'file': info(item[0])["file"]}
                 for i, item in enumerate(self.playlist.queue)}
-        list_item_args_converter = lambda row_index, rec: \
+
+        args_converter = lambda row_index, rec: \
             {'text': rec['text'],
-             'source': rec['source'],
-             'album': rec['album'],
-             'file': rec['file'],
              'size_hint_y': None,
-             'height': "25sp"}
+             'height': 50,
+             'cls_dicts': [{'cls': SelectableImage,
+                            'kwargs': {'source': rec['source'],
+                                       'size_hint_x': 0.5}},
+                           {'cls': ListItemLabel,
+                            'kwargs': {'text': rec['text'][:10],
+                                       'is_representing_cls': True}},
+                           {'cls': ListItemButton,
+                            'kwargs': {'text': rec['album']}}]}
+
         dict_adapter = DictAdapter(
             sorted_keys=[str(i - 1) for i in range(len(self.playlist.queue))],
             data=data,
-            args_converter=list_item_args_converter,
-            template='ZenListItem')
+            selection_mode='single',
+            args_converter=args_converter,
+            cls=ZenListItem)
+
         self.listview.adapter = dict_adapter
 
     def back(self):
         """ Return to the main playing screen """
         self.sm.current = "main"
+
+
+from kivy.uix.listview import ListItemButton
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.listview import CompositeListItem
+from kivy.properties import StringProperty
+from kivy.graphics import Color, Rectangle
+
+Builder.load_string('''
+<SelectableImage>:
+    padding: 10, 10, 10, 10
+    Image:
+        source: root.source
+''')
+
+class SelectableImage(BoxLayout):
+    source = StringProperty()
+    def select_from_composite(self, *args):
+        print("Selected. args = " + str(args))
+        print("Props: " + str(dir(self)))
+        with self.canvas:
+            Color(.5, .5, 1, 0.5)
+            Rectangle(pos=self.pos, size=self.size)
+
+    def deselect_from_composite(self, *args):
+        self.canvas.clear()
+
+
+class ZenListItem(CompositeListItem):
+    pass
