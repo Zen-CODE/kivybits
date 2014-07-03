@@ -7,7 +7,11 @@ from kivy.properties import ObjectProperty
 from os import sep, path, listdir
 from kivy.logger import Logger
 from kivy.adapters.dictadapter import DictAdapter
-from kivy.uix.listview import ListItemLabel
+from kivy.uix.listview import ListItemButton
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.listview import CompositeListItem
+from kivy.properties import StringProperty
+from kivy.graphics import Color
 
 
 class PlayList(object):
@@ -156,21 +160,21 @@ class PlayListScreen(Screen):
         data = {str(i - 1): {'text': item[0],
                              'source': item[1],
                              'album': info(item[0])["album"],
-                             'file': info(item[0])["file"]}
+                             'track': info(item[0])["file"]}
                 for i, item in enumerate(self.playlist.queue)}
 
         args_converter = lambda row_index, rec: \
             {'text': rec['text'],
              'size_hint_y': None,
              'height': 50,
-             'cls_dicts': [{'cls': SelectableImage,
+             'cls_dicts': [{'cls': ZenListImage,
                             'kwargs': {'source': rec['source'],
                                        'size_hint_x': 0.1}},
-                           {'cls': ListItemLabel,
-                            'kwargs': {'text': rec['text'][:10],
+                           {'cls': ZenListButton,
+                            'kwargs': {'text': rec['track'],
                                        'is_representing_cls': True,
                                        'size_hint_x': 0.55}},
-                           {'cls': ListItemButton,
+                           {'cls': ZenListButton,
                             'kwargs': {'text': rec['album'],
                                        'size_hint_x': 0.35}}]}
 
@@ -188,26 +192,42 @@ class PlayListScreen(Screen):
         self.sm.current = "main"
 
 
-from kivy.uix.listview import ListItemButton
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.listview import CompositeListItem
-from kivy.properties import StringProperty
-
 Builder.load_string('''
-<SelectableImage>:
+<ZenListImage>:
     padding: 5, 5, 5, 5
     Image:
         source: root.source
 ''')
 
+# Here we define the colours of the playlist (ZenList*) items
+SELECTED_COLOR = [0.5, 0.5, 1, 0.7]
+DESELECTED_COLOR = [0, 0, 0, 1]
 
-class SelectableImage(BoxLayout, ListItemButton):
+
+class ZenListImage(BoxLayout, ListItemButton):
+    """ This item displays the image but functions as a selectable list item """
     source = StringProperty()
+
+    def __init__(self, **kwargs):
+        super(ZenListImage, self).__init__(**kwargs)
+        self.selected_color = SELECTED_COLOR
+        self.deselected_color = DESELECTED_COLOR
+        #self.background_down = ""
+        #self.background_normal = ""
 
     def on_text(self, *args):
         """ Prevent the button from displaying text """
         self.text = ""
         return True
+
+
+class ZenListButton(ListItemButton):
+    def __init__(self, **kwargs):
+        super(ZenListButton, self).__init__(**kwargs)
+        self.selected_color = SELECTED_COLOR
+        self.deselected_color = DESELECTED_COLOR
+        #self.background_down = ""
+        #self.background_normal = ""
 
 
 class ZenListItem(CompositeListItem):
