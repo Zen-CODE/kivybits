@@ -165,12 +165,14 @@ class PlayListScreen(Screen):
              'height': 50,
              'cls_dicts': [{'cls': SelectableImage,
                             'kwargs': {'source': rec['source'],
-                                       'size_hint_x': 0.5}},
+                                       'size_hint_x': 0.1}},
                            {'cls': ListItemLabel,
                             'kwargs': {'text': rec['text'][:10],
-                                       'is_representing_cls': True}},
+                                       'is_representing_cls': True,
+                                       'size_hint_x': 0.55}},
                            {'cls': ListItemButton,
-                            'kwargs': {'text': rec['album']}}]}
+                            'kwargs': {'text': rec['album'],
+                                       'size_hint_x': 0.35}}]}
 
         dict_adapter = DictAdapter(
             sorted_keys=[str(i - 1) for i in range(len(self.playlist.queue))],
@@ -190,26 +192,22 @@ from kivy.uix.listview import ListItemButton
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.listview import CompositeListItem
 from kivy.properties import StringProperty
-from kivy.graphics import Color, Rectangle
 
 Builder.load_string('''
 <SelectableImage>:
-    padding: 10, 10, 10, 10
+    padding: 5, 5, 5, 5
     Image:
         source: root.source
 ''')
 
-class SelectableImage(BoxLayout):
-    source = StringProperty()
-    def select_from_composite(self, *args):
-        print("Selected. args = " + str(args))
-        print("Props: " + str(dir(self)))
-        with self.canvas:
-            Color(.5, .5, 1, 0.5)
-            Rectangle(pos=self.pos, size=self.size)
 
-    def deselect_from_composite(self, *args):
-        self.canvas.clear()
+class SelectableImage(BoxLayout, ListItemButton):
+    source = StringProperty()
+
+    def on_text(self, *args):
+        """ Prevent the button from displaying text """
+        self.text = ""
+        return True
 
 
 class ZenListItem(CompositeListItem):
