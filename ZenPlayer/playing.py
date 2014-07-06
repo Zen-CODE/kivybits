@@ -20,8 +20,8 @@ Builder.load_string('''
     but_stop: stop
     but_playpause: playpause
     but_next: next
-    volume: volume
-    progress: progress
+    volume_slider: volume
+    progress_slider: progress
     info_label1: info_label1
     info_label2: info_label2
     info_label3: info_label3
@@ -130,8 +130,8 @@ class PlayingScreen(Screen):
     but_playpause = ObjectProperty()
     but_next = ObjectProperty()
     info_label = ObjectProperty()
-    volume = ObjectProperty()
-    progress = ObjectProperty()
+    volume_slider = ObjectProperty()
+    progress_slider = ObjectProperty()
     time_label = ObjectProperty()
     store = JsonStore("zenplayer.json")
 
@@ -143,7 +143,7 @@ class PlayingScreen(Screen):
         if self.store.exists('state'):
             state = self.store.get("state")
             if "volume" in state.keys():
-                self.volume.value = state["volume"]
+                self.volume_slider.value = state["volume"]
 
     def init(self):
         """ Initialize the display """
@@ -166,14 +166,14 @@ class PlayingScreen(Screen):
                 self.sound.play()
                 self.init()
                 self.but_playpause.source = "images/pause.png"
-                self.sound.volume = self.volume.value
+                self.sound.volume = self.volume_slider.value
         elif self.sound.state == "play":
             self.sound.stop()
             self.but_playpause.source = "images/play.png"
         else:
             self.sound.play()
             self.but_playpause.source = "images/pause.png"
-            self.sound.volume = self.volume.value
+            self.sound.volume = self.volume_slider.value
 
     def play_next(self):
         """ Play the next track. """
@@ -216,7 +216,7 @@ class PlayingScreen(Screen):
     def set_volume(self):
         """ Set the volume of the currently playing track if there is one. """
         if self.sound:
-            self.sound.volume = self.volume.value
+            self.sound.volume = self.volume_slider.value
 
     def show_playlist(self):
         """ Switch to the playlist screen """
@@ -248,7 +248,7 @@ class PlayingScreen(Screen):
             length = self.sound._get_length()
             if length > 0:
                 pos = self.sound.get_pos()
-                self.progress.value = pos / length
+                self.progress_slider.value = pos / length
 
                 self.time_label.text = "{0}m {1:02d}s / {2}m {3:02d}s".format(
                     int(pos / 60),
