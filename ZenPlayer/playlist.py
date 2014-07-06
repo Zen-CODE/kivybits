@@ -210,10 +210,13 @@ class ZenListImage(BoxLayout, ListItemButton):
 
     def __init__(self, **kwargs):
         super(ZenListImage, self).__init__(**kwargs)
-        self.selected_color = SELECTED_COLOR
-        self.deselected_color = DESELECTED_COLOR
+        # TODO: Customize background. Could not get this to work properly with
+        #       the button drawing
+        # self.selected_color = SELECTED_COLOR
+        # self.deselected_color = DESELECTED_COLOR
         #self.background_down = ""
         #self.background_normal = ""
+
 
     def on_text(self, *args):
         """ Prevent the button from displaying text """
@@ -224,10 +227,12 @@ class ZenListImage(BoxLayout, ListItemButton):
 class ZenListButton(ListItemButton):
     def __init__(self, **kwargs):
         super(ZenListButton, self).__init__(**kwargs)
-        self.selected_color = SELECTED_COLOR
-        self.deselected_color = DESELECTED_COLOR
-        #self.background_down = ""
-        #self.background_normal = ""
+        # TODO: Customize background. Could not get this to work properly with
+        #       the button drawing
+        # self.selected_color = SELECTED_COLOR
+        # self.deselected_color = DESELECTED_COLOR
+        #self.background_normal = 'images/black.png'
+        #self.background_down = 'images/black.png'
 
 
 class ZenListItem(CompositeListItem):
