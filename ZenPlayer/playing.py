@@ -22,10 +22,10 @@ class Controller(object):
 
     def __init__(self):
         self.playlist = PlayList()
-        self.store = JsonStore("zenplayer.json")
-        self.playlist.load(self.store)
-        if self.store.exists('state'):
-            state = self.store.get("state")
+        self._store = JsonStore("zenplayer.json")
+        self.playlist.load(self._store)
+        if self._store.exists('state'):
+            state = self._store.get("state")
             if "volume" in state.keys():
                 self.volume = state["volume"]
 
@@ -45,8 +45,8 @@ class Controller(object):
         self.playlist.move_previous()
 
     def save(self):
-        self.playlist.save(self.store)
-        self.store.put("state", volume=self.volume)
+        self.playlist.save(self._store)
+        self._store.put("state", volume=self.volume)
 
 
 Builder.load_string('''
