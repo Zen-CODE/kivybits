@@ -66,7 +66,7 @@ class ZenPlayer(App):
     def build(self):
         sm = ScreenManager()
         self.playing = PlayingScreen(sm, name="main")
-        self.playing.init()
+        self.playing.init_display()
         sm.add_widget(self.playing)
         sm.current = "main"
         return sm

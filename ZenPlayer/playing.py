@@ -13,6 +13,14 @@ from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 
 
+class Controller(object):
+    """
+    Controls the playing of audio and coordinates the updating of the playlist
+    and screen displays
+    """
+    pass
+
+
 Builder.load_string('''
 <PlayingScreen>:
     # Define the buttons
@@ -134,6 +142,8 @@ class PlayingScreen(Screen):
     progress_slider = ObjectProperty()
     time_label = ObjectProperty()
     store = JsonStore("zenplayer.json")
+    ctrl = Controller()
+
 
     def __init__(self, sm, **kwargs):
         self.sm = sm
@@ -145,7 +155,7 @@ class PlayingScreen(Screen):
             if "volume" in state.keys():
                 self.volume_slider.value = state["volume"]
 
-    def init(self):
+    def init_display(self):
         """ Initialize the display """
         self.album_image.source = self.playlist.get_current_art()
         info = self.playlist.get_current_info()
@@ -164,7 +174,7 @@ class PlayingScreen(Screen):
                 self.sound = SoundLoader.load(audiof)
                 self.sound.bind(on_stop=self._on_sound_stop)
                 self.sound.play()
-                self.init()
+                self.init_display()
                 self.but_playpause.source = "images/pause.png"
                 self.sound.volume = self.volume_slider.value
         elif self.sound.state == "play":
@@ -185,7 +195,7 @@ class PlayingScreen(Screen):
         Logger.info("main.py: self.playlist.move_next()=" +
                     str(self.playlist.get_current_file()))
         if self.playlist.get_current_file():
-            self.init()
+            self.init_display()
             self.playpause()
 
     def play_previous(self):
@@ -197,7 +207,7 @@ class PlayingScreen(Screen):
         Logger.info("main.py: self.playlist.move_previous()=" +
                     str(self.playlist.get_current_file()))
         if self.playlist.get_current_file():
-            self.init()
+            self.init_display()
             self.playpause()
 
     def stop(self):
@@ -239,7 +249,7 @@ class PlayingScreen(Screen):
         self.sound = None
         if self.advance:
             self.playlist.move_next()
-            self.init()
+            self.init_display()
             self.playpause()
 
     def _update_progress(self, dt):
@@ -255,10 +265,3 @@ class PlayingScreen(Screen):
                     int(pos % 60),
                     int(length / 60),
                     int(length % 60))
-
-
-class Controller(object):
-    """
-    Controls the playing of audio and coordinates the updating of the playlist
-    and screen displays
-    """
