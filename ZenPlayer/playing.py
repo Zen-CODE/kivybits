@@ -18,8 +18,25 @@ class Controller(object):
     Controls the playing of audio and coordinates the updating of the playlist
     and screen displays
     """
-    pass
+    volume = 100
 
+    def __init__(self):
+        self.playlist = PlayList()
+        self.store = JsonStore("zenplayer.json")
+        self.playlist.load(self.store)
+        if self.store.exists('state'):
+            state = self.store.get("state")
+            if "volume" in state.keys():
+                self.volume = state["volume"]
+
+    def get_current_art(self):
+        return self.playlist.get_current_art()
+
+    def get_current_info(self):
+        return self.playlist.get_current_info()
+
+    def get_current_file(self):
+        return self.playlist.get_current_file()
 
 Builder.load_string('''
 <PlayingScreen>:
@@ -132,7 +149,6 @@ class PlayingScreen(Screen):
     sound = None
     advance = True  # This flag indicates whether to advance to the next track
                     # once the currently playing one had ended
-    playlist = PlayList()
     but_previous = ObjectProperty()
     but_stop = ObjectProperty()
     but_playpause = ObjectProperty()
@@ -141,24 +157,23 @@ class PlayingScreen(Screen):
     volume_slider = ObjectProperty()
     progress_slider = ObjectProperty()
     time_label = ObjectProperty()
-    store = JsonStore("zenplayer.json")
     ctrl = Controller()
-
 
     def __init__(self, sm, **kwargs):
         self.sm = sm
         super(PlayingScreen, self).__init__(**kwargs)
         Clock.schedule_interval(self._update_progress, 1/25)
-        self.playlist.load(self.store)
-        if self.store.exists('state'):
-            state = self.store.get("state")
-            if "volume" in state.keys():
-                self.volume_slider.value = state["volume"]
+        self.volume_slider.value = self.ctrl.volume
+        # self.playlist.load(self.store)
+        # if self.store.exists('state'):
+        #     state = self.store.get("state")
+        #     if "volume" in state.keys():
+        #         self.volume_slider.value = state["volume"]
 
     def init_display(self):
         """ Initialize the display """
-        self.album_image.source = self.playlist.get_current_art()
-        info = self.playlist.get_current_info()
+        self.album_image.source = self.ctrl.get_current_art()
+        info = self.ctrl.get_current_info()
         if info:
             self.info_label1.text = info["artist"]
             self.info_label2.text = info["album"]
@@ -168,7 +183,7 @@ class PlayingScreen(Screen):
         """ Start playing any audio if nothing is playing """
         self.advance = True
         if not self.sound:
-            audiof = self.playlist.get_current_file()
+            audiof = self.ctrl.get_current_file()
             if audiof:
                 Logger.info("main.py: playing " + audiof)
                 self.sound = SoundLoader.load(audiof)
@@ -191,10 +206,8 @@ class PlayingScreen(Screen):
         if self.sound:
             self.stop()
             self.sound = None
-        self.playlist.move_next()
-        Logger.info("main.py: self.playlist.move_next()=" +
-                    str(self.playlist.get_current_file()))
-        if self.playlist.get_current_file():
+        self.ctrl.playlist.move_next()
+        if self.ctrl.get_current_file():
             self.init_display()
             self.playpause()
 
@@ -203,10 +216,8 @@ class PlayingScreen(Screen):
         if self.sound:
             self.stop()
             self.sound = None
-        self.playlist.move_previous()
-        Logger.info("main.py: self.playlist.move_previous()=" +
-                    str(self.playlist.get_current_file()))
-        if self.playlist.get_current_file():
+        self.ctrl.playlist.move_previous()
+        if self.ctrl.get_current_file():
             self.init_display()
             self.playpause()
 
@@ -220,8 +231,8 @@ class PlayingScreen(Screen):
 
     def save(self):
         """ Save the current playlist state """
-        self.playlist.save(self.store)
-        self.store.put("state", volume=self.volume.value)
+        self.ctrl.playlist.save(self.ctrl.store)
+        self.ctrl.store.put("state", volume=self.volume_slider.value)
 
     def set_volume(self):
         """ Set the volume of the currently playing track if there is one. """
@@ -232,7 +243,7 @@ class PlayingScreen(Screen):
         """ Switch to the playlist screen """
         if "playlist" not in self.sm.screen_names:
             self.sm.add_widget(PlayListScreen(self.sm,
-                                              self.playlist,
+                                              self.ctrl.playlist,
                                               name="playlist"))
         self.sm.current = "playlist"
 
@@ -240,7 +251,7 @@ class PlayingScreen(Screen):
         """ Switch to the playlist screen """
         if "filebrowser" not in self.sm.screen_names:
             self.sm.add_widget(ZenFileBrowser(self.sm,
-                                              self.playlist,
+                                              self.ctrl.playlist,
                                               name="filebrowser"))
         self.sm.current = "filebrowser"
 
@@ -248,7 +259,7 @@ class PlayingScreen(Screen):
         Logger.info("main.py: sound has stopped. args=" + str(args))
         self.sound = None
         if self.advance:
-            self.playlist.move_next()
+            self.ctrl.playlist.move_next()
             self.init_display()
             self.playpause()
 
