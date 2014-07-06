@@ -38,6 +38,17 @@ class Controller(object):
     def get_current_file(self):
         return self.playlist.get_current_file()
 
+    def move_next(self):
+        self.playlist.move_next()
+
+    def move_previous(self):
+        self.playlist.move_previous()
+
+    def save(self):
+        self.playlist.save(self.store)
+        self.store.put("state", volume=self.volume)
+
+
 Builder.load_string('''
 <PlayingScreen>:
     # Define the buttons
@@ -164,11 +175,6 @@ class PlayingScreen(Screen):
         super(PlayingScreen, self).__init__(**kwargs)
         Clock.schedule_interval(self._update_progress, 1/25)
         self.volume_slider.value = self.ctrl.volume
-        # self.playlist.load(self.store)
-        # if self.store.exists('state'):
-        #     state = self.store.get("state")
-        #     if "volume" in state.keys():
-        #         self.volume_slider.value = state["volume"]
 
     def init_display(self):
         """ Initialize the display """
@@ -206,7 +212,7 @@ class PlayingScreen(Screen):
         if self.sound:
             self.stop()
             self.sound = None
-        self.ctrl.playlist.move_next()
+        self.ctrl.move_next()
         if self.ctrl.get_current_file():
             self.init_display()
             self.playpause()
@@ -216,7 +222,7 @@ class PlayingScreen(Screen):
         if self.sound:
             self.stop()
             self.sound = None
-        self.ctrl.playlist.move_previous()
+        self.ctrl.move_previous()
         if self.ctrl.get_current_file():
             self.init_display()
             self.playpause()
@@ -231,8 +237,7 @@ class PlayingScreen(Screen):
 
     def save(self):
         """ Save the current playlist state """
-        self.ctrl.playlist.save(self.ctrl.store)
-        self.ctrl.store.put("state", volume=self.volume_slider.value)
+        self.ctrl.save()
 
     def set_volume(self):
         """ Set the volume of the currently playing track if there is one. """
@@ -259,7 +264,7 @@ class PlayingScreen(Screen):
         Logger.info("main.py: sound has stopped. args=" + str(args))
         self.sound = None
         if self.advance:
-            self.ctrl.playlist.move_next()
+            self.ctrl.move_next()
             self.init_display()
             self.playpause()
 
