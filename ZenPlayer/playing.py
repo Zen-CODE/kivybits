@@ -255,3 +255,10 @@ class PlayingScreen(Screen):
                     int(pos % 60),
                     int(length / 60),
                     int(length % 60))
+
+
+class Controller(object):
+    """
+    Controls the playing of audio and coordinates the updating of the playlist
+    and screen displays
+    """
