@@ -198,6 +198,7 @@ class PlayingScreen(Screen):
                 self.init_display()
                 self.but_playpause.source = "images/pause.png"
                 self.sound.volume = self.volume_slider.value
+                Logger.info("main.py: Sounds is a " + str(self.sound))
         elif self.sound.state == "play":
             self.sound.stop()
             self.but_playpause.source = "images/play.png"
