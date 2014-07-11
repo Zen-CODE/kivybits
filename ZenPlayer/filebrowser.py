@@ -6,8 +6,6 @@ from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from kivy.storage.jsonstore import JsonStore
 from os.path import exists
-#from kivy.uix.popup import Popup
-#from kivy.clock import Clock
 
 
 Builder.load_string('''
@@ -85,7 +83,9 @@ class ZenFileBrowser(Screen):
             store = JsonStore("zenplayer.json")
             if store.exists("filebrowser"):
                 if "path" in store.get("filebrowser").keys():
-                    self.filechooser.path = store.get("filebrowser")["path"]
+                    file_path = store.get("filebrowser")["path"]
+                    if exists(file_path):
+                        self.filechooser.path = file_path
 
     def on_leave(self):
         """ The filebrowser screen is being closed """
