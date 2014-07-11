@@ -11,7 +11,7 @@ from kivy.uix.listview import ListItemButton
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.listview import CompositeListItem
 from kivy.properties import StringProperty
-from kivy.graphics import Color
+from os.path import exists
 
 
 class PlayList(object):
@@ -89,7 +89,8 @@ class PlayList(object):
                 items = store.get("playlist")["items"]
                 k = 1
                 while "item" + str(k) in items.keys():
-                    self.add_files(items["item" + str(k)])
+                    if exists(items["item" + str(k)]):
+                        self.add_files(items["item" + str(k)])
                     k += 1
             self.current = store.get("playlist")["current"]
             if self.current >= len(self.queue) - 1:
