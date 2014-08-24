@@ -170,14 +170,17 @@ class PlayListScreen(Screen):
              'height': 50,
              'cls_dicts': [{'cls': ZenListImage,
                             'kwargs': {'source': rec['source'],
-                                       'size_hint_x': 0.1}},
+                                       'size_hint_x': 0.1,
+                                       'row_index': row_index}},
                            {'cls': ZenListButton,
                             'kwargs': {'text': rec['track'],
                                        'is_representing_cls': True,
-                                       'size_hint_x': 0.55}},
+                                       'size_hint_x': 0.55,
+                                       'row_index': row_index}},
                            {'cls': ZenListButton,
                             'kwargs': {'text': rec['album'],
-                                       'size_hint_x': 0.35}}]}
+                                       'size_hint_x': 0.35,
+                                       'row_index': row_index}}]}
 
         dict_adapter = DictAdapter(
             sorted_keys=[str(i - 1) for i in range(len(self.playlist.queue))],
@@ -187,11 +190,15 @@ class PlayListScreen(Screen):
             cls=ZenListItem)
 
         self.listview.adapter = dict_adapter
+        dict_adapter.bind(on_selection_change=self.selection_changed)
 
     def back(self):
         """ Return to the main playing screen """
         self.sm.current = "main"
 
+    def selection_changed(self, adapter):
+        print "Selection changed - " + str(adapter.selection) + ", " + \
+            str(dir(adapter.selection[0]))
 
 Builder.load_string('''
 <ZenListImage>:
@@ -210,6 +217,7 @@ class ZenListImage(BoxLayout, ListItemButton):
     source = StringProperty()
 
     def __init__(self, **kwargs):
+        self.row_index = kwargs.pop('row_index')
         super(ZenListImage, self).__init__(**kwargs)
         # TODO: Customize background. Could not get this to work properly with
         #       the button drawing
@@ -217,7 +225,6 @@ class ZenListImage(BoxLayout, ListItemButton):
         # self.deselected_color = DESELECTED_COLOR
         #self.background_down = ""
         #self.background_normal = ""
-
 
     def on_text(self, *args):
         """ Prevent the button from displaying text """
@@ -227,6 +234,7 @@ class ZenListImage(BoxLayout, ListItemButton):
 
 class ZenListButton(ListItemButton):
     def __init__(self, **kwargs):
+        self.row_index = kwargs.pop('row_index')
         super(ZenListButton, self).__init__(**kwargs)
         # TODO: Customize background. Could not get this to work properly with
         #       the button drawing
