@@ -159,21 +159,40 @@ class Sound():
     _sound = None  # The underlying Sound instance
 
     @staticmethod
-    def stop():
-        """ Stop any playing audio """
+    def _on_stop(*args):
+        Logger.info("main.py: sound has stopped. args=" + str(args))
+        Sound.state = "stopped"
 
     @staticmethod
-    def play(filename, on_stop):
+    def stop():
+        """ Stop any playing audio """
+        if Sound._sound:
+            Sound._sound.stop()
+            Sound.state = "stopped"
+
+    @staticmethod
+    def play(filename="", on_stop=None):
         """
         Play the file specified by the filename. If on_stop is passed in,
         this function is called when the sound stops
         """
+        if Sound._sound is not None:
+            Sound._sound.stop()
+
+        if filename:
+            Sound._sound = SoundLoader.load(filename)
+        if Sound._sound:
+            Sound._sound.bind(on_stop=Sound._on_stop)
+            Sound._sound.play()
+            Sound.state = "playing"
 
     @staticmethod
     def set_volume(value):
         """
         The the volume of the currently playing sound if appropriate
         """
+        if Sound._sound:
+            Sound._sound.volume = value
 
 
 class PlayingScreen(Screen):
@@ -213,45 +232,39 @@ class PlayingScreen(Screen):
     def playpause(self):
         """ Start playing any audio if nothing is playing """
         self.advance = True
-        if not self.sound:
+        if not Sound.state:
             audiof = self.ctrl.get_current_file()
             if audiof:
                 Logger.info("main.py: playing " + audiof)
-                self.sound = SoundLoader.load(audiof)
-                self.sound.bind(on_stop=self._on_sound_stop)
-                self.sound.play()
+                Sound.play(audiof, self._on_sound_stop)
                 self.init_display()
                 self.but_playpause.source = "images/pause.png"
-                self.sound.volume = self.volume_slider.value
+                Sound.set_volume(self.volume_slider.value)
                 Logger.info("main.py: Sounds is a " + str(self.sound))
-        elif self.sound.state == "play":
-            self.sound.stop()
+        elif Sound.state == "playing":
+            Sound.stop()
             self.but_playpause.source = "images/play.png"
         else:
-            self.sound.play()
+            Sound.play()
             self.but_playpause.source = "images/pause.png"
-            self.sound.volume = self.volume_slider.value
+            Sound.set_volume(self.volume_slider.value)
 
     def play_next(self):
         """ Play the next track. """
         Logger.info("main.py: PlayingScreen.play_next")
-        if self.sound:
-            self.stop()
-            self.sound = None
         self.ctrl.move_next()
-        if self.ctrl.get_current_file():
+        audiofile = self.ctrl.get_current_file()
+        if audiofile:
             self.init_display()
-            self.playpause()
+            Sound.play(audiofile)
 
     def play_previous(self):
         """ Ply the previous track. """
-        if self.sound:
-            self.stop()
-            self.sound = None
         self.ctrl.move_previous()
-        if self.ctrl.get_current_file():
+        audiofile = self.ctrl.get_current_file()
+        if audiofile:
             self.init_display()
-            self.playpause()
+            Sound.play(audiofile)
 
     def stop(self):
         """ Stop any playing audio """
@@ -267,8 +280,7 @@ class PlayingScreen(Screen):
 
     def set_volume(self):
         """ Set the volume of the currently playing track if there is one. """
-        if self.sound:
-            self.sound.volume = self.volume_slider.value
+        Sound.set_volume(self.volume_slider.value)
 
     def show_playlist(self):
         """ Switch to the playlist screen """
