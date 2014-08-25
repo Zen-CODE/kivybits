@@ -81,6 +81,12 @@ class PlayList(object):
                   current=self.current,
                   items=all_items)
 
+    def set_index(self, index):
+        """ Set the currently selected track to the one specified by the index
+        """
+        if index < len(self.queue):
+            self.current = index
+
     def load(self, store):
         """ Initialize and load previous state """
         # See if there is an existing playlist to restore
@@ -199,6 +205,7 @@ class PlayListScreen(Screen):
     def selection_changed(self, adapter):
         print "Selection changed - " + str(adapter.selection) + ", " + \
             str(dir(adapter.selection[0]))
+        print "Row index=", str(adapter.selection[0].row_index)
 
 Builder.load_string('''
 <ZenListImage>:

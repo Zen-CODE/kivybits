@@ -151,6 +151,31 @@ Builder.load_string('''
 ''')
 
 
+class Sound():
+    """
+    This class manages the playing audio as a Singleton
+    """
+    state = ""  # One of "", "stopped", "playing"
+    _sound = None  # The underlying Sound instance
+
+    @staticmethod
+    def stop():
+        """ Stop any playing audio """
+
+    @staticmethod
+    def play(filename, on_stop):
+        """
+        Play the file specified by the filename. If on_stop is passed in,
+        this function is called when the sound stops
+        """
+
+    @staticmethod
+    def set_volume(value):
+        """
+        The the volume of the currently playing sound if appropriate
+        """
+
+
 class PlayingScreen(Screen):
     """
     The main screen that shows whats currently playing
