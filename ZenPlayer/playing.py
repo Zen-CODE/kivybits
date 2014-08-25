@@ -164,6 +164,14 @@ class Sound():
         Sound.state = "stopped"
 
     @staticmethod
+    def get_pos_length():
+        """ Return a tuple of the length and position, or return 0, 0"""
+        if Sound._sound:
+            return Sound._sound.get_pos(), Sound._sound._get_length()
+        else:
+            return 0, 0
+
+    @staticmethod
     def stop():
         """ Stop any playing audio """
         if Sound._sound:
@@ -201,7 +209,6 @@ class PlayingScreen(Screen):
     """
     #TODO : Document properties once stable
     album_image = ObjectProperty()
-    sound = None
     advance = True  # This flag indicates whether to advance to the next track
                     # once the currently playing one had ended
     but_previous = ObjectProperty()
@@ -240,7 +247,6 @@ class PlayingScreen(Screen):
                 self.init_display()
                 self.but_playpause.source = "images/pause.png"
                 Sound.set_volume(self.volume_slider.value)
-                Logger.info("main.py: Sounds is a " + str(self.sound))
         elif Sound.state == "playing":
             Sound.stop()
             self.but_playpause.source = "images/play.png"
@@ -269,10 +275,8 @@ class PlayingScreen(Screen):
     def stop(self):
         """ Stop any playing audio """
         self.advance = False
-        if self.sound:
-            self.sound.stop()
-            self.but_playpause.source = "images/play.png"
-            self.sound = None
+        Sound.stop()
+        self.but_playpause.source = "images/play.png"
 
     def save(self):
         """ Save the current playlist state """
@@ -300,7 +304,6 @@ class PlayingScreen(Screen):
 
     def _on_sound_stop(self, *args):
         Logger.info("main.py: sound has stopped. args=" + str(args))
-        self.sound = None
         if self.advance:
             self.ctrl.move_next()
             self.init_display()
@@ -308,10 +311,9 @@ class PlayingScreen(Screen):
 
     def _update_progress(self, dt):
         """ Update the progressbar  """
-        if self.sound:
-            length = self.sound._get_length()
+        if Sound.state == "playing":
+            pos, length = Sound.get_pos_length()
             if length > 0:
-                pos = self.sound.get_pos()
                 self.progress_slider.value = pos / length
 
                 self.time_label.text = "{0}m {1:02d}s / {2}m {3:02d}s".format(
