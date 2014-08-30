@@ -164,10 +164,10 @@ class PlayListScreen(Screen):
     def on_enter(self):
         """ Repopulate the listview """
         info = self.playlist.get_info
-        data = {str(i - 1): {'text': item[0],
-                             'source': item[1],
-                             'album': info(item[0])["album"],
-                             'track': info(item[0])["file"]}
+        data = {str(i): {'text': item[0],
+                         'source': item[1],
+                         'album': info(item[0])["album"],
+                         'track': info(item[0])["file"]}
                 for i, item in enumerate(self.playlist.queue)}
 
         args_converter = lambda row_index, rec: \
@@ -189,7 +189,7 @@ class PlayListScreen(Screen):
                                        'row_index': row_index}}]}
 
         dict_adapter = DictAdapter(
-            sorted_keys=[str(i - 1) for i in range(len(self.playlist.queue))],
+            sorted_keys=[str(i) for i in range(len(self.playlist.queue))],
             data=data,
             selection_mode='single',
             args_converter=args_converter,
