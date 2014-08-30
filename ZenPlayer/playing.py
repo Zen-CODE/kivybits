@@ -166,8 +166,9 @@ class Sound():
     @staticmethod
     def get_pos_length():
         """ Return a tuple of the length and position, or return 0, 0"""
-        if Sound._sound:
-            return Sound._sound.get_pos(), Sound._sound._get_length()
+        sound = Sound._sound
+        if sound:
+            return sound.get_pos(), sound._get_length()
         else:
             return 0, 0
 
