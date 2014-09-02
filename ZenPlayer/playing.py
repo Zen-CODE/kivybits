@@ -88,12 +88,14 @@ Builder.load_string('''
                 size_hint_y: 0.05
                 Image:
                     source: 'images/add.png'
-                    on_touch_down: self.collide_point(*args[1].pos) and root.show_filebrowser()
+                    on_touch_down: self.collide_point(*args[1].pos) and \
+                                   root.show_filebrowser()
                 Image:
                     source: 'images/zencode.jpg'
                 Image:
                     source: 'images/playlist.png'
-                    on_touch_down: self.collide_point(*args[1].pos) and root.show_playlist()
+                    on_touch_down: self.collide_point(*args[1].pos) and \
+                                   root.show_playlist()
             Label:
                 id: info_label1
                 size_hint_y: 0.05
