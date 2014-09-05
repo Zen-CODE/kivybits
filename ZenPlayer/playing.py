@@ -124,10 +124,7 @@ class Controller(object):
 Builder.load_string('''
 <PlayingScreen>:
     # Define the buttons
-    but_previous: previous
-    but_stop: stop
     but_playpause: playpause
-    but_next: next
     volume_slider: volume
     progress_slider: progress
     info_label1: info_label1
@@ -161,13 +158,13 @@ Builder.load_string('''
                 Image:
                     source: 'images/add.png'
                     on_touch_down: self.collide_point(*args[1].pos) and \
-                                   root.show_filebrowser()
+                                   root.ctrl.show_filebrowser()
                 Image:
                     source: 'images/zencode.jpg'
                 Image:
                     source: 'images/playlist.png'
                     on_touch_down: self.collide_point(*args[1].pos) and \
-                                   root.show_playlist()
+                                   root.ctrl.show_playlist()
             Label:
                 id: info_label1
                 size_hint_y: 0.05
@@ -284,10 +281,7 @@ class PlayingScreen(Screen):
     """
     #TODO : Document properties once stable
     album_image = ObjectProperty()
-    but_previous = ObjectProperty()
-    but_stop = ObjectProperty()
     but_playpause = ObjectProperty()
-    but_next = ObjectProperty()
     info_label = ObjectProperty()
     volume_slider = ObjectProperty()
     progress_slider = ObjectProperty()
@@ -312,14 +306,6 @@ class PlayingScreen(Screen):
     def save(self):
         """ Save the current playlist state """
         self.ctrl.save()
-
-    def show_playlist(self):
-        """ Switch to the playlist screen """
-        self.ctrl.show_playlist()
-
-    def show_filebrowser(self):
-        """ Switch to the playlist screen """
-        self.ctrl.show_filebrowser()
 
     def _update_progress(self, dt):
         """ Update the progressbar  """
