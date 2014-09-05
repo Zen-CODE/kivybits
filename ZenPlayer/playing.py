@@ -19,6 +19,8 @@ class Controller(object):
     and screen displays
     """
     volume = 100
+    advance = True  # This flag indicates whether to advance to the next track
+                    # once the currently playing one had ended
 
     def __init__(self):
         self.playlist = PlayList()
@@ -29,6 +31,13 @@ class Controller(object):
             if "volume" in state.keys():
                 self.volume = state["volume"]
 
+    def _on_sound_stop(self, *args):
+        Logger.info("main.py: sound has stopped. args=" + str(args))
+        if self.advance:
+            self.move_next()
+            #self.init_display()
+            self.play_pause()
+
     def get_current_art(self):
         return self.playlist.get_current_art()
 
@@ -37,6 +46,40 @@ class Controller(object):
 
     def get_current_file(self):
         return self.playlist.get_current_file()
+
+    def play_pause(self):
+        self.advance = True
+        if not Sound.state:
+            audiof = self.get_current_file()
+            if audiof:
+                Logger.info("main.py: playing " + audiof)
+                Sound.play(audiof, self._on_sound_stop)
+                #self.init_display()
+                #self.but_playpause.source = "images/pause.png"
+                Sound.set_volume(self.volume)
+        elif Sound.state == "playing":
+            Sound.stop()
+            #self.but_playpause.source = "images/play.png"
+        else:
+            Sound.play()
+            #self.but_playpause.source = "images/pause.png"
+            Sound.set_volume(self.volume_slider.value)
+
+    def play_next(self):
+        Logger.info("main.py: PlayingScreen.play_next")
+        self.move_next()
+        audiofile = self.get_current_file()
+        if audiofile:
+            #self.init_display()
+            Sound.play(audiofile)
+
+    def play_previous(self):
+        """ Ply the previous track. """
+        self.move_previous()
+        audiofile = self.get_current_file()
+        if audiofile:
+            #self.init_display()
+            Sound.play(audiofile)
 
     def move_next(self):
         self.playlist.move_next()
@@ -48,6 +91,16 @@ class Controller(object):
         self.playlist.save(self._store)
         self._store.put("state", volume=self.volume)
 
+    def set_volume(self, value):
+        """ Set the volume of the currently playing track if there is one. """
+        self.volume = value
+        Sound.set_volume(value)
+
+    def stop(self):
+        """ Stop any playing audio """
+        self.advance = False
+        Sound.stop()
+        #self.but_playpause.source = "images/play.png"
 
 Builder.load_string('''
 <PlayingScreen>:
@@ -128,7 +181,7 @@ Builder.load_string('''
                 MediaButton:
                     id: playpause
                     source: 'images/play.png'
-                    on_click: root.playpause()
+                    on_click: root.play_pause()
                 MediaButton:
                     id: next
                     source: 'images/next.png'
@@ -212,8 +265,6 @@ class PlayingScreen(Screen):
     """
     #TODO : Document properties once stable
     album_image = ObjectProperty()
-    advance = True  # This flag indicates whether to advance to the next track
-                    # once the currently playing one had ended
     but_previous = ObjectProperty()
     but_stop = ObjectProperty()
     but_playpause = ObjectProperty()
@@ -239,47 +290,21 @@ class PlayingScreen(Screen):
             self.info_label2.text = info["album"]
             self.info_label3.text = info["file"]
 
-    def playpause(self):
+    def play_pause(self):
         """ Start playing any audio if nothing is playing """
-        self.advance = True
-        if not Sound.state:
-            audiof = self.ctrl.get_current_file()
-            if audiof:
-                Logger.info("main.py: playing " + audiof)
-                Sound.play(audiof, self._on_sound_stop)
-                self.init_display()
-                self.but_playpause.source = "images/pause.png"
-                Sound.set_volume(self.volume_slider.value)
-        elif Sound.state == "playing":
-            Sound.stop()
-            self.but_playpause.source = "images/play.png"
-        else:
-            Sound.play()
-            self.but_playpause.source = "images/pause.png"
-            Sound.set_volume(self.volume_slider.value)
+        self.ctrl.play_pause()
 
     def play_next(self):
         """ Play the next track. """
-        Logger.info("main.py: PlayingScreen.play_next")
-        self.ctrl.move_next()
-        audiofile = self.ctrl.get_current_file()
-        if audiofile:
-            self.init_display()
-            Sound.play(audiofile)
+        self.ctrl.play_next()
 
     def play_previous(self):
         """ Ply the previous track. """
-        self.ctrl.move_previous()
-        audiofile = self.ctrl.get_current_file()
-        if audiofile:
-            self.init_display()
-            Sound.play(audiofile)
+        self.ctrl.play_previous()
 
     def stop(self):
         """ Stop any playing audio """
-        self.advance = False
-        Sound.stop()
-        self.but_playpause.source = "images/play.png"
+        self.ctrl.stop()
 
     def save(self):
         """ Save the current playlist state """
@@ -287,7 +312,7 @@ class PlayingScreen(Screen):
 
     def set_volume(self):
         """ Set the volume of the currently playing track if there is one. """
-        Sound.set_volume(self.volume_slider.value)
+        self.ctrl.set_volume(self.volume_slider.value)
 
     def show_playlist(self):
         """ Switch to the playlist screen """
@@ -304,13 +329,6 @@ class PlayingScreen(Screen):
                                               self.ctrl.playlist,
                                               name="filebrowser"))
         self.sm.current = "filebrowser"
-
-    def _on_sound_stop(self, *args):
-        Logger.info("main.py: sound has stopped. args=" + str(args))
-        if self.advance:
-            self.ctrl.move_next()
-            self.init_display()
-            self.playpause()
 
     def _update_progress(self, dt):
         """ Update the progressbar  """

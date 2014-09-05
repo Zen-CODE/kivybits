@@ -54,7 +54,6 @@ class ZenPlayer(App):
     """
     playing = None  # Reference to the main screen (for saving)
 
-
     def on_pause(self):
         # Enable support for pause
         return True
