@@ -21,8 +21,10 @@ class Controller(object):
     volume = 100
     advance = True  # This flag indicates whether to advance to the next track
                     # once the currently playing one had ended
+    sm = None  # THe ScreenManager
 
-    def __init__(self):
+    def __init__(self, sm):
+        self.sm = sm
         self.playlist = PlayList()
         self._store = JsonStore("zenplayer.json")
         self.playlist.load(self._store)
@@ -95,6 +97,23 @@ class Controller(object):
         """ Set the volume of the currently playing track if there is one. """
         self.volume = value
         Sound.set_volume(value)
+
+    def show_filebrowser(self):
+        """ Switch to the playlist screen """
+        if "filebrowser" not in self.sm.screen_names:
+            self.sm.add_widget(ZenFileBrowser(self.sm,
+                                              self.playlist,
+                                              name="filebrowser"))
+        self.sm.current = "filebrowser"
+
+    def show_playlist(self):
+        """ Switch to the playlist screen """
+        if "playlist" not in self.sm.screen_names:
+            self.sm.add_widget(PlayListScreen(self.sm,
+                                              self.playlist,
+                                              name="playlist"))
+        self.sm.current = "playlist"
+
 
     def stop(self):
         """ Stop any playing audio """
@@ -273,10 +292,10 @@ class PlayingScreen(Screen):
     volume_slider = ObjectProperty()
     progress_slider = ObjectProperty()
     time_label = ObjectProperty()
-    ctrl = Controller()
+    ctrl = None  #Controller()
 
     def __init__(self, sm, **kwargs):
-        self.sm = sm
+        self.ctrl = Controller(sm)
         super(PlayingScreen, self).__init__(**kwargs)
         Clock.schedule_interval(self._update_progress, 1/25)
         self.volume_slider.value = self.ctrl.volume
@@ -316,19 +335,11 @@ class PlayingScreen(Screen):
 
     def show_playlist(self):
         """ Switch to the playlist screen """
-        if "playlist" not in self.sm.screen_names:
-            self.sm.add_widget(PlayListScreen(self.sm,
-                                              self.ctrl.playlist,
-                                              name="playlist"))
-        self.sm.current = "playlist"
+        self.ctrl.show_playlist()
 
     def show_filebrowser(self):
         """ Switch to the playlist screen """
-        if "filebrowser" not in self.sm.screen_names:
-            self.sm.add_widget(ZenFileBrowser(self.sm,
-                                              self.ctrl.playlist,
-                                              name="filebrowser"))
-        self.sm.current = "filebrowser"
+        self.ctrl.show_filebrowser()
 
     def _update_progress(self, dt):
         """ Update the progressbar  """
