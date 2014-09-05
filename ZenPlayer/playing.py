@@ -65,7 +65,7 @@ class Controller(object):
         else:
             Sound.play()
             #self.but_playpause.source = "images/pause.png"
-            Sound.set_volume(self.volume_slider.value)
+            Sound.set_volume(self.volume)
 
     def play_next(self):
         Logger.info("main.py: PlayingScreen.play_next")
@@ -192,19 +192,19 @@ Builder.load_string('''
                 MediaButton:
                     id: previous
                     source: 'images/previous.png'
-                    on_click: root.play_previous()
+                    on_click: root.ctrl.play_previous()
                 MediaButton:
                     id: stop
                     source: 'images/stop.png'
-                    on_click: root.stop()
+                    on_click: root.ctrl.stop()
                 MediaButton:
                     id: playpause
                     source: 'images/play.png'
-                    on_click: root.play_pause()
+                    on_click: root.ctrl.play_pause()
                 MediaButton:
                     id: next
                     source: 'images/next.png'
-                    on_click: root.play_next()
+                    on_click: root.ctrl.play_next()
 
         BoxLayout:
             # Right sidebar
@@ -218,7 +218,7 @@ Builder.load_string('''
                 orientation: "vertical"
                 value: 0.5
                 max: 1
-                on_value: root.set_volume()
+                on_value: root.ctrl.set_volume(self.value)
             Image:
                 size_hint_y: 0.075
                 source: 'images/speaker.png'
@@ -309,29 +309,9 @@ class PlayingScreen(Screen):
             self.info_label2.text = info["album"]
             self.info_label3.text = info["file"]
 
-    def play_pause(self):
-        """ Start playing any audio if nothing is playing """
-        self.ctrl.play_pause()
-
-    def play_next(self):
-        """ Play the next track. """
-        self.ctrl.play_next()
-
-    def play_previous(self):
-        """ Ply the previous track. """
-        self.ctrl.play_previous()
-
-    def stop(self):
-        """ Stop any playing audio """
-        self.ctrl.stop()
-
     def save(self):
         """ Save the current playlist state """
         self.ctrl.save()
-
-    def set_volume(self):
-        """ Set the volume of the currently playing track if there is one. """
-        self.ctrl.set_volume(self.volume_slider.value)
 
     def show_playlist(self):
         """ Switch to the playlist screen """
