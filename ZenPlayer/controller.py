@@ -7,6 +7,8 @@ else:
     from kivy.core.audio import SoundLoader
 from kivy.logger import Logger
 from kivy.storage.jsonstore import JsonStore
+from kivy.uix.screenmanager import ScreenManager
+from playing import PlayingScreen
 
 
 class Controller(object):
@@ -20,8 +22,8 @@ class Controller(object):
     sm = None  # THe ScreenManager
     state = ""
 
-    def __init__(self, sm):
-        self.sm = sm
+    def __init__(self):
+        """ Initialize the screens and the screen manager """
         self.playlist = PlayList()
         self._store = JsonStore("zenplayer.json")
         self.playlist.load(self._store)
@@ -29,6 +31,12 @@ class Controller(object):
             state = self._store.get("state")
             if "volume" in state.keys():
                 self.volume = state["volume"]
+
+        self.sm = ScreenManager()
+        self.playing = PlayingScreen(self, name="main")
+        self.playing.init_display()
+        self.sm.add_widget(self.playing)
+        self.sm.current = "main"
 
     def _on_sound_stop(self, *args):
         Logger.info("main.py: sound has stopped. args=" + str(args))

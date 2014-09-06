@@ -1,7 +1,6 @@
 from kivy.properties import ObjectProperty
 from kivy.clock import Clock
 from kivy.uix.screenmanager import Screen
-from controller import Controller
 
 
 class PlayingScreen(Screen):
@@ -15,10 +14,10 @@ class PlayingScreen(Screen):
     volume_slider = ObjectProperty()
     progress_slider = ObjectProperty()
     time_label = ObjectProperty()
-    ctrl = None  #Controller()
+    ctrl = None  # The Controller
 
-    def __init__(self, sm, **kwargs):
-        self.ctrl = Controller(sm)
+    def __init__(self, ctrl, **kwargs):
+        self.ctrl = ctrl
         super(PlayingScreen, self).__init__(**kwargs)
         Clock.schedule_interval(self._update_progress, 1/25)
         self.volume_slider.value = self.ctrl.volume
@@ -31,10 +30,6 @@ class PlayingScreen(Screen):
             self.info_label1.text = info["artist"]
             self.info_label2.text = info["album"]
             self.info_label3.text = info["file"]
-
-    def save(self):
-        """ Save the current playlist state """
-        self.ctrl.save()
 
     def _update_progress(self, dt):
         """ Update the progressbar  """

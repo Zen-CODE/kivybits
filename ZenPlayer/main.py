@@ -11,9 +11,8 @@ __author__ = 'ZenCODE'
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.screenmanager import ScreenManager
 from kivy.properties import ObjectProperty, StringProperty
-from playing import PlayingScreen
+from controller import Controller
 
 
 Builder.load_file('style.kv')
@@ -44,7 +43,7 @@ class ZenPlayer(App):
     """
     The App initialisation class
     """
-    playing = None  # Reference to the main screen (for saving)
+    ctrl = None  # Reference to the controller (for saving)
 
     def on_pause(self):
         """ Enable support for pause """
@@ -55,15 +54,12 @@ class ZenPlayer(App):
         pass
 
     def build(self):
-        sm = ScreenManager()
-        self.playing = PlayingScreen(sm, name="main")
-        self.playing.init_display()
-        sm.add_widget(self.playing)
-        sm.current = "main"
-        return sm
+        """ Build the app and return the screen manager """
+        self.ctrl = Controller()
+        return self.ctrl.sm
 
     def on_stop(self):
         """The app is closing. Save the state."""
-        self.playing.save()
+        self.ctrl.save()
 
 ZenPlayer().run()
