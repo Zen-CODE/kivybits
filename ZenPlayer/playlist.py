@@ -131,25 +131,6 @@ class PlayList(object):
                 "file": "-"}
 
 
-Builder.load_string('''
-<PlayListScreen>:
-    listview: listview
-
-    BoxLayout:
-        orientation: 'vertical'
-        ListView:
-            id: listview
-            size_hint_y: 0.9
-        BoxLayout:
-            size_hint_y: 0.1
-            orientation: 'horizontal'
-            padding: 10, 10, 10, 10
-            Button:
-                text: 'Back'
-                on_release: root.back()
-''')
-
-
 class PlayListScreen(Screen):
     """
     Displays the playlist along with some simple editing options.

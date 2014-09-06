@@ -16,15 +16,7 @@ from kivy.properties import ObjectProperty, StringProperty
 from playing import PlayingScreen
 
 
-Builder.load_string('''
-<MediaButton>:
-    image: image
-    Image:
-        id: image
-        pos_hint: {'x': 0, 'y': 0}
-        size_hint: 1, 1
-        on_touch_down: self.collide_point(*args[1].pos) and root.dispatch('on_click')
-''')
+Builder.load_file('style.kv')
 
 
 class MediaButton(FloatLayout):
@@ -55,11 +47,11 @@ class ZenPlayer(App):
     playing = None  # Reference to the main screen (for saving)
 
     def on_pause(self):
-        # Enable support for pause
+        """ Enable support for pause """
         return True
 
     def on_resume(self):
-        # Enable support for resume
+        """ Enable support for resume """
         pass
 
     def build(self):
