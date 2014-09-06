@@ -2,55 +2,9 @@
 Displays the file browsing screen for ZenPlayer
 """
 from kivy.uix.screenmanager import Screen
-from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from kivy.storage.jsonstore import JsonStore
 from os.path import exists
-
-
-Builder.load_string('''
-<ZenFileBrowser>:
-    filechooser: filechooser
-    label_sel: label_sel
-
-    BoxLayout:
-        orientation: 'vertical'
-        #FileChooserIconView:
-        BoxLayout:
-            orientation: 'vertical'
-            size_hint_y: 0.1
-            Label:
-                text: "Select the file or folder"
-                canvas:
-                    Color:
-                        rgba: 0.25, 0.25, 0.75, 0.5
-                    Rectangle:
-                        pos: self.pos
-                        size: self.size
-            Label:
-                id: label_sel
-                text: "Selection - None"
-        FileChooserListView:
-            id: filechooser
-            size_hint_y: 0.8
-            dirselect: True
-            on_selection: label_sel.text = "Selection - " + str(self.selection)
-            #TODO: Remove
-            #path: '/media/Zen320/Zen/Music'
-        BoxLayout:
-            orientation: 'horizontal'
-            padding: 10, 10, 10, 10
-            size_hint_y: 0.1
-            Button:
-                text: 'Back'
-                on_release: root.sm.current = "main"
-            Button:
-                text: "Add and replace"
-                on_release: root.add_replace()
-            Button:
-                text: "Add"
-                on_release: root.add_files()
-''')
 
 
 class ZenFileBrowser(Screen):

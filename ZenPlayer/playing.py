@@ -1,4 +1,3 @@
-from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from playlist import PlayList, PlayListScreen
 from kivy.clock import Clock
@@ -114,112 +113,11 @@ class Controller(object):
                                               name="playlist"))
         self.sm.current = "playlist"
 
-
     def stop(self):
         """ Stop any playing audio """
         self.advance = False
         Sound.stop()
         #self.but_playpause.source = "images/play.png"
-
-Builder.load_string('''
-<PlayingScreen>:
-    # Define the buttons
-    but_playpause: playpause
-    volume_slider: volume
-    progress_slider: progress
-    info_label1: info_label1
-    info_label2: info_label2
-    info_label3: info_label3
-    time_label: time_label
-
-    album_image: album_image
-    BoxLayout:
-        BoxLayout:
-            orientation: "vertical"
-            size_hint_x: 0.1
-            padding: 10
-            spacing: 10
-            Slider:
-                id: progress
-                size_hint_y: 0.9
-                orientation: "vertical"
-                max: 1
-                #on_value: root.set_volume()
-            Image:
-                size_hint_y: 0.075
-                source: 'images/progress.png'
-        BoxLayout:
-            # Center column
-            size_hint_x: 0.8
-            orientation: "vertical"
-            padding: 10, 10, 10, 10
-            BoxLayout:
-                size_hint_y: 0.05
-                Image:
-                    source: 'images/add.png'
-                    on_touch_down: self.collide_point(*args[1].pos) and \
-                                   root.ctrl.show_filebrowser()
-                Image:
-                    source: 'images/zencode.jpg'
-                Image:
-                    source: 'images/playlist.png'
-                    on_touch_down: self.collide_point(*args[1].pos) and \
-                                   root.ctrl.show_playlist()
-            Label:
-                id: info_label1
-                size_hint_y: 0.05
-            Label:
-                id: info_label2
-                size_hint_y: 0.05
-            Label:
-                id: info_label3
-                size_hint_y: 0.05
-            BoxLayout:
-                size_hint_y: 0.65
-                padding: 10, 10, 10, 10
-                Image:
-                    id: album_image
-                    source: "images/zencode.jpg"
-            Label:
-                id: time_label
-                size_hint_y: 0.05
-            BoxLayout:
-                size_hint_y: 0.075
-                orientation: "horizontal"
-                MediaButton:
-                    id: previous
-                    source: 'images/previous.png'
-                    on_click: root.ctrl.play_previous()
-                MediaButton:
-                    id: stop
-                    source: 'images/stop.png'
-                    on_click: root.ctrl.stop()
-                MediaButton:
-                    id: playpause
-                    source: 'images/play.png'
-                    on_click: root.ctrl.play_pause()
-                MediaButton:
-                    id: next
-                    source: 'images/next.png'
-                    on_click: root.ctrl.play_next()
-
-        BoxLayout:
-            # Right sidebar
-            orientation: "vertical"
-            size_hint_x: 0.1
-            padding: 10
-            spacing: 10
-            Slider:
-                id: volume
-                size_hint_y: 0.9
-                orientation: "vertical"
-                value: 0.5
-                max: 1
-                on_value: root.ctrl.set_volume(self.value)
-            Image:
-                size_hint_y: 0.075
-                source: 'images/speaker.png'
-''')
 
 
 class Sound():
