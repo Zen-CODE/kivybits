@@ -22,7 +22,7 @@ class PlayingScreen(Screen):
         Clock.schedule_interval(self._update_progress, 1/25)
         self.volume_slider.value = self.ctrl.volume
 
-    def init_display(self):
+    def on_state(self):
         """ Initialize the display """
         self.album_image.source = self.ctrl.get_current_art()
         info = self.ctrl.get_current_info()

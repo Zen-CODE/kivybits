@@ -34,7 +34,7 @@ class Controller(object):
 
         self.sm = ScreenManager()
         self.playing = PlayingScreen(self, name="main")
-        self.playing.init_display()
+        self.playing.on_state()
         self.sm.add_widget(self.playing)
         self.sm.current = "main"
 
@@ -42,8 +42,8 @@ class Controller(object):
         Logger.info("main.py: sound has stopped. args=" + str(args))
         if self.advance:
             self.move_next()
-            #self.init_display()
             self.play_pause()
+            self.playing.on_state()
 
     def get_current_art(self):
         return self.playlist.get_current_art()
@@ -60,10 +60,10 @@ class Controller(object):
             audiof = self.get_current_file()
             if audiof:
                 Logger.info("main.py: playing " + audiof)
-                Sound.play(audiof, self._on_sound_stop)
-                #self.init_display()
-                #self.but_playpause.source = "images/pause.png"
                 Sound.set_volume(self.volume)
+                Sound.play(audiof, self._on_sound_stop)
+                self.playing.on_state()
+                #self.but_playpause.source = "images/pause.png"
         elif Sound.state == "playing":
             Sound.stop()
             #self.but_playpause.source = "images/play.png"
@@ -77,16 +77,16 @@ class Controller(object):
         self.move_next()
         audiofile = self.get_current_file()
         if audiofile:
-            #self.init_display()
             Sound.play(audiofile)
+            self.playing.on_state()
 
     def play_previous(self):
         """ Ply the previous track. """
         self.move_previous()
         audiofile = self.get_current_file()
         if audiofile:
-            #self.init_display()
             Sound.play(audiofile)
+            self.playing.on_state()
 
     def move_next(self):
         self.playlist.move_next()
