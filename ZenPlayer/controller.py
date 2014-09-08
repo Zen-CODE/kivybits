@@ -64,9 +64,9 @@ class Controller(object):
             audiof = self.get_current_file()
             if audiof:
                 Logger.info("main.py: playing " + audiof)
-                Sound.set_volume(self.volume)
                 Sound.play(audiof, self._on_sound_stop)
                 self.playing.on_state()
+                Sound.set_volume(self.volume)
                 #self.but_playpause.source = "images/pause.png"
         elif Sound.state == "playing":
             Sound.stop()
