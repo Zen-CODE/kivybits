@@ -35,7 +35,7 @@ class PlayingScreen(Screen):
         """ Update the progressbar  """
         #if Sound.state == "playing":
         if self.ctrl.state == "playing":
-            pos, length = Sound.get_pos_length()
+            pos, length = self.ctrl.get_pos_length()
             if length > 0:
                 self.progress_slider.value = pos / length
 

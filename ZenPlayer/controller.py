@@ -54,6 +54,10 @@ class Controller(object):
     def get_current_file(self):
         return self.playlist.get_current_file()
 
+    @staticmethod
+    def get_pos_length():
+        return Sound.get_pos_length()
+
     def play_pause(self):
         self.advance = True
         if not Sound.state:
@@ -73,38 +77,45 @@ class Controller(object):
             Sound.set_volume(self.volume)
 
     def play_next(self):
+        """ Play the next track in the playlist. """
         Logger.info("main.py: PlayingScreen.play_next")
         self.move_next()
         audiofile = self.get_current_file()
         if audiofile:
             Sound.play(audiofile)
+            Sound.set_volume(self.volume)
             self.playing.on_state()
 
     def play_previous(self):
-        """ Ply the previous track. """
+        """ Play the previous track in the playlist. """
         self.move_previous()
         audiofile = self.get_current_file()
         if audiofile:
             Sound.play(audiofile)
+            Sound.set_volume(self.volume)
             self.playing.on_state()
 
+
     def move_next(self):
+        """ Play the next track in the playlist. """
         self.playlist.move_next()
 
     def move_previous(self):
+        """" Move the current playlist item back one. """
         self.playlist.move_previous()
 
     def save(self):
+        """ Save the state of the the playlist and volume. """
         self.playlist.save(self._store)
         self._store.put("state", volume=self.volume)
 
     def set_volume(self, value):
         """ Set the volume of the currently playing track if there is one. """
         self.volume = value
-        Sound.set_volume(value)
+        Sound.set_volume(self.volume)
 
     def show_filebrowser(self):
-        """ Switch to the playlist screen """
+        """ Switch to the file browser screen """
         if "filebrowser" not in self.sm.screen_names:
             self.sm.add_widget(ZenFileBrowser(self.sm,
                                               self.playlist,
