@@ -1,6 +1,7 @@
 from kivy.properties import ObjectProperty
 from kivy.clock import Clock
 from kivy.uix.screenmanager import Screen
+from audioplayer import Sound
 
 
 class PlayingScreen(Screen):
@@ -32,13 +33,24 @@ class PlayingScreen(Screen):
             self.info_label3.text = info["file"]
 
     def on_sound_state(self, state):
-        print "state changed - {0}".format(state)
+        #print "state changed - {0}".format(state)
+        if state == "playing":
+            self.but_playpause.source = "images/pause.png"
+            self.init_display()
+
+        else:
+            self.but_playpause.source = "images/play.png"
+
+            if state == "stopped":
+                pass
+            else:
+                pass
 
     def _update_progress(self, dt):
         """ Update the progressbar  """
-        #if Sound.state == "playing":
-        if self.ctrl.state == "playing":
-            pos, length = self.ctrl.get_pos_length()
+        if Sound.state == "playing":
+        #if self.ctrl.state == "playing":
+            pos, length = Sound.get_pos_length()
             if length > 0:
                 self.progress_slider.value = pos / length
 
