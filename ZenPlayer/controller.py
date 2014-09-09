@@ -37,9 +37,11 @@ class Controller(object):
 
         self.sm = ScreenManager()
         self.playing = PlayingScreen(self, name="main")
-        self.playing.on_state()
+        self.playing.init_display()
         self.sm.add_widget(self.playing)
         self.sm.current = "main"
+
+        Sound.add_state_callback(self.playing.on_sound_state)
 
     def _on_sound_stop(self, *args):
         Logger.info("main.py: sound has stopped. args=" + str(args))
@@ -69,7 +71,7 @@ class Controller(object):
             if audiof:
                 Logger.info("main.py: playing " + audiof)
                 Sound.play(audiof)
-                self.playing.on_state()
+                #self.playing.init_display()
                 Sound.set_volume(self.volume)
                 #self.but_playpause.source = "images/pause.png"
         elif Sound.state == "playing":

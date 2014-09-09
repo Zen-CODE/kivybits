@@ -22,7 +22,7 @@ class PlayingScreen(Screen):
         Clock.schedule_interval(self._update_progress, 1/25)
         self.volume_slider.value = self.ctrl.volume
 
-    def on_state(self):
+    def init_display(self):
         """ Initialize the display """
         self.album_image.source = self.ctrl.get_current_art()
         info = self.ctrl.get_current_info()
@@ -30,6 +30,9 @@ class PlayingScreen(Screen):
             self.info_label1.text = info["artist"]
             self.info_label2.text = info["album"]
             self.info_label3.text = info["file"]
+
+    def on_sound_state(self, state):
+        print "state changed - {0}".format(state)
 
     def _update_progress(self, dt):
         """ Update the progressbar  """
