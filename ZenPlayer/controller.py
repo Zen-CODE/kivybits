@@ -64,11 +64,11 @@ class Controller(object):
 
     def play_pause(self):
         self.advance = True
-        if not Sound.state:
+        if Sound.state == "":
             audiof = self.get_current_file()
             if audiof:
                 Logger.info("main.py: playing " + audiof)
-                Sound.play(audiof, self._on_sound_stop)
+                Sound.play(audiof)
                 self.playing.on_state()
                 Sound.set_volume(self.volume)
                 #self.but_playpause.source = "images/pause.png"
