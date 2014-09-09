@@ -1,8 +1,9 @@
 import gobject
 from kivy.core.audio.audio_pygst import SoundPyGst
+from kivy.logger import Logger
 
 
-class SoundLoader():
+class SoundLoader(object):
     """
     Supplies the Gst Sound class capable of playing Mp3 files.
     """
@@ -15,7 +16,7 @@ class SoundLoader():
         return SoundPyGst(source=filename)
 
 
-class Sound():
+class Sound(object):
     """
     This class manages the playing audio as a Singleton
     """
