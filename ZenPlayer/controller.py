@@ -9,6 +9,8 @@ from kivy.logger import Logger
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import ScreenManager
 from playing import PlayingScreen
+from kivy.properties import StringProperty
+from audioplayer import Sound
 
 
 class Controller(object):
@@ -20,6 +22,7 @@ class Controller(object):
     advance = True  # This flag indicates whether to advance to the next track
                     # once the currently playing one had ended
     sm = None  # THe ScreenManager
+    #state = StringProperty(Sound.state)
     state = ""
 
     def __init__(self):
@@ -40,6 +43,7 @@ class Controller(object):
 
     def _on_sound_stop(self, *args):
         Logger.info("main.py: sound has stopped. args=" + str(args))
+        print "Sound state=" + Sound.state
         if self.advance:
             self.move_next()
             self.play_pause()
@@ -95,7 +99,6 @@ class Controller(object):
             Sound.set_volume(self.volume)
             self.playing.on_state()
 
-
     def move_next(self):
         """ Play the next track in the playlist. """
         self.playlist.move_next()
@@ -135,56 +138,3 @@ class Controller(object):
         self.advance = False
         Sound.stop()
         #self.but_playpause.source = "images/play.png"
-
-
-class Sound():
-    """
-    This class manages the playing audio as a Singleton
-    """
-    state = ""  # One of "", "stopped", "playing"
-    _sound = None  # The underlying Sound instance
-
-    @staticmethod
-    def _on_stop(*args):
-        Logger.info("main.py: sound has stopped. args=" + str(args))
-        Sound.state = "stopped"
-
-    @staticmethod
-    def get_pos_length():
-        """ Return a tuple of the length and position, or return 0, 0"""
-        sound = Sound._sound
-        if sound:
-            return sound.get_pos(), sound._get_length()
-        else:
-            return 0, 0
-
-    @staticmethod
-    def stop():
-        """ Stop any playing audio """
-        if Sound._sound:
-            Sound._sound.stop()
-            Sound.state = "stopped"
-
-    @staticmethod
-    def play(filename="", on_stop=None):
-        """
-        Play the file specified by the filename. If on_stop is passed in,
-        this function is called when the sound stops
-        """
-        if Sound._sound is not None:
-            Sound._sound.stop()
-
-        if filename:
-            Sound._sound = SoundLoader.load(filename)
-        if Sound._sound:
-            Sound._sound.bind(on_stop=Sound._on_stop)
-            Sound._sound.play()
-            Sound.state = "playing"
-
-    @staticmethod
-    def set_volume(value):
-        """
-        The the volume of the currently playing sound if appropriate
-        """
-        if Sound._sound:
-            Sound._sound.volume = value
