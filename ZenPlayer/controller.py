@@ -57,10 +57,9 @@ class Controller(object):
     def play_pause(self):
         self.advance = True
         if Sound.state == "":
-            audiof = self.get_current_file()
-            if audiof:
-                Logger.info("main.py: playing " + audiof)
-                Sound.play(audiof, self.volume)
+            audio_file = self.get_current_file()
+            if audio_file:
+                Sound.play(audio_file, self.volume)
         elif Sound.state == "playing":
             Sound.stop()
         else:
@@ -70,16 +69,16 @@ class Controller(object):
         """ Play the next track in the playlist. """
         Logger.info("main.py: PlayingScreen.play_next")
         self.move_next()
-        audiofile = self.get_current_file()
-        if audiofile:
-            Sound.play(audiofile, self.volume)
+        audio_file = self.get_current_file()
+        if audio_file:
+            Sound.play(audio_file, self.volume)
 
     def play_previous(self):
         """ Play the previous track in the playlist. """
         self.move_previous()
-        audiofile = self.get_current_file()
-        if audiofile:
-            Sound.play(audiofile, self.volume)
+        audio_file = self.get_current_file()
+        if audio_file:
+            Sound.play(audio_file, self.volume)
 
     def move_next(self):
         """ Play the next track in the playlist. """
@@ -119,4 +118,3 @@ class Controller(object):
         """ Stop any playing audio """
         self.advance = False
         Sound.stop()
-        #self.but_playpause.source = "images/play.png"

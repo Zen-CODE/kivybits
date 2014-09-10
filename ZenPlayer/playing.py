@@ -33,18 +33,12 @@ class PlayingScreen(Screen):
             self.info_label3.text = info["file"]
 
     def on_sound_state(self, state):
-        #print "state changed - {0}".format(state)
+        """ React to the change of state of the sound """
         if state == "playing":
             self.but_playpause.source = "images/pause.png"
             self.init_display()
-
         else:
             self.but_playpause.source = "images/play.png"
-
-            if state == "stopped":
-                pass
-            else:
-                pass
 
     def _update_progress(self, dt):
         """ Update the progressbar  """
