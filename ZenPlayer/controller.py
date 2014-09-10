@@ -22,8 +22,6 @@ class Controller(object):
     advance = True  # This flag indicates whether to advance to the next track
                     # once the currently playing one had ended
     sm = None  # THe ScreenManager
-    #state = StringProperty(Sound.state)
-    state = ""
 
     def __init__(self):
         """ Initialize the screens and the screen manager """
