@@ -60,13 +60,11 @@ class Controller(object):
             audiof = self.get_current_file()
             if audiof:
                 Logger.info("main.py: playing " + audiof)
-                Sound.play(audiof)
-                Sound.set_volume(self.volume)
+                Sound.play(audiof, self.volume)
         elif Sound.state == "playing":
             Sound.stop()
         else:
-            Sound.play()
-            Sound.set_volume(self.volume)
+            Sound.play(volume=self.volume)
 
     def play_next(self):
         """ Play the next track in the playlist. """
@@ -74,16 +72,14 @@ class Controller(object):
         self.move_next()
         audiofile = self.get_current_file()
         if audiofile:
-            Sound.play(audiofile)
-            Sound.set_volume(self.volume)
+            Sound.play(audiofile, self.volume)
 
     def play_previous(self):
         """ Play the previous track in the playlist. """
         self.move_previous()
         audiofile = self.get_current_file()
         if audiofile:
-            Sound.play(audiofile)
-            Sound.set_volume(self.volume)
+            Sound.play(audiofile, self.volume)
 
     def move_next(self):
         """ Play the next track in the playlist. """

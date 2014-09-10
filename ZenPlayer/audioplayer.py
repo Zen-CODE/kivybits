@@ -58,7 +58,7 @@ class Sound(object):
             Sound._set_state("stopped")
 
     @staticmethod
-    def play(filename=""):
+    def play(filename="", volume=100):
         """
         Play the file specified by the filename. If on_stop is passed in,
         this function is called when the sound stops
@@ -71,6 +71,7 @@ class Sound(object):
         if Sound._sound:
             Sound._sound.bind(on_stop=Sound._on_stop)
             Sound._sound.play()
+            Sound._sound.volume = volume
             Sound._set_state("playing")
         else:
             Sound._set_state("")
