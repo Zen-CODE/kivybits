@@ -41,14 +41,6 @@ class Controller(object):
 
         Sound.add_state_callback(self.playing.on_sound_state)
 
-    def _on_sound_stop(self, *args):
-        Logger.info("main.py: sound has stopped. args=" + str(args))
-        print "Sound state=" + Sound.state
-        if self.advance:
-            self.move_next()
-            self.play_pause()
-            self.playing.on_state()
-
     def get_current_art(self):
         return self.playlist.get_current_art()
 
