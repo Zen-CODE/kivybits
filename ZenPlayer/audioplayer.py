@@ -32,9 +32,10 @@ class Sound(object):
     @staticmethod
     def _set_state(state):
         """ Set the state value and fire all attached callbacks """
-        Sound.state = state
-        for func in Sound._state_callbacks:
-            func(state)
+        if state != Sound.state:
+            Sound.state = state
+            for func in Sound._state_callbacks:
+                func(state)
 
     @staticmethod
     def add_state_callback(callback):

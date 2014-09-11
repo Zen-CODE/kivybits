@@ -45,7 +45,7 @@ class Controller(object):
     def _on_sound_state(self, state):
         print "_on_sound_state fired - " + state
         if state == "stopped" and self.advance:
-            Clock.schedule_once(lambda dt: self.play_next())
+            self.play_next()
 
     def get_current_art(self):
         return self.playlist.get_current_art()
