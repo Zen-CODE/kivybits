@@ -9,8 +9,8 @@ from kivy.logger import Logger
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import ScreenManager
 from playing import PlayingScreen
-from kivy.properties import StringProperty
 from audioplayer import Sound
+from kivy.clock import Clock
 
 
 class Controller(object):
@@ -40,6 +40,12 @@ class Controller(object):
         self.sm.current = "main"
 
         Sound.add_state_callback(self.playing.on_sound_state)
+        Sound.add_state_callback(self._on_sound_state)
+
+    def _on_sound_state(self, state):
+        print "_on_sound_state fired - " + state
+        if state == "stopped" and self.advance:
+            Clock.schedule_once(lambda dt: self.play_next())
 
     def get_current_art(self):
         return self.playlist.get_current_art()
