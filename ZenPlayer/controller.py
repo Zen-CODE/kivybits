@@ -64,9 +64,21 @@ class Controller(object):
         return Sound.get_pos_length()
 
     def on_key_down(self, keyboard, keycode, text, modifiers):
-        print('The key', keycode, 'have been pressed')
-        print(' - text is %r' % text)
-        print(' - modifiers are %r' % modifiers)
+        """ React to the keypress event """
+        key_name = keycode[1]
+        if key_name == "up":
+            self.set_volume(self.volume + 5)
+        elif key_name == "down":
+            self.set_volume(self.volume - 5)
+        elif key_name == "x":
+            self.play_pause()
+        elif key_name == "z":
+            self.move_previous()
+        elif key_name == "v":
+            self.stop()
+        elif key_name == "b":
+            self.play_next()
+
         return True
 
     def play_pause(self):
