@@ -10,7 +10,8 @@ from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import ScreenManager
 from playing import PlayingScreen
 from audioplayer import Sound
-from kivy.clock import Clock
+from kivy.core.window import Window
+from kivy.event import EventDispatcher
 
 
 class Controller(object):
@@ -39,6 +40,8 @@ class Controller(object):
         self.sm.add_widget(self.playing)
         self.sm.current = "main"
 
+        self.kb_listener = ZenKeyboardListener(self)
+
         Sound.add_state_callback(self.playing.on_sound_state)
         Sound.add_state_callback(self._on_sound_state)
 
@@ -59,6 +62,12 @@ class Controller(object):
     @staticmethod
     def get_pos_length():
         return Sound.get_pos_length()
+
+    def on_key_down(self, keyboard, keycode, text, modifiers):
+        print('The key', keycode, 'have been pressed')
+        print(' - text is %r' % text)
+        print(' - modifiers are %r' % modifiers)
+        return True
 
     def play_pause(self):
         self.advance = True
@@ -124,3 +133,19 @@ class Controller(object):
         """ Stop any playing audio """
         self.advance = False
         Sound.stop()
+
+
+class ZenKeyboardListener(EventDispatcher):
+    """
+    This class handles the management of keypress to control volume, play,
+    stop, next etc.
+    """
+    def __init__(self, ctrl, **kwargs):
+        super(ZenKeyboardListener, self).__init__(**kwargs)
+        self._keyboard = Window.request_keyboard(
+            self._keyboard_closed, self, 'text')
+        self._keyboard.bind(on_key_down=ctrl.on_key_down)
+
+    def _keyboard_closed(self):
+        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        self._keyboard = None
