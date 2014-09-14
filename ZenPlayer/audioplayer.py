@@ -20,14 +20,15 @@ class Sound(object):
     """
     This class manages the playing audio as a Singleton
     """
-    state = ""  # options= "", "stopped" or "playing"
+    state = ""  # options= "", "stopped" or "playing", "finished"
     _state_callbacks = []
     _sound = None  # The underlying Sound instance
 
     @staticmethod
     def _on_stop(*args):
-        Logger.info("main.py: sound has stopped. args=" + str(args))
-        Sound._set_state("stopped")
+        Logger.info("main.py: sound has stopped. state=" + str(Sound.state))
+        if Sound.state != "stopped":
+            Sound._set_state("finished")
 
     @staticmethod
     def _set_state(state):
@@ -55,8 +56,8 @@ class Sound(object):
     def stop():
         """ Stop any playing audio """
         if Sound._sound:
-            Sound._sound.stop()
             Sound._set_state("stopped")
+            Sound._sound.stop()
 
     @staticmethod
     def play(filename="", volume=100):

@@ -24,6 +24,7 @@ class Controller(object):
                     # once the currently playing one had ended
     sm = None  # THe ScreenManager
 
+
     def __init__(self):
         """ Initialize the screens and the screen manager """
         self.playlist = PlayList()
@@ -47,7 +48,7 @@ class Controller(object):
 
     def _on_sound_state(self, state):
         print "_on_sound_state fired - " + state
-        if state == "stopped" and self.advance:
+        if state == "finished" and self.advance:
             self.play_next()
 
     def get_current_art(self):
@@ -83,37 +84,24 @@ class Controller(object):
 
     def play_pause(self):
         self.advance = True
-        if Sound.state == "":
+        if Sound.state == "playing":
+            Sound.stop()
+        else:
             audio_file = self.get_current_file()
             if audio_file:
                 Sound.play(audio_file, self.volume)
-        elif Sound.state == "playing":
-            Sound.stop()
-        else:
-            Sound.play(volume=self.volume)
 
     def play_next(self):
         """ Play the next track in the playlist. """
-        Logger.info("main.py: PlayingScreen.play_next")
-        self.move_next()
-        audio_file = self.get_current_file()
-        if audio_file:
-            Sound.play(audio_file, self.volume)
+        Sound.stop()
+        self.playlist.move_next()
+        self.play_pause()
 
     def play_previous(self):
         """ Play the previous track in the playlist. """
-        self.move_previous()
-        audio_file = self.get_current_file()
-        if audio_file:
-            Sound.play(audio_file, self.volume)
-
-    def move_next(self):
-        """ Play the next track in the playlist. """
-        self.playlist.move_next()
-
-    def move_previous(self):
-        """" Move the current playlist item back one. """
+        Sound.stop()
         self.playlist.move_previous()
+        self.play_pause()
 
     def save(self):
         """ Save the state of the the playlist and volume. """
