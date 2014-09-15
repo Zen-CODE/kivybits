@@ -1,6 +1,5 @@
 from playlist import PlayList, PlayListScreen
 from filebrowser import ZenFileBrowser
-from audioplayer import SoundLoader
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import ScreenManager
 from playing import PlayingScreen
