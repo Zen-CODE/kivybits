@@ -5,13 +5,11 @@ if platform == 'linux':  # Enable Mp3
     from audioplayer import SoundLoader
 else:
     from kivy.core.audio import SoundLoader
-from kivy.logger import Logger
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import ScreenManager
 from playing import PlayingScreen
 from audioplayer import Sound
 from kivy.core.window import Window
-from kivy.event import EventDispatcher
 from kivy.properties import NumericProperty
 from kivy.event import EventDispatcher
 
