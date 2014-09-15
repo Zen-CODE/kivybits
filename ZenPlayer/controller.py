@@ -7,6 +7,7 @@ from audioplayer import Sound
 from kivy.core.window import Window
 from kivy.properties import NumericProperty
 from kivy.event import EventDispatcher
+from kivy.utils import platform
 
 
 class Controller(EventDispatcher):
@@ -29,7 +30,8 @@ class Controller(EventDispatcher):
         self.sm.add_widget(self.playing)
         self.sm.current = "main"
 
-        self.kb_listener = ZenKeyboardListener(self)
+        if platform not in ['ios', 'android']:
+            self.kb_listener = ZenKeyboardListener(self)
         Sound.add_state_callback(self.playing.on_sound_state)
         Sound.add_state_callback(self._on_sound_state)
 
