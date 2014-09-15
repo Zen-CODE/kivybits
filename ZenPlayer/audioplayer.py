@@ -1,20 +1,25 @@
-import gobject
-from kivy.core.audio.audio_pygst import SoundPyGst
-from kivy.logger import Logger
+from kivy.utils import platform
+if platform == 'linux':  # Enable Mp3
+    import gobject
+    from kivy.core.audio.audio_pygst import SoundPyGst
+else:
+    from kivy.core.audio import SoundLoader as _SoundLoader
 
 
-class SoundLoader(object):
-    """
-    Supplies the Gst Sound class capable of playing Mp3 files.
-    """
-
-    @staticmethod
-    def load(filename):
+if platform == "linux":
+    class SoundLoader(object):
         """
-        Load and start playing the specified *filename*.
+        Supplies the Gst Sound class capable of playing Mp3 files.
         """
-        return SoundPyGst(source=filename)
 
+        @staticmethod
+        def load(filename):
+            """
+            Load and start playing the specified *filename*.
+            """
+            return SoundPyGst(source=filename)
+else:
+    SoundLoader = _SoundLoader
 
 class Sound(object):
     """

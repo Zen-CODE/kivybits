@@ -1,10 +1,6 @@
 from playlist import PlayList, PlayListScreen
 from filebrowser import ZenFileBrowser
-from kivy.utils import platform
-if platform == 'linux':  # Enable Mp3
-    from audioplayer import SoundLoader
-else:
-    from kivy.core.audio import SoundLoader
+from audioplayer import SoundLoader
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import ScreenManager
 from playing import PlayingScreen
