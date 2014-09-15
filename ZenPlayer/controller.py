@@ -26,7 +26,6 @@ class Controller(EventDispatcher):
                     # once the currently playing one had ended
     sm = None  # THe ScreenManager
 
-
     def __init__(self, **kwargs):
         """ Initialize the screens and the screen manager """
         self._store = JsonStore("zenplayer.json")
@@ -47,9 +46,9 @@ class Controller(EventDispatcher):
             if "volume" in state.keys():
                 self.volume = state["volume"]
 
-
     def _on_sound_state(self, state):
-        print "_on_sound_state fired - " + state
+        """ The sound state has changed. If the track played to the end,
+        move to the next track."""
         if state == "finished" and self.advance:
             self.play_next()
 
@@ -95,6 +94,7 @@ class Controller(EventDispatcher):
             self.playing.volume_slider.value = value
 
     def play_pause(self):
+        """ Play or pause the currently playing track """
         self.advance = True
         if Sound.state == "playing":
             Sound.stop()
@@ -135,9 +135,6 @@ class Controller(EventDispatcher):
                                               self.playlist,
                                               name="playlist"))
         self.sm.current = "playlist"
-
-    def set_volume(self, value):
-        self.volume = value
 
     def stop(self):
         """ Stop any playing audio """
