@@ -31,7 +31,6 @@ class Sound(object):
 
     @staticmethod
     def _on_stop(*args):
-        Logger.info("main.py: sound has stopped. state=" + str(Sound.state))
         if Sound.state != "stopped":
             Sound._set_state("finished")
 
