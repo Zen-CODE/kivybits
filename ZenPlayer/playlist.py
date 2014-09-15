@@ -22,6 +22,25 @@ class PlayList(object):
     queue = []  # contains a list of (filename, albumart) pairs
     art_names = ["cover.jpg", "cover.png", "cover.bmp", "cover.jpeg"]
 
+    def __init__(self, store):
+        super(PlayList, self).__init__()
+        self._load(store)
+
+    def _load(self, store):
+        """ Initialize and load previous state """
+        # See if there is an existing playlist to restore
+        if store.exists("playlist"):
+            if "items" in store.get("playlist"):
+                items = store.get("playlist")["items"]
+                k = 1
+                while "item" + str(k) in items.keys():
+                    if exists(items["item" + str(k)]):
+                        self.add_files(items["item" + str(k)])
+                    k += 1
+            self.current = store.get("playlist")["current"]
+            if self.current >= len(self.queue) - 1:
+                self.current = 0
+
     def get_current_file(self):
         """Returns the filename of the current audio file."""
         if len(self.queue) > self.current:
@@ -86,21 +105,6 @@ class PlayList(object):
         """
         if index < len(self.queue):
             self.current = index
-
-    def load(self, store):
-        """ Initialize and load previous state """
-        # See if there is an existing playlist to restore
-        if store.exists("playlist"):
-            if "items" in store.get("playlist"):
-                items = store.get("playlist")["items"]
-                k = 1
-                while "item" + str(k) in items.keys():
-                    if exists(items["item" + str(k)]):
-                        self.add_files(items["item" + str(k)])
-                    k += 1
-            self.current = store.get("playlist")["current"]
-            if self.current >= len(self.queue) - 1:
-                self.current = 0
 
     @staticmethod
     def _get_albumart(audiofile):

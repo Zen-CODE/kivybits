@@ -30,8 +30,7 @@ class Controller(EventDispatcher):
     def __init__(self, **kwargs):
         """ Initialize the screens and the screen manager """
         self._store = JsonStore("zenplayer.json")
-        self.playlist = PlayList()
-        self.playlist.load(self._store)
+        self.playlist = PlayList(self._store)
 
         self.sm = ScreenManager()
         self.playing = PlayingScreen(self, name="main")
