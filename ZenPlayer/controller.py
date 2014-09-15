@@ -12,28 +12,26 @@ from playing import PlayingScreen
 from audioplayer import Sound
 from kivy.core.window import Window
 from kivy.event import EventDispatcher
+from kivy.properties import NumericProperty
+from kivy.event import EventDispatcher
 
 
-class Controller(object):
+class Controller(EventDispatcher):
     """
     Controls the playing of audio and coordinates the updating of the playlist
     and screen displays
     """
-    volume = 100
+    volume = NumericProperty(1.0)
     advance = True  # This flag indicates whether to advance to the next track
                     # once the currently playing one had ended
     sm = None  # THe ScreenManager
 
 
-    def __init__(self):
+    def __init__(self, **kwargs):
         """ Initialize the screens and the screen manager """
-        self.playlist = PlayList()
         self._store = JsonStore("zenplayer.json")
+        self.playlist = PlayList()
         self.playlist.load(self._store)
-        if self._store.exists('state'):
-            state = self._store.get("state")
-            if "volume" in state.keys():
-                self.volume = state["volume"]
 
         self.sm = ScreenManager()
         self.playing = PlayingScreen(self, name="main")
@@ -42,9 +40,15 @@ class Controller(object):
         self.sm.current = "main"
 
         self.kb_listener = ZenKeyboardListener(self)
-
         Sound.add_state_callback(self.playing.on_sound_state)
         Sound.add_state_callback(self._on_sound_state)
+
+        super(Controller, self).__init__(**kwargs)
+        if self._store.exists('state'):
+            state = self._store.get("state")
+            if "volume" in state.keys():
+                self.volume = state["volume"]
+
 
     def _on_sound_state(self, state):
         print "_on_sound_state fired - " + state
@@ -68,9 +72,9 @@ class Controller(object):
         """ React to the keypress event """
         key_name = keycode[1]
         if key_name == "up":
-            self.set_volume(self.volume + 5)
+            self.volume += 0.05
         elif key_name == "down":
-            self.set_volume(self.volume - 5)
+            self.volume -= 0.05
         elif key_name == "x":
             self.play_pause()
         elif key_name == "z":
@@ -81,6 +85,16 @@ class Controller(object):
             self.play_next()
 
         return True
+
+    def on_volume(self, widget, value):
+        """ Set the volume of the currently playing sound """
+        if 0.0 > value:
+            self.volume = 0.0
+        elif value > 1.0:
+            self.volume = 1.0
+        else:
+            Sound.set_volume(value)
+            self.playing.volume_slider.value = value
 
     def play_pause(self):
         self.advance = True
@@ -108,11 +122,6 @@ class Controller(object):
         self.playlist.save(self._store)
         self._store.put("state", volume=self.volume)
 
-    def set_volume(self, value):
-        """ Set the volume of the currently playing track if there is one. """
-        self.volume = value
-        Sound.set_volume(self.volume)
-
     def show_filebrowser(self):
         """ Switch to the file browser screen """
         if "filebrowser" not in self.sm.screen_names:
@@ -128,6 +137,9 @@ class Controller(object):
                                               self.playlist,
                                               name="playlist"))
         self.sm.current = "playlist"
+
+    def set_volume(self, value):
+        self.volume = value
 
     def stop(self):
         """ Stop any playing audio """

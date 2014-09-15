@@ -113,7 +113,7 @@
                 orientation: "vertical"
                 value: 0.5
                 max: 1
-                on_value: root.ctrl.set_volume(self.value)
+                on_value: root.ctrl.volume = self.value
             Image:
                 size_hint_y: 0.075
                 source: 'images/speaker.png'
