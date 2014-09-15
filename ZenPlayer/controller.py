@@ -34,7 +34,6 @@ class Controller(EventDispatcher):
 
         self.sm = ScreenManager()
         self.playing = PlayingScreen(self, name="main")
-        self.playing.init_display()
         self.sm.add_widget(self.playing)
         self.sm.current = "main"
 

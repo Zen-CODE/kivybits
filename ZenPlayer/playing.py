@@ -22,6 +22,7 @@ class PlayingScreen(Screen):
         super(PlayingScreen, self).__init__(**kwargs)
         Clock.schedule_interval(self._update_progress, 1/25)
         self.volume_slider.value = self.ctrl.volume
+        self.init_display()
 
     def init_display(self):
         """ Initialize the display """
