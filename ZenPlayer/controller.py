@@ -8,6 +8,7 @@ from kivy.core.window import Window
 from kivy.properties import NumericProperty
 from kivy.event import EventDispatcher
 from kivy.utils import platform
+from kivy.clock import Clock
 
 
 class Controller(EventDispatcher):
@@ -19,6 +20,7 @@ class Controller(EventDispatcher):
     advance = True  # This flag indicates whether to advance to the next track
                     # once the currently playing one had ended
     sm = None  # THe ScreenManager
+    pos = 0
 
     def __init__(self, **kwargs):
         """ Initialize the screens and the screen manager """
@@ -92,11 +94,14 @@ class Controller(EventDispatcher):
         """ Play or pause the currently playing track """
         self.advance = True
         if Sound.state == "playing":
+            self.pos, x = Sound.get_pos_length()
             Sound.stop()
         else:
             audio_file = self.get_current_file()
             if audio_file:
                 Sound.play(audio_file, self.volume)
+                if self.pos > 0:
+                    Clock.schedule_once(lambda dt: Sound.seek(self.pos), 0.1)
 
     def play_next(self):
         """ Play the next track in the playlist. """

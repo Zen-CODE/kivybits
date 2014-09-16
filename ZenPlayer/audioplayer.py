@@ -57,6 +57,12 @@ class Sound(object):
             return 0, 0
 
     @staticmethod
+    def seek(pos):
+        """ Set the sound to the specified position """
+        if Sound._sound:
+            Sound._sound.seek(pos)
+
+    @staticmethod
     def stop():
         """ Stop any playing audio """
         if Sound._sound:
