@@ -188,9 +188,9 @@ class PlayListScreen(Screen):
         self.sm.current = "main"
 
     def selection_changed(self, adapter):
-        print "Selection changed - " + str(adapter.selection) + ", " + \
-            str(dir(adapter.selection[0]))
-        print "Row index=", str(adapter.selection[0].row_index)
+        print "Selection changed - " + str(adapter.selection)
+        if len(adapter.selection) > 0:
+            print "Row index=", str(adapter.selection[0].row_index)
 
 Builder.load_string('''
 <ZenListImage>:
