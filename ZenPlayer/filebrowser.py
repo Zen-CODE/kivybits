@@ -14,11 +14,23 @@ class ZenFileBrowser(Screen):
     """
     filechooser = ObjectProperty()
 
-    def __init__(self, ctrl, playlist, **kwargs):
+    def __init__(self, ctrl, playlist, store, **kwargs):
         self.ctrl = ctrl
         self.playlist = playlist
-        self.initialized = False
         super(ZenFileBrowser, self).__init__(**kwargs)
+        self._init(store)
+
+    def _init(self, store):
+        """
+        The filebrowser screen is being opened for the first time.
+        Initialize the paths to the one stored.
+        """
+        if store.exists("filebrowser"):
+            if "path" in store.get("filebrowser").keys():
+                file_path = store.get("filebrowser")["path"]
+                if exists(file_path):
+                    self.filechooser.path = file_path
+
 
     def add_files(self):
         """ Add any selected files/folders to the playlist"""
@@ -36,19 +48,7 @@ class ZenFileBrowser(Screen):
         if state == "playing":
             self.ctrl.play_pause()
 
-    def on_enter(self):
-        """ The filebrowser screen is being opened """
-        if not self.initialized:
-            self.initialized = True
-            store = JsonStore("zenplayer.json")
-            if store.exists("filebrowser"):
-                if "path" in store.get("filebrowser").keys():
-                    file_path = store.get("filebrowser")["path"]
-                    if exists(file_path):
-                        self.filechooser.path = file_path
-
-    def on_leave(self):
-        """ The filebrowser screen is being closed """
+    def save(self, store):
+        """ Save the file browser state """
         if len(self.filechooser.selection) > 0:
-            store = JsonStore("zenplayer.json")
             store.put("filebrowser", path=self.filechooser.selection[0])

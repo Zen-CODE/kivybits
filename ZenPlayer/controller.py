@@ -114,12 +114,15 @@ class Controller(EventDispatcher):
         """ Save the state of the the playlist and volume. """
         self.playlist.save(self._store)
         self._store.put("state", volume=self.volume)
+        if "filebrowser" in self.sm.screen_names:
+            self.sm.get_screen("filebrowser").save(self._store)
 
     def show_filebrowser(self):
         """ Switch to the file browser screen """
         if "filebrowser" not in self.sm.screen_names:
             self.sm.add_widget(ZenFileBrowser(self,
                                               self.playlist,
+                                              self._store,
                                               name="filebrowser"))
         self.sm.current = "filebrowser"
 
