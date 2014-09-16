@@ -5,6 +5,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.properties import ObjectProperty
 from kivy.storage.jsonstore import JsonStore
 from os.path import exists
+from audioplayer import Sound
 
 
 class ZenFileBrowser(Screen):
@@ -27,9 +28,13 @@ class ZenFileBrowser(Screen):
     def add_replace(self):
         """ Add amy selected files/folders to the playlist removing any that
         already exist """
-        state = self.c
+        state = Sound.state
+        if state == "playing":
+            self.ctrl.stop()
         self.playlist.clear_files()
         self.add_files()
+        if state == "playing":
+            self.ctrl.play_pause()
 
     def on_enter(self):
         """ The filebrowser screen is being opened """
