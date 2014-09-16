@@ -118,7 +118,7 @@ class Controller(EventDispatcher):
     def show_filebrowser(self):
         """ Switch to the file browser screen """
         if "filebrowser" not in self.sm.screen_names:
-            self.sm.add_widget(ZenFileBrowser(self.sm,
+            self.sm.add_widget(ZenFileBrowser(self,
                                               self.playlist,
                                               name="filebrowser"))
         self.sm.current = "filebrowser"

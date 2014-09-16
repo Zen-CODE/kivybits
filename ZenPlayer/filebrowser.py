@@ -13,10 +13,10 @@ class ZenFileBrowser(Screen):
     """
     filechooser = ObjectProperty()
 
-    def __init__(self, sm, playlist, **kwargs):
-        self.sm = sm
+    def __init__(self, ctrl, playlist, **kwargs):
+        self.ctrl = ctrl
         self.playlist = playlist
-        self.initailized = False
+        self.initialized = False
         super(ZenFileBrowser, self).__init__(**kwargs)
 
     def add_files(self):
@@ -27,13 +27,14 @@ class ZenFileBrowser(Screen):
     def add_replace(self):
         """ Add amy selected files/folders to the playlist removing any that
         already exist """
+        state = self.c
         self.playlist.clear_files()
         self.add_files()
 
     def on_enter(self):
         """ The filebrowser screen is being opened """
-        if not self.initailized:
-            self.initailized = True
+        if not self.initialized:
+            self.initialized = True
             store = JsonStore("zenplayer.json")
             if store.exists("filebrowser"):
                 if "path" in store.get("filebrowser").keys():

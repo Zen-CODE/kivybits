@@ -76,6 +76,7 @@ class PlayList(object):
     def clear_files(self):
         """ Clear the existing playlist"""
         self.queue = []
+        self.current = 0
 
     def move_next(self):
         """ Move the selected track to the next"""
