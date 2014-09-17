@@ -101,10 +101,14 @@ class Controller(EventDispatcher):
             if audio_file:
                 Sound.play(audio_file, self.volume)
                 if self.pos > 0:
-                    Clock.schedule_once(lambda dt: Sound.seek(self.pos), 0.1)
+                    def set_pos(dt):
+                        Sound.seek(self.pos)
+                        self.pos = 0
+                    Clock.schedule_once(set_pos, 0.1)
 
     def play_next(self):
         """ Play the next track in the playlist. """
+
         Sound.stop()
         self.playlist.move_next()
         self.play_pause()
