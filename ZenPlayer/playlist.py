@@ -65,7 +65,9 @@ class PlayList(object):
 
     def add_files(self, filefolder):
         """ Add the specified folder to the queue """
-        Logger.info("playlist.py: processing {0}".format(filefolder))
+        # To convert to pure asc as the logger does not handle unicode
+        Logger.info("playlist.py: processing {0}".format(
+            filefolder.encode('ascii', 'replace')))
         if path.isdir(filefolder):
             for f in sorted(listdir(filefolder)):
                 self.add_files(path.join(filefolder, f))
