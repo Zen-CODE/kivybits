@@ -31,14 +31,13 @@ class ZenFileBrowser(Screen):
                 if exists(file_path):
                     self.filechooser.path = file_path
 
-
     def add_files(self):
         """ Add any selected files/folders to the playlist"""
         for filefolder in self.filechooser.selection:
             self.playlist.add_files(filefolder)
 
     def add_replace(self):
-        """ Add amy selected files/folders to the playlist removing any that
+        """ Add any selected files/folders to the playlist removing any that
         already exist """
         state = Sound.state
         if state == "playing":
