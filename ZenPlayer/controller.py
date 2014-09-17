@@ -66,9 +66,9 @@ class Controller(EventDispatcher):
         """ React to the keypress event """
         key_name = keycode[1]
         if key_name == "up":
-            self.volume += 0.05
+            self.volume += 0.025
         elif key_name == "down":
-            self.volume -= 0.05
+            self.volume -= 0.025
         elif key_name == "x":
             self.play_pause()
         elif key_name == "z":
