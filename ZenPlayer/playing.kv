@@ -6,22 +6,6 @@
         size_hint: 1, 1
         on_touch_down: self.collide_point(*args[1].pos) and root.dispatch('on_click')
 
-<PlayListScreen>:
-    listview: listview
-
-    BoxLayout:
-        orientation: 'vertical'
-        ListView:
-            id: listview
-            size_hint_y: 0.9
-        BoxLayout:
-            size_hint_y: 0.1
-            orientation: 'horizontal'
-            padding: 10, 10, 10, 10
-            Button:
-                text: 'Back'
-                on_release: root.back()
-
 <PlayingScreen>:
     # Define the buttons
     but_playpause: playpause

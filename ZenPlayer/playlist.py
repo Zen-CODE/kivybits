@@ -12,6 +12,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.listview import CompositeListItem
 from kivy.properties import StringProperty
 from os.path import exists
+from kivy.lang import Builder
 
 
 class PlayList(object):
@@ -23,6 +24,7 @@ class PlayList(object):
     art_names = ["cover.jpg", "cover.png", "cover.bmp", "cover.jpeg"]
 
     def __init__(self, store):
+
         super(PlayList, self).__init__()
         self._load(store)
 
@@ -145,9 +147,11 @@ class PlayListScreen(Screen):
     listview = ObjectProperty()
 
     def __init__(self, sm, playlist, **kwargs):
+        Builder.load_file("playlist.kv")
         self.sm = sm
         self.playlist = playlist
-        super(PlayListScreen, self).__init__(**kwargs)
+        super(
+            PlayListScreen, self).__init__(**kwargs)
 
     def on_enter(self):
         """ Repopulate the listview """
