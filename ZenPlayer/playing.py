@@ -2,6 +2,7 @@ from kivy.properties import ObjectProperty
 from kivy.clock import Clock
 from kivy.uix.screenmanager import Screen
 from audioplayer import Sound
+from kivy.lang import Builder
 
 
 class PlayingScreen(Screen):
@@ -18,6 +19,7 @@ class PlayingScreen(Screen):
     ctrl = None  # The Controller
 
     def __init__(self, ctrl, **kwargs):
+        Builder.load_file("playing.kv")
         self.ctrl = ctrl
         super(PlayingScreen, self).__init__(**kwargs)
         Clock.schedule_interval(self._update_progress, 1/25)
