@@ -9,13 +9,9 @@ Kivy framework.
 __author__ = 'ZenCODE'
 
 from kivy.app import App
-from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
 from kivy.properties import ObjectProperty, StringProperty
 from controller import Controller
-
-
-Builder.load_file('style.kv')
 
 
 class MediaButton(FloatLayout):

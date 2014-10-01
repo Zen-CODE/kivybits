@@ -3,9 +3,9 @@ Displays the file browsing screen for ZenPlayer
 """
 from kivy.uix.screenmanager import Screen
 from kivy.properties import ObjectProperty
-from kivy.storage.jsonstore import JsonStore
 from os.path import exists
 from audioplayer import Sound
+from kivy.lang import Builder
 
 
 class ZenFileBrowser(Screen):
@@ -15,6 +15,7 @@ class ZenFileBrowser(Screen):
     filechooser = ObjectProperty()
 
     def __init__(self, ctrl, playlist, store, **kwargs):
+        Builder.load_file('filebrowser.kv')
         self.ctrl = ctrl
         self.playlist = playlist
         super(ZenFileBrowser, self).__init__(**kwargs)
