@@ -2,7 +2,6 @@
 This class houses the PlayList class for ZenPlayer
 """
 from kivy.uix.screenmanager import Screen
-from kivy.lang import Builder
 from kivy.properties import ObjectProperty
 from os import sep, path, listdir
 from kivy.logger import Logger
@@ -187,6 +186,19 @@ class PlayListScreen(Screen):
             args_converter=args_converter,
             cls=ZenListItem)
 
+        # args_converter = lambda row_index, rec: \
+        #     {'text': rec['text'],
+        #      'size_hint_y': None,
+        #      'height': 50}
+        #
+        # dict_adapter = DictAdapter(
+        #     sorted_keys=[str(i) for i in range(len(self.playlist.queue))],
+        #     data=data,
+        #     selection_mode='single',
+        #     args_converter=args_converter,
+        #     cls=ListItemButton)
+
+
         self.listview.adapter = dict_adapter
         dict_adapter.bind(on_selection_change=self.selection_changed)
 
@@ -197,7 +209,8 @@ class PlayListScreen(Screen):
     def selection_changed(self, adapter):
         print "Selection changed - " + str(adapter.selection)
         if len(adapter.selection) > 0:
-            print "Row index=", str(adapter.selection[0].row_index)
+            #print "Row index=", str(adapter.selection[0].row_index)
+            print "Row index=", str(adapter.selection[0])
 
 Builder.load_string('''
 <ZenListImage>:
