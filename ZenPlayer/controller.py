@@ -72,7 +72,7 @@ class Controller(EventDispatcher):
         elif key_name == "x":
             self.play_pause()
         elif key_name == "z":
-            self.move_previous()
+            self.play_previous()
         elif key_name == "v":
             self.stop()
         elif key_name == "b":
