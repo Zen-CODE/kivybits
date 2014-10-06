@@ -272,7 +272,7 @@ class PlayListScreen(Screen):
         self.sm.current = "main"
 
     def selection_changed(self, adapter):
-        print "Selection changed - " + str(adapter.selection)
+        """ The selection has changed. Start playing the selected track """
         if len(adapter.selection) > 0:
             selection = adapter.selection[0]
             if isinstance(selection, ZenListItem):
@@ -331,14 +331,16 @@ class ZenListItem(CompositeListItem):
     This item view composes itself out of a image and two ListItem subclasses
     for displaying artist and track information.
     """
-    # def select(self, selected=True):
-    #     super(ZenListItem, self).select()
-    #     print "Applying selection to {0} to {1}".format(self, selected)
-    #     self.is_selected = selected
-    #     for child in self.children:
-    #         child.is_selected = selected
-    #
-    # def deselect(self):
-    #     super(ZenListItem, self).deselect()
-    #     print "deselected"
-    #     self.select(False)
+    def select(self, selected=True):
+        """
+        Propagate selection to children
+        """
+        for child in self.children:
+            child.select()
+
+    def deselect(self):
+        """
+        Propagate deselection to children components
+        """
+        for child in self.children:
+            child.deselect()
