@@ -72,8 +72,7 @@ class PlayList(object):
         if path.isdir(filefolder):
             for f in sorted(listdir(filefolder)):
                 self.add_files(path.join(filefolder, f))
-        elif ".mp3" in filefolder or ".ogg" in filefolder or\
-                ".wav" in filefolder:
+        elif filefolder[-3:] in ["mp3", "ogg", "wav", "m4a"]:
             self.queue.append((filefolder, self._get_albumart(filefolder)))
 
     def clear_files(self):
