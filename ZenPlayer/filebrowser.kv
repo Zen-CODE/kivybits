@@ -16,14 +16,26 @@
                     Rectangle:
                         pos: self.pos
                         size: self.size
-            Label:
-                id: label_sel
-                text: "Selection - None"
+            BoxLayout:
+                orientation: 'horizontal'
+                Button:
+                    text: "Up"
+                    size_hint_x: 0.1
+                    on_release: root.folder_up()
+                Label:
+                    id: label_sel
+                    text: "Selection - None"
+                    size_hint_x: 0.8
+                Button:
+                    text: "Root"
+                    size_hint_x: 0.1
+
         FileChooserListView:
             id: filechooser
             size_hint_y: 0.8
             dirselect: True
             on_selection: label_sel.text = "Selection - " + str(self.selection)
+
         BoxLayout:
             orientation: 'horizontal'
             padding: 10, 10, 10, 10
