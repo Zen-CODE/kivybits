@@ -45,8 +45,7 @@ class ZenFileBrowser(Screen):
             self.ctrl.stop()
         self.playlist.clear_files()
         self.add_files()
-        if state == "playing":
-            self.ctrl.play_pause()
+        self.ctrl.play_pause()
 
     def save(self, store):
         """ Save the file browser state """
