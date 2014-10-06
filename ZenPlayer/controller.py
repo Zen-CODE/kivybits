@@ -90,6 +90,14 @@ class Controller(EventDispatcher):
             Sound.set_volume(value)
             self.playing.volume_slider.value = value
 
+    def play_index(self, index):
+        """
+        Play the track with the specified playlist index
+        """
+        Sound.stop()
+        self.playlist.current = index
+        self.play_pause()
+
     def play_pause(self):
         """ Play or pause the currently playing track """
         self.advance = True
@@ -139,6 +147,7 @@ class Controller(EventDispatcher):
         """ Switch to the playlist screen """
         if "playlist" not in self.sm.screen_names:
             self.sm.add_widget(PlayListScreen(self.sm,
+                                              self,
                                               self.playlist,
                                               name="playlist"))
         self.sm.current = "playlist"

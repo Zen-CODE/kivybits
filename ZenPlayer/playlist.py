@@ -145,59 +145,125 @@ class PlayListScreen(Screen):
     """
     listview = ObjectProperty()
 
-    def __init__(self, sm, playlist, **kwargs):
+    def __init__(self, sm, ctrl, playlist, **kwargs):
         Builder.load_file("playlist.kv")
         self.sm = sm
         self.playlist = playlist
+        self.ctrl = ctrl
         super(
             PlayListScreen, self).__init__(**kwargs)
 
     def on_enter(self):
         """ Repopulate the listview """
-        info = self.playlist.get_info
-        data = {str(i): {'text': item[0],
-                         'source': item[1],
-                         'album': info(item[0])["album"],
-                         'track': info(item[0])["file"]}
-                for i, item in enumerate(self.playlist.queue)}
-
-        args_converter = lambda row_index, rec: \
-            {'text': rec['text'],
-             'size_hint_y': None,
-             'height': 50,
-             'cls_dicts': [{'cls': ZenListImage,
-                            'kwargs': {'source': rec['source'],
-                                       'size_hint_x': 0.1,
-                                       'row_index': row_index}},
-                           {'cls': ZenListButton,
-                            'kwargs': {'text': rec['track'],
-                                       'is_representing_cls': True,
-                                       'size_hint_x': 0.55,
-                                       'row_index': row_index}},
-                           {'cls': ZenListButton,
-                            'kwargs': {'text': rec['album'],
-                                       'size_hint_x': 0.35,
-                                       'row_index': row_index}}]}
-
-        dict_adapter = DictAdapter(
-            sorted_keys=[str(i) for i in range(len(self.playlist.queue))],
-            data=data,
-            selection_mode='single',
-            args_converter=args_converter,
-            cls=ZenListItem)
-
+        # ===================================================================
+        # = Original, working without initial selection
+        # info = self.playlist.get_info
+        # data = {str(i): {'text': item[0],
+        #                  'source': item[1],
+        #                  'album': info(item[0])["album"],
+        #                  'track': info(item[0])["file"]}
+        #         for i, item in enumerate(self.playlist.queue)}
+        #
         # args_converter = lambda row_index, rec: \
         #     {'text': rec['text'],
         #      'size_hint_y': None,
-        #      'height': 50}
+        #      'height': 50,
+        #      'cls_dicts': [{'cls': ZenListImage,
+        #                     'kwargs': {'source': rec['source'],
+        #                                'size_hint_x': 0.1,
+        #                                'row_index': row_index}},
+        #                    {'cls': ZenListButton,
+        #                     'kwargs': {'text': rec['track'],
+        #                                'is_representing_cls': True,
+        #                                'size_hint_x': 0.55,
+        #                                'row_index': row_index}},
+        #                    {'cls': ZenListButton,
+        #                     'kwargs': {'text': rec['album'],
+        #                                'size_hint_x': 0.35,
+        #                                'row_index': row_index}}]}
         #
         # dict_adapter = DictAdapter(
         #     sorted_keys=[str(i) for i in range(len(self.playlist.queue))],
         #     data=data,
         #     selection_mode='single',
         #     args_converter=args_converter,
+        #     cls=ZenListItem)
+
+        # =============================================================
+        # = Using ListItemButton, working with selection
+        # class DataItem(object):
+        #     def __init__(self, info_func, item0, item1, is_selected):
+        #         super(DataItem, self).__init__()
+        #         self.text = item0
+        #         self.source = item1
+        #         self.album = info_func(item0)['album']
+        #         self.track = info_func(item0)['file']
+        #         self.is_selected = is_selected
+        #
+        # data = {str(i): DataItem(self.playlist.get_info,
+        #                          item[0],
+        #                          item[1],
+        #                          bool(i == self.playlist.current))
+        #         for i, item in enumerate(self.playlist.queue)}
+        #
+        # def args_converter(row_index, item):
+        #     return {'text': item.text,
+        #             'size_hint_y': None,
+        #             'height': 50,
+        #             'is_selected': item.is_selected}
+        #
+        # dict_adapter = DictAdapter(
+        #     sorted_keys=[str(i) for i in range(len(self.playlist.queue))],
+        #     data=data,
+        #     selection_mode='single',
+        #     args_converter=args_converter,
+        #     propagate_selection_to_data=True,
         #     cls=ListItemButton)
 
+
+        # ===============================================================
+        class DataItem(object):
+            def __init__(self, info_func, item0, item1, is_selected):
+                super(DataItem, self).__init__()
+                self.text = item0
+                self.source = item1
+                self.album = info_func(item0)['album']
+                self.track = info_func(item0)['file']
+                self.is_selected = is_selected
+
+        data = {str(i): DataItem(self.playlist.get_info,
+                                 item[0],
+                                 item[1],
+                                 bool(i == self.playlist.current))
+                for i, item in enumerate(self.playlist.queue)}
+
+        def args_converter(row_index, item):
+            return {'text': item.text,
+                    'size_hint_y': None,
+                    'height': 50,
+                    'cls_dicts': [{'cls': ZenListImage,
+                                   'kwargs': {'source': item.source,
+                                              'size_hint_x': 0.1,
+                                              'row_index': row_index}},
+                                  {'cls': ZenListButton,
+                                   'kwargs': {'text': item.track,
+                                              'is_representing_cls': True,
+                                              'size_hint_x': 0.55,
+                                              'row_index': row_index,
+                                              'is_selected': item.is_selected}},
+                                  {'cls': ZenListButton,
+                                   'kwargs': {'text': item.album,
+                                              'size_hint_x': 0.35,
+                                              'row_index': row_index}}],
+                    'is_selected': item.is_selected}
+
+        dict_adapter = DictAdapter(
+            sorted_keys=[str(i) for i in range(len(self.playlist.queue))],
+            data=data,
+            selection_mode='single',
+            args_converter=args_converter,
+            propagate_selection_to_data=True,
+            cls=ZenListItem)
 
         self.listview.adapter = dict_adapter
         dict_adapter.bind(on_selection_change=self.selection_changed)
@@ -209,8 +275,13 @@ class PlayListScreen(Screen):
     def selection_changed(self, adapter):
         print "Selection changed - " + str(adapter.selection)
         if len(adapter.selection) > 0:
-            #print "Row index=", str(adapter.selection[0].row_index)
-            print "Row index=", str(adapter.selection[0])
+            selection = adapter.selection[0]
+            if isinstance(selection, ZenListItem):
+                row_index = selection.children[0].row_index
+            else:
+                row_index = selection.row_index
+            if row_index != self.playlist.current:
+                self.ctrl.play_index(row_index)
 
 Builder.load_string('''
 <ZenListImage>:
@@ -257,4 +328,18 @@ class ZenListButton(ListItemButton):
 
 
 class ZenListItem(CompositeListItem):
-    pass
+    """
+    This item view composes itself out of a image and two ListItem subclasses
+    for displaying artist and track information.
+    """
+    # def select(self, selected=True):
+    #     super(ZenListItem, self).select()
+    #     print "Applying selection to {0} to {1}".format(self, selected)
+    #     self.is_selected = selected
+    #     for child in self.children:
+    #         child.is_selected = selected
+    #
+    # def deselect(self):
+    #     super(ZenListItem, self).deselect()
+    #     print "deselected"
+    #     self.select(False)
