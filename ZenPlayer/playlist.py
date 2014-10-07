@@ -12,6 +12,7 @@ from kivy.uix.listview import CompositeListItem
 from kivy.properties import StringProperty, ListProperty
 from os.path import exists
 from kivy.lang import Builder
+from kivy.uix.button import ButtonBehavior
 
 
 class PlayList(object):
@@ -198,6 +199,7 @@ class PlayListScreen(Screen):
     def selection_changed(self, adapter):
         """ The selection has changed. Start playing the selected track """
         if len(adapter.selection) > 0:
+            print "On selection changed {0}".format(adapter.selection[0])
             selection = adapter.selection[0]
             if isinstance(selection, ZenListItem):
                 row_index = selection.children[0].row_index
@@ -209,8 +211,6 @@ class PlayListScreen(Screen):
 Builder.load_string('''
 <ZenSelectableView>:
     padding: 5, 5, 5, 5
-    selected_color: 0.5, 0.5, 1, 0.7
-    deselected_color: 0, 0, 0, 1
     canvas:
         Color:
             rgba: root.background_color
@@ -224,23 +224,33 @@ Builder.load_string('''
 <ZenListButton>:
     background_down: 'graphics/clear.png'
     background_normal: 'graphics/clear.png'
-    selected_color: 0.5, 0.5, 1, 0.7
-    deselected_color: 0, 0, 0, 1
 
 ''')
 
 
-class ZenSelectableView(BoxLayout, SelectableView):
+class ZenSelectableView(SelectableView, ButtonBehavior, BoxLayout):
     """
     This defines the base class for the Zen Playlist items elements. It handles
     the background drawing and provide a BoxLayout for subclass to add
     additional elements
     """
+    selected_color = [0.5, 0.5, 1, 0.7]
+    deselected_color = [0, 0, 0, 1]
     background_color = ListProperty([0, 0, 0, 1])
 
     def __init__(self, **kwargs):
         self.row_index = kwargs.pop('row_index')
         super(ZenSelectableView, self).__init__(**kwargs)
+
+    def select(self, *args):
+        self.background_color = self.selected_color
+        if isinstance(self.parent, CompositeListItem):
+            self.parent.select_from_child(self, *args)
+
+    def deselect(self, *args):
+        self.background_color = self.deselected_color
+        if isinstance(self.parent, CompositeListItem):
+            self.parent.deselect_from_child(self, *args)
 
     def select_from_composite(self, *args):
         self.background_color = self.selected_color
