@@ -209,13 +209,21 @@ class PlayListScreen(Screen):
 Builder.load_string('''
 <ZenListImage>:
     padding: 5, 5, 5, 5
+    background_down: 'graphics/clear.png'
+    background_normal: 'graphics/clear.png'
+    selected_color: 0.5, 0.5, 1, 0.7
+    deselected_color: 0, 0, 0, 1
     Image:
         source: root.source
+<ZenListButton>:
+    background_down: 'graphics/clear.png'
+    background_normal: 'graphics/clear.png'
+    selected_color: 0.5, 0.5, 1, 0.7
+    deselected_color: 0, 0, 0, 1
+
 ''')
 
 # Here we define the colours of the playlist (ZenList*) items
-SELECTED_COLOR = [0.5, 0.5, 1, 0.7]
-DESELECTED_COLOR = [0, 0, 0, 1]
 
 
 class ZenListImage(BoxLayout, ListItemButton):
@@ -225,12 +233,6 @@ class ZenListImage(BoxLayout, ListItemButton):
     def __init__(self, **kwargs):
         self.row_index = kwargs.pop('row_index')
         super(ZenListImage, self).__init__(**kwargs)
-        # TODO: Customize background. Could not get this to work properly with
-        #       the button drawing
-        # self.selected_color = SELECTED_COLOR
-        # self.deselected_color = DESELECTED_COLOR
-        #self.background_down = ""
-        #self.background_normal = ""
 
     def on_text(self, *args):
         """ Prevent the button from displaying text """
@@ -242,12 +244,6 @@ class ZenListButton(ListItemButton):
     def __init__(self, **kwargs):
         self.row_index = kwargs.pop('row_index')
         super(ZenListButton, self).__init__(**kwargs)
-        # TODO: Customize background. Could not get this to work properly with
-        #       the button drawing
-        # self.selected_color = SELECTED_COLOR
-        # self.deselected_color = DESELECTED_COLOR
-        #self.background_normal = 'images/black.png'
-        #self.background_down = 'images/black.png'
 
 
 class ZenListItem(CompositeListItem):
