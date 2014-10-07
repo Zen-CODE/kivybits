@@ -154,107 +154,31 @@ class PlayListScreen(Screen):
 
     def on_enter(self):
         """ Repopulate the listview """
-        # ===================================================================
-        # = Original, working without initial selection
-        # info = self.playlist.get_info
-        # data = {str(i): {'text': item[0],
-        #                  'source': item[1],
-        #                  'album': info(item[0])["album"],
-        #                  'track': info(item[0])["file"]}
-        #         for i, item in enumerate(self.playlist.queue)}
-        #
-        # args_converter = lambda row_index, rec: \
-        #     {'text': rec['text'],
-        #      'size_hint_y': None,
-        #      'height': 50,
-        #      'cls_dicts': [{'cls': ZenListImage,
-        #                     'kwargs': {'source': rec['source'],
-        #                                'size_hint_x': 0.1,
-        #                                'row_index': row_index}},
-        #                    {'cls': ZenListButton,
-        #                     'kwargs': {'text': rec['track'],
-        #                                'is_representing_cls': True,
-        #                                'size_hint_x': 0.55,
-        #                                'row_index': row_index}},
-        #                    {'cls': ZenListButton,
-        #                     'kwargs': {'text': rec['album'],
-        #                                'size_hint_x': 0.35,
-        #                                'row_index': row_index}}]}
-        #
-        # dict_adapter = DictAdapter(
-        #     sorted_keys=[str(i) for i in range(len(self.playlist.queue))],
-        #     data=data,
-        #     selection_mode='single',
-        #     args_converter=args_converter,
-        #     cls=ZenListItem)
-
-        # =============================================================
-        # = Using ListItemButton, working with selection
-        # class DataItem(object):
-        #     def __init__(self, info_func, item0, item1, is_selected):
-        #         super(DataItem, self).__init__()
-        #         self.text = item0
-        #         self.source = item1
-        #         self.album = info_func(item0)['album']
-        #         self.track = info_func(item0)['file']
-        #         self.is_selected = is_selected
-        #
-        # data = {str(i): DataItem(self.playlist.get_info,
-        #                          item[0],
-        #                          item[1],
-        #                          bool(i == self.playlist.current))
-        #         for i, item in enumerate(self.playlist.queue)}
-        #
-        # def args_converter(row_index, item):
-        #     return {'text': item.text,
-        #             'size_hint_y': None,
-        #             'height': 50,
-        #             'is_selected': item.is_selected}
-        #
-        # dict_adapter = DictAdapter(
-        #     sorted_keys=[str(i) for i in range(len(self.playlist.queue))],
-        #     data=data,
-        #     selection_mode='single',
-        #     args_converter=args_converter,
-        #     propagate_selection_to_data=True,
-        #     cls=ListItemButton)
-
-
-        # ===============================================================
-        class DataItem(object):
-            def __init__(self, info_func, item0, item1, is_selected):
-                super(DataItem, self).__init__()
-                self.text = item0
-                self.source = item1
-                self.album = info_func(item0)['album']
-                self.track = info_func(item0)['file']
-                self.is_selected = is_selected
-
-        data = {str(i): DataItem(self.playlist.get_info,
-                                 item[0],
-                                 item[1],
-                                 bool(i == self.playlist.current))
+        info = self.playlist.get_info
+        data = {str(i): {'text': item[0],
+                         'source': item[1],
+                         'album': info(item[0])["album"],
+                         'track': info(item[0])["file"],
+                         'is_selected': bool(i == self.playlist.current)}
                 for i, item in enumerate(self.playlist.queue)}
 
         def args_converter(row_index, item):
-            return {'text': item.text,
+            return {'text': item['text'],
                     'size_hint_y': None,
                     'height': 50,
                     'cls_dicts': [{'cls': ZenListImage,
-                                   'kwargs': {'source': item.source,
+                                   'kwargs': {'source': item['source'],
                                               'size_hint_x': 0.1,
                                               'row_index': row_index}},
                                   {'cls': ZenListButton,
-                                   'kwargs': {'text': item.track,
+                                   'kwargs': {'text': item['track'],
                                               'is_representing_cls': True,
                                               'size_hint_x': 0.55,
-                                              'row_index': row_index,
-                                              'is_selected': item.is_selected}},
+                                              'row_index': row_index}},
                                   {'cls': ZenListButton,
-                                   'kwargs': {'text': item.album,
+                                   'kwargs': {'text': item['album'],
                                               'size_hint_x': 0.35,
-                                              'row_index': row_index}}],
-                    'is_selected': item.is_selected}
+                                              'row_index': row_index}}]}
 
         dict_adapter = DictAdapter(
             sorted_keys=[str(i) for i in range(len(self.playlist.queue))],
