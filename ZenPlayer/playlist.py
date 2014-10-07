@@ -167,7 +167,7 @@ class PlayListScreen(Screen):
         def args_converter(row_index, item):
             return {'text': item['text'],
                     'size_hint_y': None,
-                    'height': 50,
+                    'height': "50dp",
                     'cls_dicts': [{'cls': ZenListImage,
                                    'kwargs': {'source': item['source'],
                                               'size_hint_x': 0.1,
