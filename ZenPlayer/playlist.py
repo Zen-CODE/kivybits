@@ -207,7 +207,7 @@ class PlayListScreen(Screen):
                 self.ctrl.play_index(row_index)
 
 Builder.load_string('''
-<ZenListImage>:
+<ZenSelectableView>:
     padding: 5, 5, 5, 5
     selected_color: 0.5, 0.5, 1, 0.7
     deselected_color: 0, 0, 0, 1
@@ -217,6 +217,7 @@ Builder.load_string('''
         Rectangle:
             pos: self.pos
             size: self.size
+<ZenListImage>:
     Image:
         source: root.source
 
@@ -228,17 +229,18 @@ Builder.load_string('''
 
 ''')
 
-# Here we define the colours of the playlist (ZenList*) items
 
-
-class ZenListImage(BoxLayout, SelectableView): # ListItemButton):
-    """ This item displays the image but functions as a selectable list item """
-    source = StringProperty()
+class ZenSelectableView(BoxLayout, SelectableView):
+    """
+    This defines the base class for the Zen Playlist items elements. It handles
+    the background drawing and provide a BoxLayout for subclass to add
+    additional elements
+    """
     background_color = ListProperty([0, 0, 0, 1])
 
     def __init__(self, **kwargs):
         self.row_index = kwargs.pop('row_index')
-        super(ZenListImage, self).__init__(**kwargs)
+        super(ZenSelectableView, self).__init__(**kwargs)
 
     def select_from_composite(self, *args):
         self.background_color = self.selected_color
@@ -246,10 +248,10 @@ class ZenListImage(BoxLayout, SelectableView): # ListItemButton):
     def deselect_from_composite(self, *args):
         self.background_color = self.deselected_color
 
-    # def on_text(self, *args):
-    #     """ Prevent the button from displaying text """
-    #     self.text = ""
-    #     return True
+
+class ZenListImage(ZenSelectableView):
+    """ This item displays the image but functions as a selectable list item """
+    source = StringProperty()
 
 
 class ZenListButton(ListItemButton):
