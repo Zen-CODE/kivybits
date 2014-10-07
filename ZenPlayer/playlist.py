@@ -6,10 +6,10 @@ from kivy.properties import ObjectProperty
 from os import sep, path, listdir
 from kivy.logger import Logger
 from kivy.adapters.dictadapter import DictAdapter
-from kivy.uix.listview import ListItemButton
+from kivy.uix.listview import ListItemButton, SelectableView
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.listview import CompositeListItem
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, ListProperty
 from os.path import exists
 from kivy.lang import Builder
 
@@ -209,12 +209,17 @@ class PlayListScreen(Screen):
 Builder.load_string('''
 <ZenListImage>:
     padding: 5, 5, 5, 5
-    background_down: 'graphics/clear.png'
-    background_normal: 'graphics/clear.png'
     selected_color: 0.5, 0.5, 1, 0.7
     deselected_color: 0, 0, 0, 1
+    canvas:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
     Image:
         source: root.source
+
 <ZenListButton>:
     background_down: 'graphics/clear.png'
     background_normal: 'graphics/clear.png'
@@ -226,18 +231,25 @@ Builder.load_string('''
 # Here we define the colours of the playlist (ZenList*) items
 
 
-class ZenListImage(BoxLayout, ListItemButton):
+class ZenListImage(BoxLayout, SelectableView): # ListItemButton):
     """ This item displays the image but functions as a selectable list item """
     source = StringProperty()
+    background_color = ListProperty([0, 0, 0, 1])
 
     def __init__(self, **kwargs):
         self.row_index = kwargs.pop('row_index')
         super(ZenListImage, self).__init__(**kwargs)
 
-    def on_text(self, *args):
-        """ Prevent the button from displaying text """
-        self.text = ""
-        return True
+    def select_from_composite(self, *args):
+        self.background_color = self.selected_color
+
+    def deselect_from_composite(self, *args):
+        self.background_color = self.deselected_color
+
+    # def on_text(self, *args):
+    #     """ Prevent the button from displaying text """
+    #     self.text = ""
+    #     return True
 
 
 class ZenListButton(ListItemButton):
