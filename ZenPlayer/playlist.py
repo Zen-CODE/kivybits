@@ -6,13 +6,14 @@ from kivy.properties import ObjectProperty
 from os import sep, path, listdir
 from kivy.logger import Logger
 from kivy.adapters.dictadapter import DictAdapter
-from kivy.uix.listview import ListItemButton, SelectableView
+from kivy.uix.listview import SelectableView
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.listview import CompositeListItem
 from kivy.properties import StringProperty, ListProperty
 from os.path import exists
 from kivy.lang import Builder
 from kivy.uix.button import ButtonBehavior
+from kivy.clock import Clock
 
 
 class PlayList(object):
@@ -220,11 +221,9 @@ Builder.load_string('''
 <ZenListImage>:
     Image:
         source: root.source
-
 <ZenListButton>:
-    background_down: 'graphics/clear.png'
-    background_normal: 'graphics/clear.png'
-
+    Label:
+        id: label
 ''')
 
 
@@ -264,10 +263,20 @@ class ZenListImage(ZenSelectableView):
     source = StringProperty()
 
 
-class ZenListButton(ListItemButton):
-    def __init__(self, **kwargs):
-        self.row_index = kwargs.pop('row_index')
-        super(ZenListButton, self).__init__(**kwargs)
+class ZenListButton(ZenSelectableView):
+    """
+    The text items displayed in the ZenPlaylist
+    """
+    text = StringProperty('')
+
+    def on_text(self, widget, value):
+        """
+        Set the text of the label. This is fired before the objects have
+        been fully loaded, so delay the call using the Clock
+        """
+        def set_text(text):
+            self.ids.label.text = text
+        Clock.schedule_once(lambda dt: set_text(value))
 
 
 class ZenListItem(CompositeListItem):
