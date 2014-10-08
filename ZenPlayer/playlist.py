@@ -57,7 +57,7 @@ class PlayList(object):
         if len(self.queue) > self.current:
             return self.queue[self.current][1]
         else:
-            return "images/zencode.jpg"
+            return u"images/zencode.jpg"
 
     def get_current_info(self):
         """ Return a dictionary of information on the current track"""
