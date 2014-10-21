@@ -77,6 +77,12 @@ class Controller(EventDispatcher):
             self.stop()
         elif key_name == "b":
             self.play_next()
+        elif key_name == "a":
+            self.show_filebrowser()
+        elif key_name == "p":
+            self.show_playlist()
+        elif key_name == "s":
+            self.show_main()
 
         return True
 
@@ -151,6 +157,10 @@ class Controller(EventDispatcher):
                                               self.playlist,
                                               name="playlist"))
         self.sm.current = "playlist"
+
+    def show_main(self):
+        """ Switch to the main playing screen"""
+        self.sm.current = "main"
 
     def stop(self):
         """ Stop any playing audio """

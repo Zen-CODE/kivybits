@@ -193,10 +193,6 @@ class PlayListScreen(Screen):
         self.listview.adapter = dict_adapter
         dict_adapter.bind(on_selection_change=self.selection_changed)
 
-    def back(self):
-        """ Return to the main playing screen """
-        self.sm.current = "main"
-
     def selection_changed(self, adapter):
         """ The selection has changed. Start playing the selected track """
         if len(adapter.selection) > 0:
