@@ -9,7 +9,7 @@ class PlayingScreen(Screen):
     """
     The main screen that shows whats currently playing
     """
-    #TODO : Document properties once stable
+    # TODO : Document properties once stable
     album_image = ObjectProperty()
     but_playpause = ObjectProperty()
     info_label = ObjectProperty()
@@ -51,7 +51,6 @@ class PlayingScreen(Screen):
     def _update_progress(self, dt):
         """ Update the progressbar  """
         if Sound.state == "playing":
-        #if self.ctrl.state == "playing":
             pos, length = Sound.get_pos_length()
             if length > 0:
                 self.progress_slider.value = pos / length

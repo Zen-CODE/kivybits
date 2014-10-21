@@ -21,6 +21,7 @@ if platform == "linux":
 else:
     SoundLoader = _SoundLoader
 
+
 class Sound(object):
     """
     This class manages the playing audio as a Singleton

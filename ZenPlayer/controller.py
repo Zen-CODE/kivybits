@@ -17,8 +17,10 @@ class Controller(EventDispatcher):
     and screen displays
     """
     volume = NumericProperty(1.0)
-    advance = True  # This flag indicates whether to advance to the next track
-                    # once the currently playing one had ended
+    advance = True
+    # This flag indicates whether to advance to the next track
+    # once the currently playing one had ended
+
     sm = None  # THe ScreenManager
     pos = 0
 

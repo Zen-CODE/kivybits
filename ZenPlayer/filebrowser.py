@@ -55,7 +55,6 @@ class ZenFileBrowser(Screen):
         if path.rfind('/') > 1:
             self.filechooser.path = path[:path.rfind('/')]
 
-
     def save(self, store):
         """ Save the file browser state """
         if len(self.filechooser.selection) > 0:

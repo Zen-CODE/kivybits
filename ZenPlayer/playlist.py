@@ -255,7 +255,8 @@ class ZenSelectableView(SelectableView, ButtonBehavior, BoxLayout):
 
 
 class ZenListImage(ZenSelectableView):
-    """ This item displays the image but functions as a selectable list item """
+    """ This item displays the image but functions as a selectable list item
+    """
     source = StringProperty()
 
 
