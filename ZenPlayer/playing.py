@@ -28,12 +28,13 @@ class PlayingScreen(Screen):
 
     def init_display(self):
         """ Initialize the display """
-        try:
-            # The image control seems not to be able to handle unicode
-            self.album_image.source = self.ctrl.get_current_art()
-        except UnicodeEncodeError:
-            print "Image not accepting unicode path"
-            self.album_image.source = 'images/zencode.jpg'
+        self.album_image.source = self.ctrl.get_current_art()
+        # try:
+        #     # The image control seems not to be able to handle unicode
+        #     self.album_image.source = self.ctrl.get_current_art()
+        # except UnicodeEncodeError:
+        #     print "Image not accepting unicode path"
+        #     self.album_image.source = 'images/zencode.jpg'
         info = self.ctrl.get_current_info()
         if info:
             self.info_label1.text = info["artist"]
