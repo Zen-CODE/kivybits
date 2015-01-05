@@ -50,7 +50,7 @@ class ZenFileBrowser(Screen):
     def folder_up(self):
         """ Move a single folder up """
         # TODO: Check this for windows
-        print "folderUp fired" + str(self.filechooser.path)
+        # print "folderUp fired" + str(self.filechooser.path)
         path = self.filechooser.path
         if path.rfind('/') > 1:
             self.filechooser.path = path[:path.rfind('/')]
@@ -58,4 +58,4 @@ class ZenFileBrowser(Screen):
     def save(self, store):
         """ Save the file browser state """
         if len(self.filechooser.selection) > 0:
-            store.put("filebrowser", path=self.filechooser.selection[0])
+            store.put("filebrowser", path=self.filechooser.path)
