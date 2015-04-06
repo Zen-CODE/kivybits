@@ -135,6 +135,10 @@ class Controller(EventDispatcher):
         self.playlist.move_previous()
         self.play_pause()
 
+    def set_position(self, value):
+        """ Set the playing position to the specified value. """
+        print "set t0 " + str(value)
+
     def save(self):
         """ Save the state of the the playlist and volume. """
         self.playlist.save(self._store)

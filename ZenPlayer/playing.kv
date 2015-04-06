@@ -28,7 +28,7 @@
                 size_hint_y: 0.9
                 orientation: "vertical"
                 max: 1
-                #on_value: root.set_volume()
+                on_touch_up: self.collide_point(*args[1].pos) and root.ctrl.set_position(self.value)
             Image:
                 size_hint_y: 0.075
                 source: 'images/progress.png'
