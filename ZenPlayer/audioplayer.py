@@ -1,4 +1,5 @@
 from kivy.utils import platform
+from kivy.clock import Clock
 if platform == 'linux':  # Enable Mp3
     import gobject
     from kivy.core.audio.audio_pygst import SoundPyGst
@@ -29,16 +30,17 @@ class Sound(object):
     state = ""  # options= "", "stopped" or "playing", "finished"
     _state_callbacks = []
     _sound = None  # The underlying Sound instance
+    _seeking = False
 
     @staticmethod
     def _on_stop(*args):
-        if Sound.state != "stopped":
+        if Sound.state != "stopped" and not Sound._seeking:
             Sound._set_state("finished")
 
     @staticmethod
     def _set_state(state):
         """ Set the state value and fire all attached callbacks """
-        if state != Sound.state:
+        if state != Sound.state and not Sound._seeking:
             Sound.state = state
             for func in Sound._state_callbacks:
                 func(state)
@@ -66,7 +68,7 @@ class Sound(object):
     @staticmethod
     def stop():
         """ Stop any playing audio """
-        if Sound._sound:
+        if Sound._sound and not Sound._seeking:
             Sound._set_state("stopped")
             Sound._sound.stop()
 
@@ -90,9 +92,27 @@ class Sound(object):
             Sound._set_state("")
 
     @staticmethod
+    def set_position(value):
+        """
+        The position of the currently playing sound as a fraction between 0
+        and 1.
+        """
+        sound = Sound._sound
+        if sound:
+            print "value = {0}, length = {1} ".format(value, sound.length)
+
+            def unlock(dt):
+                Sound._seeking = False
+
+            Sound._seeking = True
+            sound.stop()
+            Clock.schedule_once(lambda dt: sound.seek(value * sound.length))
+            Clock.schedule_once(lambda dt: sound.play())
+            Clock.schedule_once(unlock)
+
+
+    @staticmethod
     def set_volume(value):
-        """
-        The the volume of the currently playing sound if appropriate
-        """
+        """ The volume of the currently playing sound. """
         if Sound._sound:
             Sound._sound.volume = value

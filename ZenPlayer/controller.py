@@ -137,7 +137,7 @@ class Controller(EventDispatcher):
 
     def set_position(self, value):
         """ Set the playing position to the specified value. """
-        print "set t0 " + str(value)
+        Sound.set_position(value)
 
     def save(self):
         """ Save the state of the the playlist and volume. """
