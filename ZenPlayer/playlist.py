@@ -133,7 +133,7 @@ class PlayList(object):
                 "artist": parts[-3],
                 "album": parts[-2],
                 "file": parts[-1]}
-        except:
+        except IndexError:
             return {
                 "artist": "-",
                 "album": "-",
@@ -167,7 +167,7 @@ class PlayListScreen(Screen):
         def args_converter(row_index, item):
             return {'text': item['text'],
                     'size_hint_y': None,
-                    'height': "50dp",
+                    'height': "60sp",
                     'cls_dicts': [{'cls': ZenListImage,
                                    'kwargs': {'source': item['source'],
                                               'size_hint_x': 0.1,
@@ -220,6 +220,7 @@ Builder.load_string('''
 <ZenListButton>:
     Label:
         id: label
+        font_size: "14sp"
 ''')
 
 
