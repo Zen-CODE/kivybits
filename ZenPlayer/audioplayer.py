@@ -27,20 +27,19 @@ class Sound(object):
     """
     This class manages the playing audio as a Singleton
     """
-    state = ""  # options= "", "stopped" or "playing", "finished"
+    state = ""  # options= "", "stopped" or "playing", "finished", "seeking"
     _state_callbacks = []
     _sound = None  # The underlying Sound instance
-    _seeking = False
 
     @staticmethod
     def _on_stop(*args):
-        if Sound.state != "stopped" and not Sound._seeking:
+        if Sound.state not in ["stopped", "seeking"]:
             Sound._set_state("finished")
 
     @staticmethod
     def _set_state(state):
         """ Set the state value and fire all attached callbacks """
-        if state != Sound.state and not Sound._seeking:
+        if state != Sound.state and Sound.state != "seeking":
             Sound.state = state
             for func in Sound._state_callbacks:
                 func(state)
@@ -68,7 +67,7 @@ class Sound(object):
     @staticmethod
     def stop():
         """ Stop any playing audio """
-        if Sound._sound and not Sound._seeking:
+        if Sound._sound and not Sound.state != "seeking":
             Sound._set_state("stopped")
             Sound._sound.stop()
 
@@ -102,9 +101,10 @@ class Sound(object):
             print "value = {0}, length = {1} ".format(value, sound.length)
 
             def unlock(dt):
-                Sound._seeking = False
+                Sound.state = "playing" if Sound._sound.state == "play"\
+                    else "stopped"
 
-            Sound._seeking = True
+            Sound.state = "seeking"
             sound.stop()
             Clock.schedule_once(lambda dt: sound.seek(value * sound.length))
             Clock.schedule_once(lambda dt: sound.play())
