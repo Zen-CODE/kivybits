@@ -1,8 +1,30 @@
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, StringProperty
 from kivy.clock import Clock
 from kivy.uix.screenmanager import Screen
 from audioplayer import Sound
 from kivy.lang import Builder
+from kivy.uix.floatlayout import FloatLayout
+
+
+class MediaButton(FloatLayout):
+    """
+    A pretty, shiny button showing the player controls
+    """
+    source = StringProperty('')
+    image = ObjectProperty()
+
+    def __init__(self, **kwargs):
+        """ Override the constructor so we can register an event """
+        super(MediaButton, self).__init__(**kwargs)
+        self.register_event_type("on_click")
+
+    def on_source(self, widget, value):
+        """ The 'source' property for the image has changed. Change it. """
+        self.image.source = value
+
+    def on_click(self):
+        """ The button has been clicked. """
+        pass
 
 
 class PlayingScreen(Screen):
@@ -29,12 +51,6 @@ class PlayingScreen(Screen):
     def init_display(self):
         """ Initialize the display """
         self.album_image.source = self.ctrl.get_current_art()
-        # try:
-        #     # The image control seems not to be able to handle unicode
-        #     self.album_image.source = self.ctrl.get_current_art()
-        # except UnicodeEncodeError:
-        #     print "Image not accepting unicode path"
-        #     self.album_image.source = 'images/zencode.jpg'
         info = self.ctrl.get_current_info()
         if info:
             self.info_label1.text = info["artist"]
