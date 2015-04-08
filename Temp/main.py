@@ -1,16 +1,35 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-from kivy.base import runTouchApp
-from kivy.uix.label import Label
-from kivy.uix.image import Image
+from kivy.app import App
+from kivy.graphics.svg import Svg
 from kivy.uix.boxlayout import BoxLayout
+from kivy.graphics import Scale
+from kivy.uix.relativelayout import RelativeLayout
+from kivy.properties import StringProperty
 
-#widget = Label(text='/media/Zen320/Zen/Music/MP3/Bob Sinclar/Champs ElyséEs/cover.jpg')
-box = BoxLayout()
-box.add_widget(
-    Image(source='/media/Zen320/Zen/Music/MP3/Bob Sinclar/Champs ElyséEs/cover.jpg'))
-box.add_widget(
-    Image(source='/media/Zen320/Zen/Music/MP3/Bob Sinclar/Champs ElyséEs/cover.jpg'))
 
-runTouchApp(box)
+class SvgWidget(RelativeLayout):
+    filename = StringProperty()
+
+    def __init__(self, **kwargs):
+        super(SvgWidget, self).__init__(**kwargs)
+        with self.canvas:
+            self.scale = Scale(1, 1, 1)
+            self.svg = Svg(kwargs['filename'])
+
+        self.bind(size=self._do_scale)
+
+    def _do_scale(self, *args):
+        self.scale.xyz = (self.width / self.svg.width,
+                          self.height / self.svg.height,
+                          1)
+
+
+class SvgApp(App):
+    def build(self):
+        root = BoxLayout()
+        root.add_widget(SvgWidget(filename='refresh.svg'))
+        root.add_widget(SvgWidget(filename='refresh.svg'))
+        return root
+
+
+if __name__ == '__main__':
+    SvgApp().run()
