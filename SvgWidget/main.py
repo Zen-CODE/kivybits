@@ -26,7 +26,7 @@ class SvgWidget(RelativeLayout):
 class SvgApp(App):
     def build(self):
         root = BoxLayout()
-        root.add_widget(SvgWidget(filename='refresh.svg'))
+        root.add_widget(SvgWidget(filename='fox.svg'))
         root.add_widget(SvgWidget(filename='refresh.svg'))
         return root
 
