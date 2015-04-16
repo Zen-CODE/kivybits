@@ -15,6 +15,10 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivy.uix.label import Label
 from kivy.metrics import sp
+from os import sep, listdir, path
+from kivy.properties import ObjectProperty
+from kivy.clock import Clock
+
 
 Builder.load_string('''
 <RowItem>:
@@ -35,32 +39,85 @@ Builder.load_string('''
         size_hint_y: 0.1
     ScrollView:
         BoxLayout:
-            id: row_box
+            id: box
             orientation: 'vertical'
             size_hint_y: None
 ''')
 
 
+class MusicLib(object):
+    """
+    This class houses metadata about our music collection.
+    """
+    source = u'/media/ZenOne/Zen/Music/CD'
+
+    @staticmethod
+    def get_row_item(folder, files):
+        """
+        Give a formatted display to the folder.
+        """
+        ri = RowItem()
+        parts = folder.split(sep)
+        header = u"{0} - by {1} (in {2})".format(
+            parts[-1],
+            parts[-2],
+            path.join(*reversed(parts[::-1])))
+
+        ri.add_widget(Label(text=header))
+        # for my_file in sorted(files):
+        #     ext = my_file[-4:]
+        #     if ext == ".jpg":
+        #         display_jpeg(Image(filename=path.join(folder, my_file)))
+        #     elif ext == ".mp3":
+        #         print(my_file[0:-4:])
+        #     else:
+        #         print(my_file)
+        #
+        # display_html(HTML(u"<center><b>{0}</b> by <i>{1}</i> (in {2})</center>".format(parts[-1],
+        #                                       parts[-2],
+        #                                           path.join(*reversed(parts[::-1])))))
+        return ri
+
+
 class RowItem(BoxLayout):
     """ This class represent an individual album found in the search. """
-    def __init__(self):
-        super(RowItem, self).__init__()
-        self.add_widget(Label(text="Object {0}".format(self)))
+    # def __init__(self):
+    #     super(RowItem, self).__init__()
+    #     self.add_widget(Label(text="Object {0}".format(self)))
 
 
 class MainScreen(BoxLayout):
-    """" The main screen showing a list of albums found. """
+    """"
+    The main screen showing a list of albums found.
+    """
     box = None
 
-    def __init__(self):
-        super(MainScreen, self).__init__()
-        num_rows = 10
-        self.box = self.ids.row_box
+    def __init__(self, **kwargs):
+        super(MainScreen, self).__init__(**kwargs)
+        self.max_folders = 10
+        self.folder_count = 0
+        self.box = self.ids.box
+        self.start()
 
-        for k in range(0, num_rows):
-            self.add_row(RowItem())
+    def start(self):
+        self.box = self.ids.box
+        self.build_contents(MusicLib.source)
+        self.box.height = self.folder_count * sp(100)
 
-        self.box.height = num_rows * sp(100)
+    def build_contents(self, folder):
+        """ Populate our main display with row items."""
+        contents = listdir(folder)
+        for item in contents:
+            if self.folder_count >= self.max_folders:
+                return
+
+            full_path = path.join(folder, item)
+            if path.isdir(full_path):
+                self.build_contents(full_path)
+            else:
+                self.add_row(MusicLib.get_row_item(folder, contents))
+                self.folder_count += 1
+                break
 
     def add_row(self, row_item):
         """ Add the row_item to the main display. """
