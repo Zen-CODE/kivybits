@@ -58,14 +58,14 @@ class MusicLib(object):
         """
         ri = RowItem()
         parts = folder.split(sep)
-        header = u"{0} - by {1}".format(
+        header = u"[b][color=#FFFF00]{0} - by {1}[/color][/b]".format(
             parts[-1],
             parts[-2])
 
         full_path = path.join(*reversed(parts[::-1]))
         source = "images/album.png"
         count = 0
-        unrecognized = 0
+        warnings = []
 
         # Gather data
         for my_file in sorted(files):
@@ -73,18 +73,21 @@ class MusicLib(object):
             if ext in [".jpg", ".png", ".gif"]:
                 source = path.join(folder, my_file)
             elif ext == ".mp3":
-                #print(my_file[0:-4:])
+                # print(my_file[0:-4:])
                 count += 1
             else:
-                unrecognized += 1
-                print(my_file)
+                warnings.append(u"Unrecognized file {0}".format(my_file))
 
         # Now create and return the row_tem
+        footer = ""
+        for warning in warnings:
+            footer += "[color=#FF0000]{0}[/color]".format(warning)
+
         ri.add_widget(Image(source=source, size_hint=(0.3, 1)))
         ri.add_widget(
             Label(
-                text=u"{0}\n\nTracks: {1}\nUnrecognized files: {2}".format(
-                    header, count, unrecognized),
+                text=u"{0}\n\nTracks: {1}\n{2}".format(
+                    header, count, footer),
                 markup=True,
                 size_hint=(0.7, 1),
                 halign="center"))
