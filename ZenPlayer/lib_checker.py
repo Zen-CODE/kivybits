@@ -58,9 +58,9 @@ class MusicLib(object):
         """
         ri = RowItem()
         parts = folder.split(sep)
-        header = u"[b][color=#FFFF00]{0} - by {1}[/color][/b]".format(
-            parts[-1],
-            parts[-2])
+        header = u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
+            parts[-2],
+            parts[-1])
 
         full_path = path.join(*reversed(parts[::-1]))
         source = "images/album.png"
@@ -70,7 +70,7 @@ class MusicLib(object):
         # Gather data
         for my_file in sorted(files):
             ext = my_file[-4:]
-            if ext in [".jpg", ".png", ".gif"]:
+            if ext in [".jpg", ".png", ".gif", "jpeg"]:
                 source = path.join(folder, my_file)
             elif ext == ".mp3":
                 # print(my_file[0:-4:])
@@ -109,7 +109,7 @@ class MainScreen(BoxLayout):
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.max_folders = 10
+        self.max_folders = 50
         self.folder_count = 0
         self.box = self.ids.box
         self.start()
