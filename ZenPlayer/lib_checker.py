@@ -13,11 +13,10 @@ __author__ = 'Richard Larkin a.k.a. ZenCODE'
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
-from kivy.uix.label import Label
 from kivy.metrics import sp
 from os import sep, listdir, path
-from kivy.properties import ObjectProperty
-from kivy.clock import Clock
+from kivy.uix.image import Image
+from kivy.uix.label import Label
 
 
 Builder.load_string('''
@@ -40,6 +39,7 @@ Builder.load_string('''
     ScrollView:
         BoxLayout:
             id: box
+            spacing: "20dp"
             orientation: 'vertical'
             size_hint_y: None
 ''')
@@ -58,24 +58,36 @@ class MusicLib(object):
         """
         ri = RowItem()
         parts = folder.split(sep)
-        header = u"{0} - by {1} (in {2})".format(
+        header = u"{0} - by {1}".format(
             parts[-1],
-            parts[-2],
-            path.join(*reversed(parts[::-1])))
+            parts[-2])
 
-        ri.add_widget(Label(text=header))
-        # for my_file in sorted(files):
-        #     ext = my_file[-4:]
-        #     if ext == ".jpg":
-        #         display_jpeg(Image(filename=path.join(folder, my_file)))
-        #     elif ext == ".mp3":
-        #         print(my_file[0:-4:])
-        #     else:
-        #         print(my_file)
-        #
-        # display_html(HTML(u"<center><b>{0}</b> by <i>{1}</i> (in {2})</center>".format(parts[-1],
-        #                                       parts[-2],
-        #                                           path.join(*reversed(parts[::-1])))))
+        full_path = path.join(*reversed(parts[::-1]))
+        source = "images/album.png"
+        count = 0
+        unrecognized = 0
+
+        # Gather data
+        for my_file in sorted(files):
+            ext = my_file[-4:]
+            if ext in [".jpg", ".png", ".gif"]:
+                source = path.join(folder, my_file)
+            elif ext == ".mp3":
+                #print(my_file[0:-4:])
+                count += 1
+            else:
+                unrecognized += 1
+                print(my_file)
+
+        # Now create and return the row_tem
+        ri.add_widget(Image(source=source, size_hint=(0.3, 1)))
+        ri.add_widget(
+            Label(
+                text=u"{0}\n\nTracks: {1}\nUnrecognized files: {2}".format(
+                    header, count, unrecognized),
+                markup=True,
+                size_hint=(0.7, 1),
+                halign="center"))
         return ri
 
 
