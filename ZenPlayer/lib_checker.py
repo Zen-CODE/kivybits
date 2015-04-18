@@ -13,7 +13,6 @@ __author__ = 'Richard Larkin a.k.a. ZenCODE'
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
-from kivy.metrics import sp
 from os import sep, listdir, path, walk
 from kivy.uix.image import Image
 from kivy.uix.label import Label
@@ -41,8 +40,8 @@ Builder.load_string('''
                 size: self.size
         text: "Music Library"
         size_hint_y: 0.1
-    DisplayItem:
-        id: box
+    FloatLayout:
+        id: row_container
         size_hint_y: 0.9
 ''')
 
@@ -60,7 +59,8 @@ class MusicLib(object):
         Give a formatted display to the folder.
         """
         parts = folder.split(sep)
-        full_path = path.join(*reversed(parts[::-1]))
+        # full_path = path.join(*reversed(parts[::-1]))
+        files = [path.join(folder, fname) for fname in listdir(folder)]
 
         lines = [u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
             parts[-2],
@@ -94,6 +94,27 @@ class MusicLib(object):
                       halign="center"))
         return di
 
+    @staticmethod
+    def get_albums(folder, folders, max_folders):
+        """
+        Process the *folder*, appending to the *folders* list adding only
+        *max_folders* + 1 folders.
+        """
+        if len(folders) > max_folders:
+            return folders
+
+        for root, sub_folders, files in walk(folder):
+            for i in sub_folders:
+                MusicLib.get_albums(path.join(folder, i), folders, max_folders)
+
+            if len(sub_folders) == 0 and len(files) > 0:
+                if root not in folders:
+                    folders.append(root)
+
+                if len(folders) > max_folders:
+                    return folders
+        return folders
+
 
 class DisplayItem(BoxLayout):
     """ This class represent an individual album found in the search. """
@@ -107,29 +128,17 @@ class MainScreen(BoxLayout):
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.box = self.ids.box
-        self.folders = self._load_albums(MusicLib.source, [], 1)
-
+        self.folders = MusicLib.get_albums(MusicLib.source, [], 1)
+        self.current_index = 0
         print "albums = " + str(self.folders)
 
-    def _load_albums(self, folder, folders, max_folders):
+    def start_show(self):
         """
-        Process the *folder*, appending to the *folders* list, our *folders* list with albums in the *folder*.
+        Begins the timed display of folders
         """
-        if len(folders) > max_folders:
-            return folders
-
-        for root, subfolders, files in walk(folder):
-            for i in subfolders:
-                self._load_albums(path.join(folder, i), folders, max_folders)
-
-            if len(subfolders) == 0 and len(files) > 0:
-                if root not in folders:
-                    folders.append(root)
-
-                if len(folders) > max_folders:
-                    return folders
-        return folders
+        container = self.ids.row_container
+        container.clear_widgets()
+        container.add_widget(DisplayItem())
 
 
 class FolderChecker(App):
@@ -138,4 +147,3 @@ class FolderChecker(App):
 
 if __name__ == '__main__':
     FolderChecker().run()
-
