@@ -17,12 +17,18 @@ from kivy.metrics import sp
 from os import sep, listdir, path
 from kivy.uix.image import Image
 from kivy.uix.label import Label
-
+from kivy.clock import Clock
 
 Builder.load_string('''
-<RowItem>:
+<DisplayItem>:
     orientation: 'horizontal'
-    size_hint: 1, None
+    BoxLayout:
+        id: images
+        spacing: "20dp"
+        orientation: 'vertical'
+    BoxLayout:
+        id: labels
+        orientation: 'vertical'
 
 <MainScreen>:
     orientation: 'vertical'
@@ -35,12 +41,9 @@ Builder.load_string('''
                 size: self.size
         text: "Music Library"
         size_hint_y: 0.1
-    ScrollView:
-        BoxLayout:
+    DisplayItem:
             id: box
-            spacing: "20dp"
-            orientation: 'vertical'
-            size_hint_y: None
+            size_hint_y: 0.9
 ''')
 
 
@@ -62,12 +65,13 @@ class MusicLib(object):
         lines = [u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
             parts[-2],
             parts[-1])]
+        images = []
 
         # Gather data
         for my_file in sorted(files):
             ext = my_file[-4:]
             if ext in [".jpg", ".png", ".gif", "jpeg"]:
-                source = path.join(folder, my_file)
+                images.append(path.join(folder, my_file))
             elif ext == ".mp3":
                 lines.append(my_file[0:-4:])
             else:
@@ -76,24 +80,23 @@ class MusicLib(object):
                         my_file))
 
         # Now create and return the row_tem
-        ri = RowItem(height=sp(40) + len(lines) * sp(20))
-        ri.add_widget(Image(source=source, size_hint=(0.3, 1)))
-        ri.add_widget(
-            Label(
-                text=u"\n".join(lines),
-                markup=True,
-                size_hint=(0.7, 1),
-                halign="center",
-                shorten=True))
-                # text_size=(Window.width * 0.65, None)))
-        return ri
+        di = DisplayItem()
+        if len(images) == 0:
+            di.ids.images.add_widget(Image(source="data/album.png"))
+        else:
+            for image in images:
+                di.ids.images.add_widget(Image(source=image))
+
+        for line in lines:
+            di.ids.labels.add_widget(
+                Label(text=line,
+                      markup=True,
+                      halign="center"))
+        return di
 
 
-class RowItem(BoxLayout):
+class DisplayItem(BoxLayout):
     """ This class represent an individual album found in the search. """
-    # def __init__(self):
-    #     super(RowItem, self).__init__()
-    #     self.add_widget(Label(text="Object {0}".format(self)))
 
 
 class MainScreen(BoxLayout):
@@ -127,10 +130,12 @@ class MainScreen(BoxLayout):
             else:
                 self.add_row(MusicLib.get_row_item(folder, contents))
                 self.folder_count += 1
+
                 break
 
     def add_row(self, row_item):
         """ Add the row_item to the main display. """
+        self.box.clear_widgets()
         self.box.add_widget(row_item)
 
 
