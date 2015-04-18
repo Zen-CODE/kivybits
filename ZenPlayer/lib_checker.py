@@ -16,6 +16,7 @@ from kivy.lang import Builder
 from os import sep, listdir, path, walk
 from kivy.uix.image import Image
 from kivy.uix.label import Label
+from kivy.properties import NumericProperty, ListProperty
 from kivy.clock import Clock
 
 Builder.load_string('''
@@ -32,15 +33,25 @@ Builder.load_string('''
 
 <MainScreen>:
     orientation: 'vertical'
-    Label:
-        canvas.before:
-            Color:
-                rgba: 0, 0, 1, 0.2
-            Rectangle:
-                pos: self.pos
-                size: self.size
-        text: "Music Library"
+    BoxLayout:
         size_hint_y: 0.1
+        padding: "5sp"
+        Button:
+            text: "<<"
+            on_press: root.show_previous()
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 1, 0.2
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint_x: 8
+            text: "Music Library ({0} / {1})".format(root.current_index + 1, len(root.folders))
+        Button:
+            text: ">>"
+            on_press: root.show_next()
+
     FloatLayout:
         id: row_container
         size_hint_y: 0.9
@@ -126,15 +137,16 @@ class MainScreen(BoxLayout):
     The main screen showing a list of albums found.
     """
     box = None
+    current_index = NumericProperty(0)
+    folders = ListProperty([])
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
         self.folders = MusicLib.get_albums(MusicLib.source, [], 1)
-        self.current_index = 0
-        self.start_show()
+        self.show_album()
         print "albums = " + str(self.folders)
 
-    def start_show(self):
+    def show_album(self):
         """
         Begins the timed display of folders
         """
@@ -142,7 +154,17 @@ class MainScreen(BoxLayout):
         container.clear_widgets()
         container.add_widget(MusicLib.get_row_item(
             self.folders[self.current_index]))
+
+    def show_next(self):
+        """ Show the next album. """
         self.current_index = (self.current_index + 1) % len(self.folders)
+        self.show_album()
+
+    def show_previous(self):
+        """ Show the next album. """
+        self.current_index = (
+            len(self.folders) + self.current_index - 1) % len(self.folders)
+        self.show_album()
 
 
 class FolderChecker(App):
