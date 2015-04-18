@@ -57,14 +57,13 @@ class MusicLib(object):
         """
         parts = folder.split(sep)
         source = "images/album.png"
-        count = 0
         full_path = path.join(*reversed(parts[::-1]))
 
-        # Gather data
         lines = [u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
             parts[-2],
             parts[-1])]
 
+        # Gather data
         for my_file in sorted(files):
             ext = my_file[-4:]
             if ext in [".jpg", ".png", ".gif", "jpeg"]:
@@ -84,7 +83,9 @@ class MusicLib(object):
                 text=u"\n".join(lines),
                 markup=True,
                 size_hint=(0.7, 1),
-                halign="center"))
+                halign="center",
+                shorten=True))
+                # text_size=(Window.width * 0.65, None)))
         return ri
 
 
