@@ -23,10 +23,11 @@ Builder.load_string('''
     orientation: 'horizontal'
     BoxLayout:
         id: images
-        spacing: "20dp"
         orientation: 'vertical'
+        size_hint_x: 0.4
     BoxLayout:
         id: labels
+        size_hint_x: 0.6
         orientation: 'vertical'
 
 <MainScreen>:
@@ -54,13 +55,13 @@ class MusicLib(object):
     # source = u'/media/richard/ZenUno/Zen/Music/CD'
 
     @staticmethod
-    def get_row_item(folder, files):
+    def get_row_item(folder):
         """
         Give a formatted display to the folder.
         """
         parts = folder.split(sep)
         # full_path = path.join(*reversed(parts[::-1]))
-        files = [path.join(folder, fname) for fname in listdir(folder)]
+        files = [file_name for file_name in listdir(folder)]
 
         lines = [u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
             parts[-2],
@@ -130,6 +131,7 @@ class MainScreen(BoxLayout):
         super(MainScreen, self).__init__(**kwargs)
         self.folders = MusicLib.get_albums(MusicLib.source, [], 1)
         self.current_index = 0
+        self.start_show()
         print "albums = " + str(self.folders)
 
     def start_show(self):
@@ -138,7 +140,9 @@ class MainScreen(BoxLayout):
         """
         container = self.ids.row_container
         container.clear_widgets()
-        container.add_widget(DisplayItem())
+        container.add_widget(MusicLib.get_row_item(
+            self.folders[self.current_index]))
+        self.current_index = (self.current_index + 1) % len(self.folders)
 
 
 class FolderChecker(App):
