@@ -94,7 +94,7 @@ class MusicLib(object):
         # Now create and return the row_tem
         di = DisplayItem()
         if len(images) == 0:
-            di.ids.images.add_widget(Image(source="data/album.png"))
+            di.ids.images.add_widget(Image(source="images/album.png"))
         else:
             for image in images:
                 di.ids.images.add_widget(Image(source=image))
@@ -141,7 +141,7 @@ class MainScreen(BoxLayout):
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.folders = MusicLib.get_albums(MusicLib.source, [], 1)
+        self.folders = MusicLib.get_albums(MusicLib.source, [], 100)
         self.show_album()
         print "albums = " + str(self.folders)
 
