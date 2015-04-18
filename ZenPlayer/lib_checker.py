@@ -51,8 +51,8 @@ class MusicLib(object):
     """
     This class houses metadata about our music collection.
     """
-    # source = u'/media/ZenOne/Zen/Music/CD'
-    source = u'/media/richard/ZenUno/Zen/Music/CD'
+    source = u'/media/ZenOne/Zen/Music/CD'
+    # source = u'/media/richard/ZenUno/Zen/Music/CD'
 
     @staticmethod
     def get_row_item(folder, files):
@@ -107,39 +107,29 @@ class MainScreen(BoxLayout):
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.max_folders = 1
         self.box = self.ids.box
-        self.folders = []
-        self.start()
+        self.folders = self._load_albums(MusicLib.source, [], 1)
 
-    def start(self):
-        self.box = self.ids.box
-        self._load_albums(MusicLib.source)
         print "albums = " + str(self.folders)
 
-    def _load_albums(self, folder):
+    def _load_albums(self, folder, folders, max_folders):
         """
-        Populate our *folders* list with albums in the *folder*.
+        Process the *folder*, appending to the *folders* list, our *folders* list with albums in the *folder*.
         """
-        if len(self.folders) > self.max_folders:
-            return
+        if len(folders) > max_folders:
+            return folders
 
         for root, subfolders, files in walk(folder):
             for i in subfolders:
-                self._load_albums(path.join(folder, i))
+                self._load_albums(path.join(folder, i), folders, max_folders)
 
             if len(subfolders) == 0 and len(files) > 0:
-                if root not in self.folders:
-                    self.folders.append(root)
+                if root not in folders:
+                    folders.append(root)
 
-                if len(self.folders) > self.max_folders:
-                    return
-
-
-    def add_row(self, row_item):
-        """ Add the row_item to the main display. """
-        self.box.clear_widgets()
-        self.box.add_widget(row_item)
+                if len(folders) > max_folders:
+                    return folders
+        return folders
 
 
 class FolderChecker(App):
