@@ -136,7 +136,6 @@ class MainScreen(BoxLayout):
     """"
     The main screen showing a list of albums found.
     """
-    box = None
     current_index = NumericProperty(0)
     folders = ListProperty([])
 
