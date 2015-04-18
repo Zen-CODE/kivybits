@@ -23,7 +23,6 @@ Builder.load_string('''
 <RowItem>:
     orientation: 'horizontal'
     size_hint: 1, None
-    height: "100sp"
 
 <MainScreen>:
     orientation: 'vertical'
@@ -56,38 +55,33 @@ class MusicLib(object):
         """
         Give a formatted display to the folder.
         """
-        ri = RowItem()
         parts = folder.split(sep)
-        header = u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
-            parts[-2],
-            parts[-1])
-
-        full_path = path.join(*reversed(parts[::-1]))
         source = "images/album.png"
         count = 0
-        warnings = []
+        full_path = path.join(*reversed(parts[::-1]))
 
         # Gather data
+        lines = [u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
+            parts[-2],
+            parts[-1])]
+
         for my_file in sorted(files):
             ext = my_file[-4:]
             if ext in [".jpg", ".png", ".gif", "jpeg"]:
                 source = path.join(folder, my_file)
             elif ext == ".mp3":
-                # print(my_file[0:-4:])
-                count += 1
+                lines.append(my_file[0:-4:])
             else:
-                warnings.append(u"Unrecognized file {0}".format(my_file))
+                lines.append(
+                    u"[color=#FF0000]Unrecognized file {0}[/color]".format(
+                        my_file))
 
         # Now create and return the row_tem
-        footer = ""
-        for warning in warnings:
-            footer += "[color=#FF0000]{0}[/color]".format(warning)
-
+        ri = RowItem(height=sp(40) + len(lines) * sp(20))
         ri.add_widget(Image(source=source, size_hint=(0.3, 1)))
         ri.add_widget(
             Label(
-                text=u"{0}\n\nTracks: {1}\n{2}".format(
-                    header, count, footer),
+                text=u"\n".join(lines),
                 markup=True,
                 size_hint=(0.7, 1),
                 halign="center"))
