@@ -26,10 +26,12 @@ Builder.load_string('''
         id: images
         orientation: 'vertical'
         size_hint_x: 0.4
+        padding: "5sp"
     BoxLayout:
         id: labels
         size_hint_x: 0.6
         orientation: 'vertical'
+        padding: "5sp"
 
 <MainScreen>:
     orientation: 'vertical'
