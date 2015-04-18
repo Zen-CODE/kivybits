@@ -141,9 +141,9 @@ class MainScreen(BoxLayout):
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.folders = MusicLib.get_albums(MusicLib.source, [], 100)
+        self.folders = MusicLib.get_albums(MusicLib.source, [], 1000)
         self.show_album()
-        print "albums = " + str(self.folders)
+        Clock.schedule_interval(lambda dt: self.show_next(), 10)
 
     def show_album(self):
         """
