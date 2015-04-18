@@ -14,7 +14,7 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivy.metrics import sp
-from os import sep, listdir, path
+from os import sep, listdir, path, walk
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.clock import Clock
@@ -42,8 +42,8 @@ Builder.load_string('''
         text: "Music Library"
         size_hint_y: 0.1
     DisplayItem:
-            id: box
-            size_hint_y: 0.9
+        id: box
+        size_hint_y: 0.9
 ''')
 
 
@@ -51,7 +51,8 @@ class MusicLib(object):
     """
     This class houses metadata about our music collection.
     """
-    source = u'/media/ZenOne/Zen/Music/CD'
+    # source = u'/media/ZenOne/Zen/Music/CD'
+    source = u'/media/richard/ZenUno/Zen/Music/CD'
 
     @staticmethod
     def get_row_item(folder, files):
@@ -59,7 +60,6 @@ class MusicLib(object):
         Give a formatted display to the folder.
         """
         parts = folder.split(sep)
-        source = "images/album.png"
         full_path = path.join(*reversed(parts[::-1]))
 
         lines = [u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
@@ -107,31 +107,34 @@ class MainScreen(BoxLayout):
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.max_folders = 50
-        self.folder_count = 0
+        self.max_folders = 1
         self.box = self.ids.box
+        self.folders = []
         self.start()
 
     def start(self):
         self.box = self.ids.box
-        self.build_contents(MusicLib.source)
-        self.box.height = self.folder_count * sp(100)
+        self._load_albums(MusicLib.source)
+        print "albums = " + str(self.folders)
 
-    def build_contents(self, folder):
-        """ Populate our main display with row items."""
-        contents = listdir(folder)
-        for item in contents:
-            if self.folder_count >= self.max_folders:
-                return
+    def _load_albums(self, folder):
+        """
+        Populate our *folders* list with albums in the *folder*.
+        """
+        if len(self.folders) > self.max_folders:
+            return
 
-            full_path = path.join(folder, item)
-            if path.isdir(full_path):
-                self.build_contents(full_path)
-            else:
-                self.add_row(MusicLib.get_row_item(folder, contents))
-                self.folder_count += 1
+        for root, subfolders, files in walk(folder):
+            for i in subfolders:
+                self._load_albums(path.join(folder, i))
 
-                break
+            if len(subfolders) == 0 and len(files) > 0:
+                if root not in self.folders:
+                    self.folders.append(root)
+
+                if len(self.folders) > self.max_folders:
+                    return
+
 
     def add_row(self, row_item):
         """ Add the row_item to the main display. """
