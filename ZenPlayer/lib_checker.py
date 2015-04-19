@@ -27,7 +27,7 @@ class MusicLib(object):
     This class houses metadata about our music collection.
     """
     # source = u'/media/ZenOne/Zen/Music/CD'
-    source = u'/media/richard/ZenUno/Zen/Music/CD'
+    source = u'/media/richard/ZenUno/Zen/Music/MP3'
 
     @staticmethod
     def get_row_item(folder):
@@ -50,8 +50,9 @@ class MusicLib(object):
         for my_file in sorted(files):
             ext = my_file[-4:]
             if ext in [".jpg", ".png", ".gif", "jpeg"]:
-                images.append(Image(source=path.join(folder, my_file)))
-            elif ext in [".mp3", "ogg"]:
+                images.append(Image(source=path.join(folder, my_file),
+                                    allow_stretch=True))
+            elif ext in [".mp3", ".ogg"]:
                 add_label(PlaylistLabel(text=my_file[0:-4:]))
             else:
                 add_label(Label(
@@ -107,7 +108,7 @@ class MainScreen(BoxLayout):
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.folders = MusicLib.get_albums(MusicLib.source, [], 10)
+        self.folders = MusicLib.get_albums(MusicLib.source, [], 100)
         self.show_album()
         Clock.schedule_interval(lambda dt: self.show_next(), 10)
 
