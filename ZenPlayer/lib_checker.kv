@@ -1,0 +1,42 @@
+<PlaylistLabel>:
+    markup: True
+    halign: "center"
+
+
+<DisplayItem>:
+    orientation: 'horizontal'
+    BoxLayout:
+        id: images
+        orientation: 'vertical'
+        size_hint_x: 0.4
+        padding: "5sp"
+    BoxLayout:
+        id: labels
+        size_hint_x: 0.6
+        orientation: 'vertical'
+        padding: "5sp"
+
+<MainScreen>:
+    orientation: 'vertical'
+    BoxLayout:
+        size_hint_y: 0.1
+        padding: "5sp"
+        Button:
+            text: "<<"
+            on_press: root.show_previous()
+        Label:
+            canvas.before:
+                Color:
+                    rgba: 0, 0, 1, 0.2
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint_x: 8
+            text: "Music Library ({0} / {1})".format(root.current_index + 1, len(root.folders))
+        Button:
+            text: ">>"
+            on_press: root.show_next()
+
+    FloatLayout:
+        id: row_container
+        size_hint_y: 0.9

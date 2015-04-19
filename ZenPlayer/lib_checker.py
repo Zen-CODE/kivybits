@@ -19,53 +19,15 @@ from kivy.uix.label import Label
 from kivy.properties import NumericProperty, ListProperty
 from kivy.clock import Clock
 
-Builder.load_string('''
-<DisplayItem>:
-    orientation: 'horizontal'
-    BoxLayout:
-        id: images
-        orientation: 'vertical'
-        size_hint_x: 0.4
-        padding: "5sp"
-    BoxLayout:
-        id: labels
-        size_hint_x: 0.6
-        orientation: 'vertical'
-        padding: "5sp"
-
-<MainScreen>:
-    orientation: 'vertical'
-    BoxLayout:
-        size_hint_y: 0.1
-        padding: "5sp"
-        Button:
-            text: "<<"
-            on_press: root.show_previous()
-        Label:
-            canvas.before:
-                Color:
-                    rgba: 0, 0, 1, 0.2
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-            size_hint_x: 8
-            text: "Music Library ({0} / {1})".format(root.current_index + 1, len(root.folders))
-        Button:
-            text: ">>"
-            on_press: root.show_next()
-
-    FloatLayout:
-        id: row_container
-        size_hint_y: 0.9
-''')
+Builder.load_file('lib_checker.kv')
 
 
 class MusicLib(object):
     """
     This class houses metadata about our music collection.
     """
-    source = u'/media/ZenOne/Zen/Music/CD'
-    # source = u'/media/richard/ZenUno/Zen/Music/CD'
+    # source = u'/media/ZenOne/Zen/Music/CD'
+    source = u'/media/richard/ZenUno/Zen/Music/CD'
 
     @staticmethod
     def get_row_item(folder):
@@ -86,7 +48,7 @@ class MusicLib(object):
             ext = my_file[-4:]
             if ext in [".jpg", ".png", ".gif", "jpeg"]:
                 images.append(path.join(folder, my_file))
-            elif ext == ".mp3":
+            elif ext in [".mp3", "ogg"]:
                 lines.append(my_file[0:-4:])
             else:
                 lines.append(
@@ -103,9 +65,7 @@ class MusicLib(object):
 
         for line in lines:
             di.ids.labels.add_widget(
-                Label(text=line,
-                      markup=True,
-                      halign="center"))
+                PlaylistLabel(text=line))
         return di
 
     @staticmethod
@@ -134,6 +94,12 @@ class DisplayItem(BoxLayout):
     """ This class represent an individual album found in the search. """
 
 
+class PlaylistLabel(Label):
+    """
+    This class is used to represent each playlist item.
+    """
+
+
 class MainScreen(BoxLayout):
     """"
     The main screen showing a list of albums found.
@@ -143,7 +109,7 @@ class MainScreen(BoxLayout):
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.folders = MusicLib.get_albums(MusicLib.source, [], 1000)
+        self.folders = MusicLib.get_albums(MusicLib.source, [], 10)
         self.show_album()
         Clock.schedule_interval(lambda dt: self.show_next(), 10)
 
