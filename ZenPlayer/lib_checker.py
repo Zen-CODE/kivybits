@@ -32,16 +32,18 @@ class MusicLib(object):
     @staticmethod
     def get_row_item(folder):
         """
-        Give a formatted display to the folder.
+        Give a formatted DisplayItem for the folder.
         """
         parts = folder.split(sep)
         # full_path = path.join(*reversed(parts[::-1]))
         files = [file_name for file_name in listdir(folder)]
+        di = DisplayItem()
+        add_label = di.ids.labels.add_widget
 
-        labels = [Label(
+        add_label(Label(
             text=u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
                  parts[-2], parts[-1]),
-            markup=True)]
+            markup=True))
         images = []
 
         # Gather data
@@ -50,20 +52,18 @@ class MusicLib(object):
             if ext in [".jpg", ".png", ".gif", "jpeg"]:
                 images.append(Image(source=path.join(folder, my_file)))
             elif ext in [".mp3", "ogg"]:
-                labels.append(PlaylistLabel(text=my_file[0:-4:]))
+                add_label(PlaylistLabel(text=my_file[0:-4:]))
             else:
-                labels.append(Label(
+                add_label(Label(
                     text=u"[color=#FF0000]Unrecognized file {0}[/color]".format(
                         my_file)))
 
         # Now create and return the row_tem
-        di = DisplayItem()
         if len(images) == 0:
             di.ids.images.add_widget(Image(source="images/album.png"))
         else:
             [di.ids.images.add_widget(image) for image in images]
 
-        [di.ids.labels.add_widget(label) for label in labels]
         return di
 
     @staticmethod
