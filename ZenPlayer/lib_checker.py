@@ -38,34 +38,32 @@ class MusicLib(object):
         # full_path = path.join(*reversed(parts[::-1]))
         files = [file_name for file_name in listdir(folder)]
 
-        lines = [u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
-            parts[-2],
-            parts[-1])]
+        labels = [Label(
+            text=u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
+                 parts[-2], parts[-1]),
+            markup=True)]
         images = []
 
         # Gather data
         for my_file in sorted(files):
             ext = my_file[-4:]
             if ext in [".jpg", ".png", ".gif", "jpeg"]:
-                images.append(path.join(folder, my_file))
+                images.append(Image(source=path.join(folder, my_file)))
             elif ext in [".mp3", "ogg"]:
-                lines.append(my_file[0:-4:])
+                labels.append(PlaylistLabel(text=my_file[0:-4:]))
             else:
-                lines.append(
-                    u"[color=#FF0000]Unrecognized file {0}[/color]".format(
-                        my_file))
+                labels.append(Label(
+                    text=u"[color=#FF0000]Unrecognized file {0}[/color]".format(
+                        my_file)))
 
         # Now create and return the row_tem
         di = DisplayItem()
         if len(images) == 0:
             di.ids.images.add_widget(Image(source="images/album.png"))
         else:
-            for image in images:
-                di.ids.images.add_widget(Image(source=image))
+            [di.ids.images.add_widget(image) for image in images]
 
-        for line in lines:
-            di.ids.labels.add_widget(
-                PlaylistLabel(text=line))
+        [di.ids.labels.add_widget(label) for label in labels]
         return di
 
     @staticmethod
