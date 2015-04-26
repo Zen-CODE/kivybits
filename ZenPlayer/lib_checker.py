@@ -26,8 +26,8 @@ class MusicLib(object):
     """
     This class houses metadata about our music collection.
     """
-    # source = u'/media/ZenOne/Zen/Music/CD'
-    source = u'/media/richard/ZenUno/Zen/Music/MP3'
+    source = u'/media/ZenOne/Zen/Music/CD'
+    # source = u'/media/richard/ZenUno/Zen/Music/MP3'
 
     @staticmethod
     def get_row_item(folder):
@@ -119,11 +119,12 @@ class MainScreen(BoxLayout):
         is shown.
         """
         if advance is not None:
-            if 0 <= self.current_index < len(self.folders):
-                if advance:
+            if advance:
+                if self.current_index < len(self.folders):
                     self.current_index = (
                         self.current_index + 1) % len(self.folders)
-                else:
+            else:
+                if 0 < self.current_index:
                     self.current_index = (
                         len(self.folders) + self.current_index - 1) %\
                         len(self.folders)
