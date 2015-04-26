@@ -108,7 +108,7 @@ class MainScreen(BoxLayout):
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.folders = MusicLib.get_albums(MusicLib.source, [], 100)
+        self.folders = MusicLib.get_albums(MusicLib.source, [], 10)
         self.show_album()
         Clock.schedule_interval(lambda dt: self.show_next(), 10)
 
@@ -131,7 +131,7 @@ class MainScreen(BoxLayout):
 
         container = self.ids.row_container
         container.clear_widgets()
-        if len(self.folders) > self.current_index + 1:
+        if len(self.folders) > self.current_index:
             container.add_widget(MusicLib.get_row_item(
                 self.folders[self.current_index]))
         else:
