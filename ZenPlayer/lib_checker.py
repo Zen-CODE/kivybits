@@ -112,10 +112,22 @@ class MainScreen(BoxLayout):
         self.show_album()
         Clock.schedule_interval(lambda dt: self.show_next(), 10)
 
-    def show_album(self):
+    def show_album(self, advance=None):
         """
-        Begins the timed display of folders
+        Begins the timed display of folders. If *advance* is True, the next item
+        is shown. If False, it moves back. If not specified, the current album
+        is shown.
         """
+        if advance is not None:
+            if 0 <= self.current_index < len(self.folders):
+                if advance:
+                    self.current_index = (
+                        self.current_index + 1) % len(self.folders)
+                else:
+                    self.current_index = (
+                        len(self.folders) + self.current_index - 1) %\
+                        len(self.folders)
+
         container = self.ids.row_container
         container.clear_widgets()
         if len(self.folders) > self.current_index + 1:
@@ -126,14 +138,11 @@ class MainScreen(BoxLayout):
 
     def show_next(self):
         """ Show the next album. """
-        self.current_index = (self.current_index + 1) % len(self.folders)
-        self.show_album()
+        self.show_album(True)
 
     def show_previous(self):
         """ Show the next album. """
-        self.current_index = (
-            len(self.folders) + self.current_index - 1) % len(self.folders)
-        self.show_album()
+        self.show_album(False)
 
 
 class FolderChecker(App):
