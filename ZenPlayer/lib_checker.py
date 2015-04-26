@@ -118,8 +118,11 @@ class MainScreen(BoxLayout):
         """
         container = self.ids.row_container
         container.clear_widgets()
-        container.add_widget(MusicLib.get_row_item(
-            self.folders[self.current_index]))
+        if len(self.folders) > self.current_index + 1:
+            container.add_widget(MusicLib.get_row_item(
+                self.folders[self.current_index]))
+        else:
+            container.add_widget(Label(text="No albums found"))
 
     def show_next(self):
         """ Show the next album. """
