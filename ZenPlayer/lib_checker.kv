@@ -33,7 +33,7 @@
                     pos: self.pos
                     size: self.size
             size_hint_x: 8
-            text: "Music Library ({0} / {1})".format(root.current_index + 1, len(root.folders))
+            text: "Music Library ({0} / {1})".format(root.current_index + 1, len(root.music_lib.folders)) if root.music_lib else ""
         Button:
             text: ">>"
             on_press: root.show_next()
