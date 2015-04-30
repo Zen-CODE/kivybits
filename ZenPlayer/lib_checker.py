@@ -16,7 +16,9 @@ from kivy.lang import Builder
 from os import sep, listdir, path, walk
 from kivy.uix.image import Image
 from kivy.uix.label import Label
-from kivy.properties import NumericProperty, ListProperty, ObjectProperty
+from kivy.properties import (NumericProperty, ListProperty, ObjectProperty,
+                             BooleanProperty)
+from kivy.graphics import Color, Rectangle
 from kivy.clock import Clock
 from kivy.event import EventDispatcher
 
@@ -148,6 +150,17 @@ class PlaylistLabel(Label):
     """
     album_index = NumericProperty()
     track_index = NumericProperty()
+    playing = BooleanProperty(False)
+    _back_rect = None
+
+    def on_playing(self, widget, value):
+        """ Respond to the change in state. """
+        if value:
+            with self.canvas:
+                Color(0.5, 0.5, 1, 0.3)
+                self._back_rect = Rectangle(pos=self.pos, size=self.size)
+        else:
+            self.canvas.remove(self._back_rect)
 
     def on_touch_down(self, touch):
         """ Handle the event. """
@@ -159,7 +172,9 @@ class PlaylistLabel(Label):
         if touch.grab_current is self:
             touch.ungrab(self)
             if self.collide_point(*touch.pos):
-                print "clicked"
+                self.playing = not self.playing
+        else:
+            self.playing = False
 
 
 class AlbumScreen(BoxLayout):
