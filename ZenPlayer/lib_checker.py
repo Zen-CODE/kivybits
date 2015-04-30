@@ -246,6 +246,9 @@ class AlbumScreen(BoxLayout):
         container = self.ids.row_container
         container.clear_widgets()
         if len(self.music_lib.albums) > self.controller.album_index:
+            self.ids.header_label.text = "Music Library ({0} / {1})".format(
+                self.controller.album_index + 1, len(self.music_lib.albums))
+            
             container.add_widget(self.controller.get_currrent_album())
         else:
             container.add_widget(Label(text="No albums found"))
