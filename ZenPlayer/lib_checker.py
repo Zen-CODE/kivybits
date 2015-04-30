@@ -26,8 +26,9 @@ class MusicLib(object):
     """
     This class houses metadata about our music collection.
     """
-    source = u'/media/ZenOne/Zen/Music/CD'
-    # source = u'/media/richard/ZenUno/Zen/Music/MP3'
+    # source = u'/media/ZenOne/Zen/Music/CD'  # PC. Linux
+    # source = u'/media/richard/ZenUno/Zen/Music/MP3'  Laptop, linux
+    source = r"d:\Zen\Music\MP3"  # PC, Windows
 
     @staticmethod
     def get_row_item(folder):
