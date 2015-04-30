@@ -19,8 +19,8 @@ from kivy.uix.label import Label
 from kivy.properties import (NumericProperty, ListProperty, ObjectProperty,
                              BooleanProperty)
 from kivy.graphics import Color, Rectangle
-from kivy.clock import Clock
 from kivy.event import EventDispatcher
+from kivy.clock import Clock
 
 Builder.load_file('lib_checker.kv')
 
@@ -185,21 +185,10 @@ class Controller(EventDispatcher):
     This class houses the logic and management of the current album and
     track index as well as the management of the audio.
     """
-
-
-class AlbumScreen(BoxLayout):
-    """"
-    The main screen showing a list of albums found.
-    """
     album_index = NumericProperty(0)
     track_index = NumericProperty(0)
     music_lib = ObjectProperty(None)
-
-    def __init__(self, **kwargs):
-        super(AlbumScreen, self).__init__(**kwargs)
-        self.music_lib = MusicLib()
-        self.show_album()
-        # Clock.schedule_interval(lambda dt: self.show_next(), 10)
+    album_screen = ObjectProperty(None)
 
     def play_track(self, album_index, track_index):
         """ Play the specified track. """
@@ -207,31 +196,57 @@ class AlbumScreen(BoxLayout):
         print "play track " + self.music_lib.albums[album_index][
             'tracks'][track_index]
 
+    def move_next(self, advance):
+        """
+        Play the next track if advance in true, the previous track if False.
+        If advance is None, the track info is not changed.
+        """
+        if advance is None:
+            return
+
+        album_index, track_index = self.album_index, self.track_index
+        albums = self.music_lib.albums
+        if advance:
+            if album_index < len(albums):
+                album_index = (album_index + 1) % len(albums)
+                track_index = 0
+        else:
+            if 0 < album_index:
+                album_index = (len(albums) + album_index - 1) % len(albums)
+                track_index = 0
+        self.album_index, self.track_index = album_index, track_index
+
+    def get_currrent_album(self):
+        """ Build and return a DisplayItem for the current album. """
+        Clock.schedule_once(lambda dt:  self.play_track(self.album_index, 0))
+        return self.music_lib.get_row_item(self.album_index, self)
+
+
+class AlbumScreen(BoxLayout):
+    """"
+    The main screen showing a list of albums found.
+    """
+    music_lib = ObjectProperty(None)
+    controller = ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        super(AlbumScreen, self).__init__(**kwargs)
+        self.music_lib = MusicLib()
+        self.controller = Controller(music_lib=self.music_lib,
+                                     album_screen=self)
+        self.show_album()
+
     def show_album(self, advance=None):
         """
         Begins the timed display of albums. If *advance* is True, the next item
         is shown. If False, it moves back. If not specified, the current album
         is shown.
         """
-        albums = self.music_lib.albums
-        album_index = self.album_index
-        track_index = self.track_index
-        if advance is not None:
-            if advance:
-                if album_index < len(albums):
-                    album_index = (album_index + 1) % len(albums)
-                    track_index = 0
-            else:
-                if 0 < album_index:
-                    album_index = (len(albums) + album_index - 1) % len(albums)
-                    track_index = 0
-
+        self.controller.move_next(advance)
         container = self.ids.row_container
         container.clear_widgets()
-        if len(albums) > album_index:
-            container.add_widget(
-                self.music_lib.get_row_item(album_index, self))
-            self.play_track(album_index, track_index)
+        if len(self.music_lib.albums) > self.controller.album_index:
+            container.add_widget(self.controller.get_currrent_album())
         else:
             container.add_widget(Label(text="No albums found"))
 
