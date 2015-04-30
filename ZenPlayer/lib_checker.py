@@ -184,7 +184,8 @@ class AlbumScreen(BoxLayout):
     """"
     The main screen showing a list of albums found.
     """
-    current_index = NumericProperty(0)
+    album_index = NumericProperty(0)
+    track_index = NumericProperty(0)
     music_lib = ObjectProperty(None)
 
     def __init__(self, **kwargs):
@@ -195,6 +196,7 @@ class AlbumScreen(BoxLayout):
 
     def play_track(self, album_index, track_index):
         """ Play the specified track. """
+        self.album_index, self.track_index = album_index, track_index
         print "play track " + self.music_lib.albums[album_index][
             'tracks'][track_index]
 
@@ -205,22 +207,25 @@ class AlbumScreen(BoxLayout):
         is shown.
         """
         albums = self.music_lib.albums
+        album_index = self.album_index
+        track_index = self.track_index
         if advance is not None:
             if advance:
-                if self.current_index < len(albums):
-                    self.current_index = (
-                        self.current_index + 1) % len(albums)
+                if album_index < len(albums):
+                    album_index = (album_index + 1) % len(albums)
+                    track_index = 0
             else:
-                if 0 < self.current_index:
-                    self.current_index = (
-                        len(albums) + self.current_index - 1) %\
-                        len(albums)
+                if 0 < album_index:
+                    album_index = (len(albums) + album_index - 1) %\
+                                   len(albums)
+                    track_index = 0
 
         container = self.ids.row_container
         container.clear_widgets()
-        if len(albums) > self.current_index:
+        if len(albums) > album_index:
             container.add_widget(
-                self.music_lib.get_row_item(self.current_index, self))
+                self.music_lib.get_row_item(album_index, self))
+            self.play_track(album_index, track_index)
         else:
             container.add_widget(Label(text="No albums found"))
 
