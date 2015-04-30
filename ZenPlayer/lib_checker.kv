@@ -17,7 +17,7 @@
         orientation: 'vertical'
         padding: "5sp"
 
-<MainScreen>:
+<AlbumScreen>:
     orientation: 'vertical'
     BoxLayout:
         size_hint_y: 0.1
@@ -33,16 +33,20 @@
                     pos: self.pos
                     size: self.size
             size_hint_x: 8
-            text: "Music Library ({0} / {1})".format(root.current_index + 1, len(root.music_lib.albums)) if root.music_lib else ""
+            text: "Music Library ({0} / {1})".format(root.controller.album_index + 1, len(root.music_lib.albums)) if root.controller else ""
         Button:
             text: ">>"
             on_press: root.show_next()
-
-    FloatLayout:
-        id: row_container
+    BoxLayout:
+        orientation: 'horizontal'
         size_hint_y: 0.8
-#        pos_hint: {'x': 0, 'y': 0.05}
-
+        FloatLayout:
+            id: row_container
+            size_hint_x: 0.9
+        Slider:
+            orientation: 'vertical'
+            size_hint_x: 0.1
+            value: 100
     Label:
         markup: True
         text: "[color=#4444FF]TODO: Now playing. Click to switch to folder[/color]"
