@@ -180,6 +180,13 @@ class PlaylistLabel(Label):
             self.playing = False
 
 
+class Controller(EventDispatcher):
+    """
+    This class houses the logic and management of the current album and
+    track index as well as the management of the audio.
+    """
+
+
 class AlbumScreen(BoxLayout):
     """"
     The main screen showing a list of albums found.
@@ -216,8 +223,7 @@ class AlbumScreen(BoxLayout):
                     track_index = 0
             else:
                 if 0 < album_index:
-                    album_index = (len(albums) + album_index - 1) %\
-                                   len(albums)
+                    album_index = (len(albums) + album_index - 1) % len(albums)
                     track_index = 0
 
         container = self.ids.row_container
