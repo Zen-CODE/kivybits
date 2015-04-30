@@ -149,6 +149,18 @@ class PlaylistLabel(Label):
     album_index = NumericProperty()
     track_index = NumericProperty()
 
+    def on_touch_down(self, touch):
+        """ Handle the event. """
+        if self.collide_point(*touch.pos):
+            touch.grab(self)
+
+    def on_touch_up(self, touch):
+        """ Handle the event. """
+        if touch.grab_current is self:
+            touch.ungrab(self)
+            if self.collide_point(*touch.pos):
+                print "clicked"
+
 
 class MainScreen(BoxLayout):
     """"
