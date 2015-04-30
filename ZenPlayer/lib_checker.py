@@ -107,7 +107,7 @@ class MusicLib(EventDispatcher):
                       'images': images,
                       'warnings': warnings})
 
-    def get_row_item(self, index):
+    def get_row_item(self, index, controller):
         """
         Build and return a formatted DisplayItem for the folder.
         """
@@ -130,6 +130,7 @@ class MusicLib(EventDispatcher):
             text=u"[color=#FF0000]{0}[/color]".format(warn)))
             for warn in album['warnings']]
         [add_label(PlaylistLabel(
+            controller=controller,
             text=track,
             album_index=index,
             track_index=k)) for k, track in enumerate(album['tracks'])]
@@ -151,6 +152,7 @@ class PlaylistLabel(Label):
     album_index = NumericProperty()
     track_index = NumericProperty()
     playing = BooleanProperty(False)
+    controller = ObjectProperty()
     _back_rect = None
 
     def on_playing(self, widget, value):
@@ -159,6 +161,7 @@ class PlaylistLabel(Label):
             with self.canvas:
                 Color(0.5, 0.5, 1, 0.3)
                 self._back_rect = Rectangle(pos=self.pos, size=self.size)
+            self.controller.play_track(self.album_index, self.track_index)
         else:
             self.canvas.remove(self._back_rect)
 
@@ -190,6 +193,11 @@ class AlbumScreen(BoxLayout):
         self.show_album()
         # Clock.schedule_interval(lambda dt: self.show_next(), 10)
 
+    def play_track(self, album_index, track_index):
+        """ Play the specified track. """
+        print "play track " + self.music_lib.albums[album_index][
+            'tracks'][track_index]
+
     def show_album(self, advance=None):
         """
         Begins the timed display of albums. If *advance* is True, the next item
@@ -212,7 +220,7 @@ class AlbumScreen(BoxLayout):
         container.clear_widgets()
         if len(albums) > self.current_index:
             container.add_widget(
-                self.music_lib.get_row_item(self.current_index))
+                self.music_lib.get_row_item(self.current_index, self))
         else:
             container.add_widget(Label(text="No albums found"))
 
