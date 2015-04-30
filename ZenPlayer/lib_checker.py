@@ -2,8 +2,8 @@
 ZenCODE's Music Library Checker
 ===============================
 
-This module checks that the specified folders has properly structured music
-folders using the following conventions:
+This module checks that the specified albums has properly structured music
+albums using the following conventions:
 
     <Artists>\<Album>\<Track> - <Title>.<ext>
 """
@@ -31,42 +31,54 @@ class MusicLib(EventDispatcher):
     # source = u'/media/richard/ZenUno/Zen/Music/MP3'  Laptop, linux
     source = r"d:\Zen\Music\MP3"  # PC, Windows
 
-    folders = ListProperty([])
-    max_folders = 10
+    albums = ListProperty([])
+    '''
+    A list of dictionaries containing data for each album found. Entries are as
+    follows:
+
+        'folder': the full folder path
+
+    This is the minimum it will contain. Once processed it contains:
+
+        'tracks': a list of sorted file names
+        'images': a list of images found
+        'warning': a list list of warnings found
+    '''
+    max_albums = 10
 
     def __init__(self, **kwargs):
         """ The class constructor. """
         super(MusicLib, self).__init__(**kwargs)
-        self.folders = MusicLib._get_albums(MusicLib.source,
+        self.albums = MusicLib._get_albums(MusicLib.source,
                                             [],
-                                            MusicLib.max_folders)
+                                            MusicLib.max_albums)
 
     @staticmethod
-    def _get_albums(folder, folders, max_folders):
+    def _get_albums(folder, albums, max_albums):
         """
-        Process the *folder*, appending to the *folders* list adding only
-        *max_folders* + 1 folders.
+        Process the *folder*, appending to the *albums* list adding only
+        *max_albums* + 1 albums.
         """
-        if len(folders) > max_folders:
-            return folders
+        if len(albums) > max_albums:
+            return albums
 
-        for root, sub_folders, files in walk(folder):
-            for i in sub_folders:
-                MusicLib._get_albums(path.join(folder, i), folders, max_folders)
+        for root, sub_albums, files in walk(folder):
+            for i in sub_albums:
+                MusicLib._get_albums(path.join(folder, i), albums, max_albums)
 
-            if len(sub_folders) == 0 and len(files) > 0:
-                if root not in folders:
-                    folders.append(root)
+            if len(sub_albums) == 0 and len(files) > 0:
+                if root not in albums:
+                    albums.append({'folder': root})
 
-                if len(folders) > max_folders:
-                    return folders
-        return folders
+                if len(albums) > max_albums:
+                    return albums
+        return albums
 
     def get_row_item(self, index):
         """
         Give a formatted DisplayItem for the folder.
         """
-        folder = self.folders[index]
+        folder = self.albums[index]['folder']
         parts = folder.split(sep)
         # full_path = path.join(*reversed(parts[::-1]))
         files = [file_name for file_name in listdir(folder)]
@@ -122,29 +134,29 @@ class MainScreen(BoxLayout):
         super(MainScreen, self).__init__(**kwargs)
         self.music_lib = MusicLib()
         self.show_album()
-        Clock.schedule_interval(lambda dt: self.show_next(), 10)
+        # Clock.schedule_interval(lambda dt: self.show_next(), 10)
 
     def show_album(self, advance=None):
         """
-        Begins the timed display of folders. If *advance* is True, the next item
+        Begins the timed display of albums. If *advance* is True, the next item
         is shown. If False, it moves back. If not specified, the current album
         is shown.
         """
-        folders = self.music_lib.folders
+        albums = self.music_lib.albums
         if advance is not None:
             if advance:
-                if self.current_index < len(folders):
+                if self.current_index < len(albums):
                     self.current_index = (
-                        self.current_index + 1) % len(folders)
+                        self.current_index + 1) % len(albums)
             else:
                 if 0 < self.current_index:
                     self.current_index = (
-                        len(folders) + self.current_index - 1) %\
-                        len(folders)
+                        len(albums) + self.current_index - 1) %\
+                        len(albums)
 
         container = self.ids.row_container
         container.clear_widgets()
-        if len(folders) > self.current_index:
+        if len(albums) > self.current_index:
             container.add_widget(
                 self.music_lib.get_row_item(self.current_index))
         else:
