@@ -107,15 +107,16 @@ class MusicLib(EventDispatcher):
 
     def get_row_item(self, index):
         """
-        Give a formatted DisplayItem for the folder.
+        Build and return a formatted DisplayItem for the folder.
         """
+        # Initialize
         album = self.albums[index]
         if 'tracks' not in album.keys():
             self._populate_album(album)
-
         di = DisplayItem()
         add_label = di.ids.labels.add_widget
 
+        # Add header, images, tracks and warnings
         add_label(Label(
             text=u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
                  album['artist'], album['album']),
@@ -123,12 +124,14 @@ class MusicLib(EventDispatcher):
 
         [di.ids.images.add_widget(Image(source=image, allow_stretch=True))
          for image in album['images']]
-        [add_label(PlaylistLabel(text=track)) for track in album['tracks']]
         [add_label(Label(
             text=u"[color=#FF0000]{0}[/color]".format(warn)))
             for warn in album['warnings']]
+        [add_label(PlaylistLabel(
+            text=track,
+            album_index=index,
+            track_index=k)) for k, track in enumerate(album['tracks'])]
 
-        # Now create and return the row_tem
         if len(album['images']) == 0:
             di.ids.images.add_widget(Image(source="images/album.png"))
 
@@ -143,6 +146,8 @@ class PlaylistLabel(Label):
     """
     This class is used to represent each playlist item.
     """
+    album_index = NumericProperty()
+    track_index = NumericProperty()
 
 
 class MainScreen(BoxLayout):
