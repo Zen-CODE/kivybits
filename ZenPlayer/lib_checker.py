@@ -64,12 +64,15 @@ class MusicLib(EventDispatcher):
         if len(albums) > max_albums:
             return albums
 
+        def is_not_in_albums(_folder, _albums):
+            return all([_folder != album['folder'] for album in _albums])
+
         for root, sub_albums, files in walk(folder):
             for i in sub_albums:
                 MusicLib._get_albums(path.join(folder, i), albums, max_albums)
 
             if len(sub_albums) == 0 and len(files) > 0:
-                if root not in albums:
+                if is_not_in_albums(root, albums):
                     albums.append({'folder': root})
 
                 if len(albums) > max_albums:
