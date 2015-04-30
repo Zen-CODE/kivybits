@@ -40,6 +40,8 @@ class MusicLib(EventDispatcher):
 
     This is the minimum it will contain. Once processed it contains:
 
+        'artist': the artist
+        'album': the album
         'tracks': a list of sorted file names
         'images': a list of images found
         'warning': a list list of warnings found
@@ -74,41 +76,58 @@ class MusicLib(EventDispatcher):
                     return albums
         return albums
 
+    @staticmethod
+    def _populate_album(album):
+        """
+        Populates the indexed *folders" dictionary with album info and data.
+        """
+        folder = album['folder']
+        parts = folder.split(sep)
+        artist, album_name = parts[-2], parts[-1]
+        images, tracks, warnings = [], [], []
+        files = [file_name for file_name in listdir(folder)]
+
+        for my_file in sorted(files):
+            ext = my_file[-4:]
+            if ext in [".jpg", ".png", ".gif", "jpeg"]:
+                images.append(path.join(folder, my_file))
+            elif ext in [".mp3", ".ogg"]:
+                tracks.append(my_file)
+            else:
+                warnings.append("Unrecognized file: {0}".format(my_file))
+
+        album.update({'artist': artist,
+                      'album': album_name,
+                      'tracks': tracks,
+                      'images': images,
+                      'warnings': warnings})
+
     def get_row_item(self, index):
         """
         Give a formatted DisplayItem for the folder.
         """
-        folder = self.albums[index]['folder']
-        parts = folder.split(sep)
-        # full_path = path.join(*reversed(parts[::-1]))
-        files = [file_name for file_name in listdir(folder)]
+        album = self.albums[index]
+        if 'tracks' not in album.keys():
+            self._populate_album(album)
+
         di = DisplayItem()
         add_label = di.ids.labels.add_widget
 
         add_label(Label(
             text=u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
-                 parts[-2], parts[-1]),
+                 album['artist'], album['album']),
             markup=True))
-        images = []
 
-        # Gather data
-        for my_file in sorted(files):
-            ext = my_file[-4:]
-            if ext in [".jpg", ".png", ".gif", "jpeg"]:
-                images.append(Image(source=path.join(folder, my_file),
-                                    allow_stretch=True))
-            elif ext in [".mp3", ".ogg"]:
-                add_label(PlaylistLabel(text=my_file[0:-4:]))
-            else:
-                add_label(Label(
-                    text=u"[color=#FF0000]Unrecognized file {0}[/color]".format(
-                        my_file)))
+        [di.ids.images.add_widget(Image(source=image, allow_stretch=True))
+         for image in album['images']]
+        [add_label(PlaylistLabel(text=track)) for track in album['tracks']]
+        [add_label(Label(
+            text=u"[color=#FF0000]{0}[/color]".format(warn)))
+            for warn in album['warnings']]
 
         # Now create and return the row_tem
-        if len(images) == 0:
+        if len(album['images']) == 0:
             di.ids.images.add_widget(Image(source="images/album.png"))
-        else:
-            [di.ids.images.add_widget(image) for image in images]
 
         return di
 
