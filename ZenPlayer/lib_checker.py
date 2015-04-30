@@ -162,7 +162,7 @@ class PlaylistLabel(Label):
                 print "clicked"
 
 
-class MainScreen(BoxLayout):
+class AlbumScreen(BoxLayout):
     """"
     The main screen showing a list of albums found.
     """
@@ -170,7 +170,7 @@ class MainScreen(BoxLayout):
     music_lib = ObjectProperty(None)
 
     def __init__(self, **kwargs):
-        super(MainScreen, self).__init__(**kwargs)
+        super(AlbumScreen, self).__init__(**kwargs)
         self.music_lib = MusicLib()
         self.show_album()
         # Clock.schedule_interval(lambda dt: self.show_next(), 10)
@@ -212,7 +212,7 @@ class MainScreen(BoxLayout):
 
 class FolderChecker(App):
     def build(self):
-        return MainScreen()
+        return AlbumScreen()
 
 if __name__ == '__main__':
     FolderChecker().run()
