@@ -113,6 +113,7 @@ class MusicLib(EventDispatcher):
         """
         # Initialize
         album = self.albums[index]
+
         if 'tracks' not in album.keys():
             self._populate_album(album)
         di = DisplayItem()
@@ -129,11 +130,15 @@ class MusicLib(EventDispatcher):
         [add_label(Label(
             text=u"[color=#FF0000]{0}[/color]".format(warn)))
             for warn in album['warnings']]
-        [add_label(PlaylistLabel(
-            controller=controller,
-            text=track,
-            album_index=index,
-            track_index=k)) for k, track in enumerate(album['tracks'])]
+        for k, track in enumerate(album['tracks']):
+            add_label(PlaylistLabel(
+                controller=controller,
+                text=track,
+                album_index=index,
+                playing=bool(
+                    controller.playing_album == controller.album_index and
+                    controller.playing_track == k),
+                track_index=k))
 
         if len(album['images']) == 0:
             di.ids.images.add_widget(Image(source="images/album.png"))
@@ -155,15 +160,11 @@ class PlaylistLabel(Label):
     controller = ObjectProperty()
     _back_rect = None
 
+    back_colour = ListProperty([0, 0, 0, 0])
+
     def on_playing(self, widget, value):
         """ Respond to the change in state. """
-        if value:
-            with self.canvas:
-                Color(0.5, 0.5, 1, 0.3)
-                self._back_rect = Rectangle(pos=self.pos, size=self.size)
-            self.controller.play_track(self.album_index, self.track_index)
-        else:
-            self.canvas.remove(self._back_rect)
+        self.back_colour = [0.5, 0.5, 1, 0.3] if value else [0, 0, 0, 0]
 
     def on_touch_down(self, touch):
         """ Handle the event. """
@@ -185,14 +186,17 @@ class Controller(EventDispatcher):
     This class houses the logic and management of the current album and
     track index as well as the management of the audio.
     """
-    album_index = NumericProperty(0)
-    track_index = NumericProperty(0)
+    album_index = NumericProperty(0)  # Currently displayed
+    track_index = NumericProperty(0)  # Currently displayed
+    playing_album = NumericProperty(0)  # Currently playing
+    playing_track = NumericProperty(-1)  # Currently playing
+
     music_lib = ObjectProperty(None)
     album_screen = ObjectProperty(None)
 
     def play_track(self, album_index, track_index):
         """ Play the specified track. """
-        self.album_index, self.track_index = album_index, track_index
+        self.playing_index, self.playing_track = album_index, track_index
         print "play track " + self.music_lib.albums[album_index][
             'tracks'][track_index]
 
@@ -218,7 +222,7 @@ class Controller(EventDispatcher):
 
     def get_currrent_album(self):
         """ Build and return a DisplayItem for the current album. """
-        Clock.schedule_once(lambda dt:  self.play_track(self.album_index, 0))
+        #Clock.schedule_once(lambda dt:  self.play_track(self.album_index, 0))
         return self.music_lib.get_row_item(self.album_index, self)
 
 
@@ -248,7 +252,7 @@ class AlbumScreen(BoxLayout):
         if len(self.music_lib.albums) > self.controller.album_index:
             self.ids.header_label.text = "Music Library ({0} / {1})".format(
                 self.controller.album_index + 1, len(self.music_lib.albums))
-            
+
             container.add_widget(self.controller.get_currrent_album())
         else:
             container.add_widget(Label(text="No albums found"))
