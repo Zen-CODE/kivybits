@@ -18,9 +18,7 @@ from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.properties import (NumericProperty, ListProperty, ObjectProperty,
                              BooleanProperty)
-from kivy.graphics import Color, Rectangle
 from kivy.event import EventDispatcher
-from kivy.clock import Clock
 
 Builder.load_file('lib_checker.kv')
 
@@ -164,7 +162,6 @@ class PlaylistLabel(Label):
     track_index = NumericProperty()
     playing = BooleanProperty(False)
     controller = ObjectProperty()
-    _back_rect = None
 
     back_colour = ListProperty([0, 0, 0, 0])
 
@@ -233,7 +230,7 @@ class Controller(EventDispatcher):
 
     def set_selected(self, pl_label):
         """
-        Set the PLaylistLabel as the one linked to the currently playing
+        Set the PlaylistLabel as the one linked to the currently playing
         track.
         """
         if self.current_pl_label is not None:
