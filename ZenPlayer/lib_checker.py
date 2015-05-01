@@ -19,6 +19,7 @@ from kivy.uix.label import Label
 from kivy.properties import (NumericProperty, ListProperty, ObjectProperty,
                              BooleanProperty)
 from kivy.event import EventDispatcher
+from audioplayer import SoundLoader
 
 Builder.load_file('lib_checker.kv')
 
@@ -196,6 +197,8 @@ class Controller(EventDispatcher):
     album_screen = ObjectProperty(None)
     current_pl_label = None
 
+    sound = None
+
     def play_track(self, pl_label):
         """ Play the track linked to be the PlaylistLabel. """
         self.playing_album = pl_label.album_index
@@ -203,6 +206,15 @@ class Controller(EventDispatcher):
         self.set_selected(pl_label)
         print "play track " + self.music_lib.albums[self.playing_album][
             'tracks'][self.playing_track]
+
+        if not self.sound is None:
+            self.sound.stop()
+
+        album = self.music_lib.albums[self.playing_album]
+        full_path = path.join(album['folder'], album['tracks'][
+            self.playing_track])
+        self.sound = SoundLoader.load(full_path)
+        self.sound.play()
 
     def move_next(self, advance):
         """
