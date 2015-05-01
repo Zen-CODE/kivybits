@@ -199,7 +199,11 @@ class Controller(EventDispatcher):
 
     sound = None
     volume = NumericProperty(100)
-    manual_stop = False  # TODO: explain
+    manual_stop = False
+    '''
+    Prevent the manual stopping of audio from moving to the next track, as
+    if it's finished playing.
+    '''
 
     def _sound_state(self, *args):
         if not self.manual_stop:
