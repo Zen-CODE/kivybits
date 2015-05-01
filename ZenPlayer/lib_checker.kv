@@ -1,4 +1,10 @@
 <PlaylistLabel>:
+    canvas:
+        Color:
+            rgba: self.back_colour
+        Rectangle:
+            pos: self.pos
+            size: self.size
     markup: True
     halign: "center"
 
@@ -32,8 +38,8 @@
                 Rectangle:
                     pos: self.pos
                     size: self.size
+            id: header_label
             size_hint_x: 8
-            text: "Music Library ({0} / {1})".format(root.controller.album_index + 1, len(root.music_lib.albums)) if root.controller else ""
         Button:
             text: ">>"
             on_press: root.show_next()
