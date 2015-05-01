@@ -29,9 +29,9 @@ class MusicLib(EventDispatcher):
     """
     This class houses metadata about our music collection.
     """
-    # source = u'/media/ZenOne/Zen/Music/CD'  # PC. Linux
+    source = u'/media/ZenOne/Zen/Music/CD'  # PC. Linux
     # source = u'/media/richard/ZenUno/Zen/Music/MP3'  Laptop, linux
-    source = r"d:\Zen\Music\MP3"  # PC, Windows
+    # source = r"d:\Zen\Music\MP3"  # PC, Windows
 
     albums = ListProperty([])
     '''
@@ -131,14 +131,17 @@ class MusicLib(EventDispatcher):
             text=u"[color=#FF0000]{0}[/color]".format(warn)))
             for warn in album['warnings']]
         for k, track in enumerate(album['tracks']):
-            add_label(PlaylistLabel(
+            playing = bool(
+                controller.playing_album == controller.album_index and
+                controller.playing_track == k)
+            pl_label = PlaylistLabel(
                 controller=controller,
                 text=track,
                 album_index=index,
-                playing=bool(
-                    controller.playing_album == controller.album_index and
-                    controller.playing_track == k),
-                track_index=k))
+                track_index=k)
+            add_label(pl_label)
+            if playing:
+                controller.set_selected(pl_label)
 
         if len(album['images']) == 0:
             di.ids.images.add_widget(Image(source="images/album.png"))
@@ -191,18 +194,15 @@ class Controller(EventDispatcher):
 
     music_lib = ObjectProperty(None)
     album_screen = ObjectProperty(None)
+    current_pl_label = None
 
     def play_track(self, pl_label):
         """ Play the track linked to be the PlaylistLabel. """
-        if hasattr(self, 'current_pl_label'):
-            self.current_pl_label.playing = False
-
         self.playing_album = pl_label.album_index
         self.playing_track = pl_label.track_index
-        self.current_pl_label = pl_label
+        self.set_selected(pl_label)
         print "play track " + self.music_lib.albums[self.playing_album][
             'tracks'][self.playing_track]
-        pl_label.playing = True
 
     def move_next(self, advance):
         """
@@ -227,6 +227,17 @@ class Controller(EventDispatcher):
     def get_currrent_album(self):
         """ Build and return a DisplayItem for the current album. """
         return self.music_lib.get_row_item(self.album_index, self)
+
+    def set_selected(self, pl_label):
+        """
+        Set the PLaylistLabel as the one linked to the currently playing
+        track.
+        """
+        if self.current_pl_label is not None:
+            self.current_pl_label.playing = False
+
+        self.current_pl_label = pl_label
+        pl_label.playing = True
 
 
 class AlbumScreen(BoxLayout):
