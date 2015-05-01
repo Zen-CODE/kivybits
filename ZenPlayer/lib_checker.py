@@ -176,9 +176,8 @@ class PlaylistLabel(Label):
         if touch.grab_current is self:
             touch.ungrab(self)
             if self.collide_point(*touch.pos):
-                self.playing = not self.playing
-        else:
-            self.playing = False
+                self.playing = not self.playing  # TODO: Remove
+                self.controller.play_track(self.album_index, self.track_index)
 
 
 class Controller(EventDispatcher):
