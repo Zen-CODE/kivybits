@@ -200,6 +200,10 @@ class Controller(EventDispatcher):
     sound = None
     volume = NumericProperty(100)
 
+    def _sound_state(self, *args):
+        if args[1] == "stop":
+            print "stopped"
+
     def play_track(self, pl_label):
         """ Play the track linked to be the PlaylistLabel. """
         self.playing_album = pl_label.album_index
@@ -215,6 +219,7 @@ class Controller(EventDispatcher):
         self.sound = SoundLoader.load(full_path)
         self.sound.play()
         self.sound.volume = self.volume
+        self.sound.bind(state=self._sound_state)
 
     def move_next(self, advance):
         """

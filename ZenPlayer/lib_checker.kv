@@ -53,6 +53,7 @@
             orientation: 'vertical'
             size_hint_x: 0.1
             value: 100
+            on_value: root.controller.volume = self.value / 100.0
     Label:
         markup: True
         text: "[color=#4444FF]TODO: Now playing. Click to switch to folder[/color]"
