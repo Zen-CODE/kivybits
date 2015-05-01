@@ -176,8 +176,7 @@ class PlaylistLabel(Label):
         if touch.grab_current is self:
             touch.ungrab(self)
             if self.collide_point(*touch.pos):
-                self.playing = not self.playing  # TODO: Remove
-                self.controller.play_track(self.album_index, self.track_index)
+                self.controller.play_track(self)
 
 
 class Controller(EventDispatcher):
@@ -193,11 +192,17 @@ class Controller(EventDispatcher):
     music_lib = ObjectProperty(None)
     album_screen = ObjectProperty(None)
 
-    def play_track(self, album_index, track_index):
-        """ Play the specified track. """
-        self.playing_index, self.playing_track = album_index, track_index
-        print "play track " + self.music_lib.albums[album_index][
-            'tracks'][track_index]
+    def play_track(self, pl_label):
+        """ Play the track linked to be the PlaylistLabel. """
+        if hasattr(self, 'current_pl_label'):
+            self.current_pl_label.playing = False
+
+        self.playing_album = pl_label.album_index
+        self.playing_track = pl_label.track_index
+        self.current_pl_label = pl_label
+        print "play track " + self.music_lib.albums[self.playing_album][
+            'tracks'][self.playing_track]
+        pl_label.playing = True
 
     def move_next(self, advance):
         """
@@ -221,7 +226,6 @@ class Controller(EventDispatcher):
 
     def get_currrent_album(self):
         """ Build and return a DisplayItem for the current album. """
-        #Clock.schedule_once(lambda dt:  self.play_track(self.album_index, 0))
         return self.music_lib.get_row_item(self.album_index, self)
 
 
