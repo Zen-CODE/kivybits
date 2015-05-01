@@ -199,19 +199,30 @@ class Controller(EventDispatcher):
 
     sound = None
     volume = NumericProperty(100)
+    manual_stop = False  # TODO: explain
 
     def _sound_state(self, *args):
-        if args[1] == "stop":
-            print "stopped"
+        if not self.manual_stop:
+            if args[1] == "stop":
+                if self._set_next_track():
+                    self.play_track(None, self.playing_album,
+                                    self.playing_track)
+                    self.album_screen.show_album()
 
-    def play_track(self, pl_label):
+    def play_track(self, pl_label=None, album_index=0, track_index=0):
         """ Play the track linked to be the PlaylistLabel. """
-        self.playing_album = pl_label.album_index
-        self.playing_track = pl_label.track_index
-        self.set_selected(pl_label)
+        if pl_label is None:
+            self.playing_album = album_index
+            self.playing_track = track_index
+        else:
+            self.playing_album = pl_label.album_index
+            self.playing_track = pl_label.track_index
+            self.set_selected(pl_label)
 
         if self.sound is not None:
+            self.manual_stop = True
             self.sound.stop()
+            self.manual_stop = False
 
         album = self.music_lib.albums[self.playing_album]
         full_path = path.join(album['folder'], album['tracks'][
@@ -220,6 +231,18 @@ class Controller(EventDispatcher):
         self.sound.play()
         self.sound.volume = self.volume
         self.sound.bind(state=self._sound_state)
+
+    def _set_next_track(self):
+        """ Set the album and track index of the next legal track. """
+        albums = self.music_lib.albums
+        if len(albums[self.playing_album]['tracks']) > self.playing_track + 1:
+            self.playing_track += 1
+        elif len(albums) > self.playing_album + 1:
+            self.playing_album += 1
+            self.playing_track = 0
+        else:
+            return False
+        return True
 
     def move_next(self, advance):
         """
