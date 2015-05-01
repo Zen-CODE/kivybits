@@ -119,17 +119,23 @@ class MusicLib(EventDispatcher):
         di = DisplayItem()
         add_label = di.ids.labels.add_widget
 
-        # Add header, images, tracks and warnings
+        # Add header
         add_label(Label(
             text=u"[b][color=#FFFF00]{0} : {1}[/color][/b]".format(
                  album['artist'], album['album']),
             markup=True))
 
-        [di.ids.images.add_widget(Image(source=image, allow_stretch=True))
-         for image in album['images']]
+        # Add images + warnings
+        if len(album['images']) == 0:
+            di.ids.images.add_widget(Image(source="images/album.png"))
+        else:
+            [di.ids.images.add_widget(Image(source=image, allow_stretch=True))
+             for image in album['images']]
         [add_label(Label(
             text=u"[color=#FF0000]{0}[/color]".format(warn)))
             for warn in album['warnings']]
+
+        # Add tracks
         for k, track in enumerate(album['tracks']):
             playing = bool(
                 controller.playing_album == controller.album_index and
@@ -142,9 +148,6 @@ class MusicLib(EventDispatcher):
             add_label(pl_label)
             if playing:
                 controller.set_selected(pl_label)
-
-        if len(album['images']) == 0:
-            di.ids.images.add_widget(Image(source="images/album.png"))
 
         return di
 
