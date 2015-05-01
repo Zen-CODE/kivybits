@@ -198,16 +198,15 @@ class Controller(EventDispatcher):
     current_pl_label = None
 
     sound = None
+    volume = NumericProperty(100)
 
     def play_track(self, pl_label):
         """ Play the track linked to be the PlaylistLabel. """
         self.playing_album = pl_label.album_index
         self.playing_track = pl_label.track_index
         self.set_selected(pl_label)
-        print "play track " + self.music_lib.albums[self.playing_album][
-            'tracks'][self.playing_track]
 
-        if not self.sound is None:
+        if self.sound is not None:
             self.sound.stop()
 
         album = self.music_lib.albums[self.playing_album]
@@ -215,6 +214,7 @@ class Controller(EventDispatcher):
             self.playing_track])
         self.sound = SoundLoader.load(full_path)
         self.sound.play()
+        self.sound.volume = self.volume
 
     def move_next(self, advance):
         """
@@ -239,6 +239,11 @@ class Controller(EventDispatcher):
     def get_currrent_album(self):
         """ Build and return a DisplayItem for the current album. """
         return self.music_lib.get_row_item(self.album_index, self)
+
+    def on_volume(self, widget, value):
+        """ Set the volume of the current tracks. """
+        if self.sound is not None:
+            self.sound.volume = value
 
     def set_selected(self, pl_label):
         """
