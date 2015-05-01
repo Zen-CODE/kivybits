@@ -128,8 +128,12 @@ class MusicLib(EventDispatcher):
         if len(album['images']) == 0:
             di.ids.images.add_widget(Image(source="images/album.png"))
         else:
-            [di.ids.images.add_widget(Image(source=image, allow_stretch=True))
-             for image in album['images']]
+            for source in album['images']:
+                image = Image(source=source, allow_stretch=True)
+                image.bind(on_touch_down=lambda w, t:
+                           w.collide_point(*t.pos) and controller.stop())
+                di.ids.images.add_widget(image)
+
         [add_label(Label(
             text=u"[color=#FF0000]{0}[/color]".format(warn)))
             for warn in album['warnings']]
@@ -213,29 +217,6 @@ class Controller(EventDispatcher):
                                     self.playing_track)
                     self.album_screen.show_album()
 
-    def play_track(self, pl_label=None, album_index=0, track_index=0):
-        """ Play the track linked to be the PlaylistLabel. """
-        if pl_label is None:
-            self.playing_album = album_index
-            self.playing_track = track_index
-        else:
-            self.playing_album = pl_label.album_index
-            self.playing_track = pl_label.track_index
-            self.set_selected(pl_label)
-
-        if self.sound is not None:
-            self.manual_stop = True
-            self.sound.stop()
-            self.manual_stop = False
-
-        album = self.music_lib.albums[self.playing_album]
-        full_path = path.join(album['folder'], album['tracks'][
-            self.playing_track])
-        self.sound = SoundLoader.load(full_path)
-        self.sound.play()
-        self.sound.volume = self.volume
-        self.sound.bind(state=self._sound_state)
-
     def _set_next_track(self):
         """ Set the album and track index of the next legal track. """
         albums = self.music_lib.albums
@@ -247,6 +228,35 @@ class Controller(EventDispatcher):
         else:
             return False
         return True
+
+    def stop(self):
+        """ Stop any currently playing track."""
+        if self.sound is not None:
+            self.manual_stop = True  # Prevent triggering track endings
+            self.sound.stop()
+            self.manual_stop = False
+            self.sound = None
+
+    def play_track(self, pl_label=None, album_index=0, track_index=0):
+        """ Play the track linked to be the PlaylistLabel. """
+        if pl_label is None:
+            self.playing_album = album_index
+            self.playing_track = track_index
+        else:
+            self.playing_album = pl_label.album_index
+            self.playing_track = pl_label.track_index
+            self.set_selected(pl_label)
+
+        if self.sound is not None:
+            self.stop()
+
+        album = self.music_lib.albums[self.playing_album]
+        full_path = path.join(album['folder'], album['tracks'][
+            self.playing_track])
+        self.sound = SoundLoader.load(full_path)
+        self.sound.play()
+        self.sound.volume = self.volume
+        self.sound.bind(state=self._sound_state)
 
     def move_next(self, advance):
         """
