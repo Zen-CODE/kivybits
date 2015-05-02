@@ -4,8 +4,6 @@ from kivy.lib import osc
 from kivy.clock import Clock
 from server import OSCListener
 
-activityport = 3001
-
 
 def some_api_callback(message, *args):
    print("Client: got a message! %s" % message)
@@ -26,7 +24,7 @@ class ServiceApp(App):
         #     self.service = service
 
         osc.init()
-        oscid = osc.listen(ipAddr='127.0.0.1', port=activityport)
+        oscid = osc.listen(ipAddr='127.0.0.1', port=OSCListener.client_port)
         osc.bind(oscid, some_api_callback, 'sound_loader')
         Clock.schedule_interval(lambda *x: osc.readQueue(oscid), 0)
 
@@ -34,7 +32,8 @@ class ServiceApp(App):
 
     def ping(self):
         #osc.sendMsg('/some_api', ['ping', ], port=someotherport)
-        osc.sendMsg('sound_loader', ['p1', 'p2', 'p3'], port=OSCListener.port)
+        osc.sendMsg('sound_loader', ['p1', 'p2', 'p3'],
+                    port=OSCListener.server_port)
 
 
 if __name__ == '__main__':
