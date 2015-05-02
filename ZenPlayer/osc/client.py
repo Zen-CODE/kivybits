@@ -25,14 +25,14 @@ class ServiceApp(App):
 
         osc.init()
         oscid = osc.listen(ipAddr='127.0.0.1', port=OSCListener.client_port)
-        osc.bind(oscid, some_api_callback, 'sound_loader')
+        osc.bind(oscid, some_api_callback, 'kivy_client')
         Clock.schedule_interval(lambda *x: osc.readQueue(oscid), 0)
 
         return Builder.load_string(kv)
 
     def ping(self):
         #osc.sendMsg('/some_api', ['ping', ], port=someotherport)
-        osc.sendMsg('sound_loader', ['p1', 'p2', 'p3'],
+        osc.sendMsg('kivy_server', ['p1', 'p2', 'p3'],
                     port=OSCListener.server_port)
 
 
