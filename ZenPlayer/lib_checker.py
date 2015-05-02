@@ -202,7 +202,7 @@ class Controller(EventDispatcher):
     current_pl_label = None
 
     sound = None
-    volume = NumericProperty(100)
+    volume = NumericProperty(1.0)
     manual_stop = False
     '''
     Prevent the manual stopping of audio from moving to the next track, as
@@ -238,7 +238,10 @@ class Controller(EventDispatcher):
             self.sound = None
 
     def play_track(self, pl_label=None, album_index=0, track_index=0):
-        """ Play the track linked to be the PlaylistLabel. """
+        """
+        Play the track linked to be the PlaylistLabel, or the one specified
+        by the indices.
+        """
         if pl_label is None:
             self.playing_album = album_index
             self.playing_track = track_index
