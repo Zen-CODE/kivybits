@@ -20,13 +20,14 @@ class OSCListener(object):
         osc.bind(osc_id, self.kivy_server, 'kivy_server')
         self.osc_id = osc_id
 
-    def kivy_server(self, message, *args):
+    @staticmethod
+    def kivy_server(message, *args):
         """
         Handle SoundLoader messages. Message is a list of:
             [<api_name>, ',s')] + [<args passed in the call>]
 
         """
-        print("kivy_server : got a message! %s" % message)
+        print("kivy_server : got a message {0}".format(message))
         osc.sendMsg('kivy_client', ['p1', 'p2', 'p3'],
                     port=OSCListener.client_port)
 
