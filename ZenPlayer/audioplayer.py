@@ -67,7 +67,7 @@ class Sound(object):
     @staticmethod
     def stop():
         """ Stop any playing audio """
-        if Sound._sound and not Sound.state != "seeking":
+        if Sound._sound and Sound.state != "seeking":
             Sound._set_state("stopped")
             Sound._sound.stop()
 
