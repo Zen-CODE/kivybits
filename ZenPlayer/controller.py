@@ -67,9 +67,9 @@ class Controller(EventDispatcher):
     def on_key_down(self, keyboard, keycode, text, modifiers):
         """ React to the keypress event """
         key_name = keycode[1]
-        if key_name == "up":
+        if key_name == "up" or text == "+":
             self.volume += 0.025
-        elif key_name == "down":
+        elif key_name == "down" or text == "-":
             self.volume -= 0.025
         elif key_name == "x":
             self.play_pause()
