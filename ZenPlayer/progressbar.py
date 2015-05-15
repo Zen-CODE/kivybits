@@ -9,10 +9,21 @@ Builder.load_string('''
     canvas:
         # Color:
         #     rgba: 1, 1, 0, 0.25
+        StencilPush
+
         Rectangle:
+            pos: self.pos
             size: self.width * (self.value / self.max), self.height
+        StencilUse
+
+        Rectangle:
+            size: self.size
             pos: self.pos
             source: "bar1.png"
+
+        StencilUnUse
+        StencilPop
+
 ''')
 
 
