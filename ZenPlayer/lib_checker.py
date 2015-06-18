@@ -47,14 +47,14 @@ class MusicLib(EventDispatcher):
         'images': a list of images found
         'warning': a list list of warnings found
     '''
-    max_albums = 10
+    max_albums = 100
 
     def __init__(self, **kwargs):
         """ The class constructor. """
         super(MusicLib, self).__init__(**kwargs)
         self.albums = MusicLib._get_albums(MusicLib.source,
-                                            [],
-                                            MusicLib.max_albums)
+                                           [],
+                                           MusicLib.max_albums)
 
     @staticmethod
     def _get_albums(folder, albums, max_albums):
@@ -184,7 +184,10 @@ class PlaylistLabel(Label):
         if touch.grab_current is self:
             touch.ungrab(self)
             if self.collide_point(*touch.pos):
-                self.controller.play_track(self)
+                if self.controller.sound is None:
+                    self.controller.play_track(self)
+                else:
+                    self.controller.stop()
 
 
 class Controller(EventDispatcher):
