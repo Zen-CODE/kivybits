@@ -20,8 +20,8 @@ from kivy.properties import (NumericProperty, ListProperty, ObjectProperty,
                              BooleanProperty)
 from kivy.event import EventDispatcher
 from audioplayer import SoundLoader
-
-Builder.load_file('lib_checker.kv')
+from kivy.uix.screenmanager import Screen
+from kivy.clock import Clock
 
 
 class MusicLib(EventDispatcher):
@@ -305,7 +305,7 @@ class Controller(EventDispatcher):
         pl_label.playing = True
 
 
-class AlbumScreen(BoxLayout):
+class AlbumScreen(Screen):
     """"
     The main screen showing a list of albums found.
     """
@@ -317,7 +317,7 @@ class AlbumScreen(BoxLayout):
         self.music_lib = MusicLib()
         self.controller = Controller(music_lib=self.music_lib,
                                      album_screen=self)
-        self.show_album()
+        Clock.schedule_once(lambda dt: self.show_album())
 
     def show_album(self, advance=None):
         """
@@ -345,9 +345,13 @@ class AlbumScreen(BoxLayout):
         self.show_album(False)
 
 
+class OptionScreen(Screen):
+    pass
+
+
 class FolderChecker(App):
     def build(self):
-        return AlbumScreen()
+        return Builder.load_file('lib_checker.kv')
 
 if __name__ == '__main__':
     FolderChecker().run()
