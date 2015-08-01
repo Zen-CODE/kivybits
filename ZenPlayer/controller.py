@@ -35,7 +35,8 @@ class Controller(EventDispatcher):
         self.sm.current = "main"
 
         if platform not in ['ios', 'android']:
-            self.kb_listener = ZenKeyboardListener(self)
+            self.kb_listener = ZenKeyboardListener(self.on_key_down,
+                                                   self.playing)
         Sound.add_state_callback(self.playing.on_sound_state)
         Sound.add_state_callback(self._on_sound_state)
 
@@ -179,11 +180,11 @@ class ZenKeyboardListener(EventDispatcher):
     This class handles the management of keypress to control volume, play,
     stop, next etc.
     """
-    def __init__(self, ctrl, **kwargs):
-        super(ZenKeyboardListener, self).__init__(**kwargs)
+    def __init__(self, callback, widget):
+        super(ZenKeyboardListener, self).__init__()
         self._keyboard = Window.request_keyboard(
-            self._keyboard_closed, self, 'text')
-        self._keyboard.bind(on_key_down=ctrl.on_key_down)
+            self._keyboard_closed, widget, 'text')
+        self._keyboard.bind(on_key_down=callback)
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
