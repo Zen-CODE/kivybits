@@ -146,13 +146,12 @@ class PlayListScreen(Screen):
     """
     listview = ObjectProperty()
 
-    def __init__(self, sm, ctrl, playlist, **kwargs):
+    def __init__(self, sm, ctrl, playlist):
         Builder.load_file("playlist.kv")
         self.sm = sm
         self.playlist = playlist
         self.ctrl = ctrl
-        super(
-            PlayListScreen, self).__init__(**kwargs)
+        super(PlayListScreen, self).__init__()
 
     def on_enter(self):
         """ Repopulate the listview """
