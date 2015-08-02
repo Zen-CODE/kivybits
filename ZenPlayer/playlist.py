@@ -2,7 +2,8 @@
 This class houses the PlayList class for ZenPlayer
 """
 from kivy.uix.screenmanager import Screen
-from kivy.properties import ObjectProperty, NumericProperty
+from kivy.properties import (ObjectProperty, NumericProperty, BooleanProperty,
+                             ListProperty)
 from os import sep, path, listdir
 from kivy.logger import Logger
 from os.path import exists
@@ -162,32 +163,46 @@ class PlayListScreen(Screen):
     def show_page(self, page_no):
         """ Show the playlist items on the current page. """
 
-        self.current_page = page_no
-        self.ids.album_col.clear_widgets()
-        self.ids.file_col.clear_widgets()
-        self.ids.page_count.text = str(page_no)
-        queue = self.playlist.queue
-        info = self.playlist.get_info
+        def init_page(_page_no):
+            """ Initialise the display and controls. """
+            self.current_page = _page_no
+            self.ids.album_col.clear_widgets()
+            self.ids.file_col.clear_widgets()
+            self.ids.page_count.text = str(page_no)
 
+        def display_page(start, end, queue):
+            """
+            Add the items from the start to end index to the display
+            """
+            info, cover = self.playlist.get_info, ""
+            for i in range(start, end):
+                new_cover = queue[i][1]
+                if new_cover != cover:
+                    cover = new_cover
+                    self.ids.album_col.add_widget(
+                        PlaylistImage(source=cover,
+                                      ctrl=self.ctrl,
+                                      playlist_index=i))
+
+                self.ids.file_col.add_widget(
+                    PlaylistLabel(
+                        text=info(queue[i][0])['file'],
+                        ctrl=self.ctrl,
+                        playlist_index=i,
+                        selected=bool(i==self.playlist.current)))
+
+        queue = self.playlist.queue
         start = (page_no - 1) * self.items_per_page
         end = start + self.items_per_page
         if end > len(queue):
             end = len(queue)
 
-        for i in range(start, end):
-            self.ids.file_col.add_widget(
-                PlaylistLabel(
-                    text=info(queue[i][0])['file'],
-                    ctrl=self.ctrl,
-                    playlist_index=i))
-            self.ids.album_col.add_widget(
-                PlaylistImage(source=queue[i][1],
-                              ctrl=self.ctrl,
-                              playlist_index=i))
+        init_page(page_no)
+        display_page(start, end, queue)
 
-    def show_next_page(self, next=True):
-        """ SHow the next/previous page. """
-        page = self.current_page + 1 if next else self.current_page - 1
+    def show_next_page(self, next_page=True):
+        """ Show the next/previous page. """
+        page = self.current_page + 1 if next_page else self.current_page - 1
         if 0 < page <= self.num_pages:
             self.show_page(page)
 
@@ -199,11 +214,13 @@ class PlaylistItem(EventDispatcher):
 
     playlist_index = NumericProperty()
     ctrl = ObjectProperty()
+    selected = BooleanProperty(False)
 
     def on_touch_down(self, touch):
         """ Add support for clicking to play. """
-        if self.collide_point(*touch.pos):
-            print "play {0}".format(self.playlist_index)
+        self.selected = self.collide_point(*touch.pos)
+        if self.selected:
+            self.ctrl.play_index(self.playlist_index)
 
 
 class PlaylistImage(PlaylistItem, Image):
@@ -211,5 +228,11 @@ class PlaylistImage(PlaylistItem, Image):
 
 
 class PlaylistLabel(PlaylistItem, Label):
-    pass
+    """
+    The label shown in the playlist giving the details of the track.
+    """
+    back_color = ListProperty([0, 0, 0, 0])
 
+    def on_selected(self, widget, value):
+        """ The label has been selected. Change the visuals accordingly. """
+        self.back_color = [0.5, 0.5, 1, 0.5] if value else [0, 0, 0, 0]
