@@ -2,18 +2,14 @@
 This class houses the PlayList class for ZenPlayer
 """
 from kivy.uix.screenmanager import Screen
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, NumericProperty
 from os import sep, path, listdir
 from kivy.logger import Logger
-from kivy.adapters.dictadapter import DictAdapter
-from kivy.uix.listview import SelectableView
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.listview import CompositeListItem
-from kivy.properties import StringProperty, ListProperty
 from os.path import exists
 from kivy.lang import Builder
-from kivy.uix.button import ButtonBehavior
-from kivy.clock import Clock
+from kivy.uix.image import Image
+from kivy.uix.label import Label
+from kivy.event import EventDispatcher
 
 
 class PlayList(object):
@@ -153,144 +149,67 @@ class PlayListScreen(Screen):
         self.ctrl = ctrl
         super(PlayListScreen, self).__init__(**kwargs)
 
+        self.items_per_page = 10
+        self.num_pages = len(self.playlist.queue) // self.items_per_page + 1
+        self.current_page = 1
+
     def on_enter(self):
-        """ Repopulate the listview """
+        """ Repopulate the view area and setup the display. """
+        self.ids.page_count.text = str(self.current_page)
+        self.ids.page_count_suffix.text = "of {0}".format(self.num_pages)
+        self.show_page(self.current_page)
+
+    def show_page(self, page_no):
+        """ Show the playlist items on the current page. """
+
+        self.current_page = page_no
+        self.ids.album_col.clear_widgets()
+        self.ids.file_col.clear_widgets()
+        self.ids.page_count.text = str(page_no)
+        queue = self.playlist.queue
         info = self.playlist.get_info
-        data = {str(i): {'text': item[0],
-                         'source': item[1],
-                         'album': info(item[0])["album"],
-                         'track': info(item[0])["file"],
-                         'is_selected': bool(i == self.playlist.current)}
-                for i, item in enumerate(self.playlist.queue)}
 
-        def args_converter(row_index, item):
-            return {'text': item['text'],
-                    'size_hint_y': None,
-                    'height': "60sp",
-                    'cls_dicts': [{'cls': ZenListImage,
-                                   'kwargs': {'source': item['source'],
-                                              'size_hint_x': 0.1,
-                                              'row_index': row_index}},
-                                  {'cls': ZenListButton,
-                                   'kwargs': {'text': item['track'],
-                                              'is_representing_cls': True,
-                                              'size_hint_x': 0.55,
-                                              'row_index': row_index}},
-                                  {'cls': ZenListButton,
-                                   'kwargs': {'text': item['album'],
-                                              'size_hint_x': 0.35,
-                                              'row_index': row_index}}]}
+        start = (page_no - 1) * self.items_per_page
+        end = start + self.items_per_page
+        if end > len(queue):
+            end = len(queue)
 
-        dict_adapter = DictAdapter(
-            sorted_keys=[str(i) for i in range(len(self.playlist.queue))],
-            data=data,
-            selection_mode='single',
-            args_converter=args_converter,
-            propagate_selection_to_data=True,
-            cls=ZenListItem)
+        for i in range(start, end):
+            self.ids.file_col.add_widget(
+                PlaylistLabel(
+                    text=info(queue[i][0])['file'],
+                    ctrl=self.ctrl,
+                    playlist_index=i))
+            self.ids.album_col.add_widget(
+                PlaylistImage(source=queue[i][1],
+                              ctrl=self.ctrl,
+                              playlist_index=i))
 
-        self.listview.adapter = dict_adapter
-        dict_adapter.bind(on_selection_change=self.selection_changed)
-
-    def selection_changed(self, adapter):
-        """ The selection has changed. Start playing the selected track """
-        if len(adapter.selection) > 0:
-            print "On selection changed {0}".format(adapter.selection[0])
-            selection = adapter.selection[0]
-            if isinstance(selection, ZenListItem):
-                row_index = selection.children[0].row_index
-            else:
-                row_index = selection.row_index
-            if row_index != self.playlist.current:
-                self.ctrl.play_index(row_index)
-
-Builder.load_string('''
-<ZenSelectableView>:
-    padding: 5, 5, 5, 5
-    canvas:
-        Color:
-            rgba: root.background_color
-        Rectangle:
-            pos: self.pos
-            size: self.size
-<ZenListImage>:
-    Image:
-        source: root.source
-<ZenListButton>:
-    Label:
-        id: label
-        font_size: "14sp"
-''')
+    def show_next_page(self, next=True):
+        """ SHow the next/previous page. """
+        page = self.current_page + 1 if next else self.current_page - 1
+        if 0 < page <= self.num_pages:
+            self.show_page(page)
 
 
-class ZenSelectableView(SelectableView, ButtonBehavior, BoxLayout):
+class PlaylistItem(EventDispatcher):
     """
-    This defines the base class for the Zen Playlist items elements. It handles
-    the background drawing and provide a BoxLayout for subclass to add
-    additional elements
+    A mixin class for adding playlist click/play behaviour.
     """
-    selected_color = [0.5, 0.5, 1, 0.7]
-    deselected_color = [0, 0, 0, 1]
-    background_color = ListProperty([0, 0, 0, 1])
 
-    def __init__(self, **kwargs):
-        self.row_index = kwargs.pop('row_index')
-        super(ZenSelectableView, self).__init__(**kwargs)
+    playlist_index = NumericProperty()
+    ctrl = ObjectProperty()
 
-    def select(self, *args):
-        self.background_color = self.selected_color
-        if isinstance(self.parent, CompositeListItem):
-            self.parent.select_from_child(self, *args)
-
-    def deselect(self, *args):
-        self.background_color = self.deselected_color
-        if isinstance(self.parent, CompositeListItem):
-            self.parent.deselect_from_child(self, *args)
-
-    def select_from_composite(self, *args):
-        self.background_color = self.selected_color
-
-    def deselect_from_composite(self, *args):
-        self.background_color = self.deselected_color
+    def on_touch_down(self, touch):
+        """ Add support for clicking to play. """
+        if self.collide_point(*touch.pos):
+            print "play {0}".format(self.playlist_index)
 
 
-class ZenListImage(ZenSelectableView):
-    """ This item displays the image but functions as a selectable list item
-    """
-    source = StringProperty()
+class PlaylistImage(PlaylistItem, Image):
+    pass
 
 
-class ZenListButton(ZenSelectableView):
-    """
-    The text items displayed in the ZenPlaylist
-    """
-    text = StringProperty('')
+class PlaylistLabel(PlaylistItem, Label):
+    pass
 
-    def on_text(self, widget, value):
-        """
-        Set the text of the label. This is fired before the objects have
-        been fully loaded, so delay the call using the Clock
-        """
-        def set_text(text):
-            self.ids.label.text = text
-        Clock.schedule_once(lambda dt: set_text(value))
-
-
-class ZenListItem(CompositeListItem):
-    """
-    This item view composes itself out of a image and two ListItem subclasses
-    for displaying artist and track information.
-    """
-    def select(self, selected=True):
-        """
-        Propagate selection to children
-        """
-        for child in self.children:
-            child.select()
-
-    def deselect(self):
-        """
-        Propagate deselection to children components
-        """
-        for child in self.children:
-            child.deselect()
