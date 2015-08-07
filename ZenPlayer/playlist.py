@@ -151,11 +151,12 @@ class PlayListScreen(Screen):
         super(PlayListScreen, self).__init__(**kwargs)
 
         self.items_per_page = 10
-        self.num_pages = len(self.playlist.queue) // self.items_per_page + 1
+        self.num_pages = 1
         self.current_page = 1
 
     def on_enter(self):
         """ Repopulate the view area and setup the display. """
+        self.num_pages = len(self.playlist.queue) // self.items_per_page + 1
         self.ids.page_count.text = str(self.current_page)
         self.ids.page_count_suffix.text = "of {0}".format(self.num_pages)
         self.show_page(self.current_page)
