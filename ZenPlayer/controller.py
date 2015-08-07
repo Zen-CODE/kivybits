@@ -9,7 +9,8 @@ from kivy.properties import NumericProperty
 from kivy.event import EventDispatcher
 from kivy.utils import platform
 from kivy.clock import Clock
-
+from os.path import join, expanduser, exists
+from os import mkdir
 
 class Controller(EventDispatcher):
     """
@@ -26,7 +27,8 @@ class Controller(EventDispatcher):
 
     def __init__(self, **kwargs):
         """ Initialize the screens and the screen manager """
-        self._store = JsonStore("zenplayer.json")
+        self._store = JsonStore(join(self._get_settings_folder(),
+                                     "zenplayer.json"))
         self.playlist = PlayList(self._store)
 
         self.sm = ScreenManager()
@@ -45,6 +47,14 @@ class Controller(EventDispatcher):
             state = self._store.get("state")
             if "volume" in state.keys():
                 self.volume = state["volume"]
+
+    @staticmethod
+    def _get_settings_folder():
+        """ Return the folder when the setting file is stored. """
+        path = expanduser("~/.zencode")
+        if not exists(path):
+            mkdir(path)
+        return path
 
     def _on_sound_state(self, state):
         """ The sound state has changed. If the track played to the end,
