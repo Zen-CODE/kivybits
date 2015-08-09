@@ -157,6 +157,8 @@ class PlayListScreen(Screen):
     def on_enter(self):
         """ Repopulate the view area and setup the display. """
         self.num_pages = len(self.playlist.queue) // self.items_per_page + 1
+        if self.current_page > self.num_pages:
+            self.current_page = self.num_pages
         self.ids.page_count.text = str(self.current_page)
         self.ids.page_count_suffix.text = "of {0}".format(self.num_pages)
         self.show_page(self.current_page)
@@ -166,6 +168,7 @@ class PlayListScreen(Screen):
 
         def init_page(_page_no):
             """ Initialise the display and controls. """
+
             self.current_page = _page_no
             self.ids.album_col.clear_widgets()
             self.ids.file_col.clear_widgets()
