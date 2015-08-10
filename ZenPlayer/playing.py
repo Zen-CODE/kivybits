@@ -31,7 +31,6 @@ class PlayingScreen(Screen):
     """
     The main screen that shows whats currently playing
     """
-    # TODO : Document properties once stable
     album_image = ObjectProperty()
     but_playpause = ObjectProperty()
     info_label = ObjectProperty()
