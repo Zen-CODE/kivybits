@@ -156,7 +156,8 @@ class PlayListScreen(Screen):
 
     def on_enter(self):
         """ Repopulate the view area and setup the display. """
-        self.num_pages = len(self.playlist.queue) // self.items_per_page + 1
+        self.num_pages = \
+            (len(self.playlist.queue) - 1) // self.items_per_page + 1
         self.ids.page_count.text = str(self.current_page)
         self.ids.page_count_suffix.text = "of {0}".format(self.num_pages)
         self.show_page(self.current_page)
@@ -171,13 +172,13 @@ class PlayListScreen(Screen):
             self.ids.file_col.clear_widgets()
             self.ids.page_count.text = str(page_no)
 
-        def display_page(start, end, queue):
+        def display_page(_start, _end, _queue):
             """
-            Add the items from the start to end index to the display
+            Add the items from the _start to _end index to the display
             """
             info, cover = self.playlist.get_info, ""
-            for i in range(start, end):
-                new_cover = queue[i][1]
+            for i in range(_start, _end):
+                new_cover = _queue[i][1]
                 if new_cover != cover:
                     cover = new_cover
                     self.ids.album_col.add_widget(
@@ -187,10 +188,10 @@ class PlayListScreen(Screen):
 
                 self.ids.file_col.add_widget(
                     PlaylistLabel(
-                        text=info(queue[i][0])['file'],
+                        text=info(_queue[i][0])['file'],
                         ctrl=self.ctrl,
                         playlist_index=i,
-                        selected=bool(i==self.playlist.current)))
+                        selected=bool(i == self.playlist.current)))
 
         queue = self.playlist.queue
         start = (page_no - 1) * self.items_per_page
