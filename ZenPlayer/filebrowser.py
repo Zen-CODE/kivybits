@@ -58,4 +58,4 @@ class ZenFileBrowser(Screen):
     def save(self, store):
         """ Save the file browser state """
         if len(self.filechooser.selection) > 0:
-            store.put("filebrowser", path=self.filechooser.path)
+            store.put("filebrowser", path=self.filechooser.selection[0])
