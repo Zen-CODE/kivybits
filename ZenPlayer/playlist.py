@@ -180,9 +180,21 @@ class PlayListScreen(Screen):
             Add the items from the _start to _end index to the display
             """
             info, cover = self.playlist.get_info, ""
+            album_template = "[b][color=0000DD]{0}[/color][/b]\n"\
+                             "[color=0000BB]{1}[/color]"
+
             for i in range(_start, _end):
                 new_cover = _queue[i][1]
+                info_dict = info(_queue[i][0])
                 if new_cover != cover:
+                    # Add a new cover and text descriptor
+                    self.ids.album_col.add_widget(
+                        Label(text=album_template.format(info_dict['artist'],
+                                                         info_dict['album']),
+                              halign='center',
+                              markup=True,
+                              size_hint_y=0.25))
+
                     cover = new_cover
                     self.ids.album_col.add_widget(
                         PlaylistImage(source=cover,
@@ -191,7 +203,7 @@ class PlayListScreen(Screen):
 
                 self.ids.file_col.add_widget(
                     PlaylistLabel(
-                        text=info(_queue[i][0])['file'],
+                        text=info_dict['file'],
                         ctrl=self.ctrl,
                         playlist_index=i,
                         selected=bool(i == self.playlist.current)))
