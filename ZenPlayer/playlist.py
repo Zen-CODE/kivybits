@@ -19,7 +19,6 @@ class PlayList(object):
     """
     current = 0  # The index of the currently playing track in the queue
     queue = []  # contains a list of (filename, albumart) pairs
-    art_names = ["cover.jpg", "cover.png", "cover.bmp", "cover.jpeg"]
 
     def __init__(self, store):
 
@@ -114,10 +113,9 @@ class PlayList(object):
         Return the full image filename from the folder
         """
         folder = audiofile[0: audiofile.rfind(sep)]
-        for art in PlayList.art_names:
-            full_name = path.join(folder, art)
-            if path.exists(full_name):
-                return full_name
+        for f_name in reversed(listdir(folder)):
+            if f_name[-4:] in [".png", ".bmp", ".jpg", "jpeg"]:
+                return path.join(folder, f_name)
         return "images/zencode.jpg"
 
     @staticmethod
