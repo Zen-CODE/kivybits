@@ -1,0 +1,18 @@
+Kivy Showcase: a short exploration of how Kivy is changing the world
+
+In talk, I'll look at some real-world succcess stories using Kivy. Kivy is full stack, multi-touch, cross platform framework, running on devices from exibition size interactive surfaces, to desktops and mobile devcies.
+
+We'll briefly look at some exciting projects using Kivy, namely:
+
+    Project Liatris: a new, open source project using kivy touch devices to control robots.
+
+    RacepCapture Pro: A race-car telemetry system that uses kivy interactive displays both in-car and in post-session analytics interaction.
+
+    Brain Trainer Plus: A mental dexterity trainer deployed to old age homes and medical treatment facilities. It been shown effective in treating dimentia and other mental disorders, as well as brining a greatly enhanced quality-of-lile to the aged and mentally ill.
+    
+    CAMI Educational prodcuts: CAMI is currently using kivy to provide a variety of educational content on both mobile and desktop platforms. The rich feature set of Kivy and it's built in Animation objects make developing compelling, responsive mobile interactions trivial.
+    
+    The Icarus touch and Touch live projects: creating radically new and exciting interactive musical instruments.
+    
+All of this is being delived using Kivy, a free, open source Python/Cython framework that runs on a watch. I kid you not.
+    
