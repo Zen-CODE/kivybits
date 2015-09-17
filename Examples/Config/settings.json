@@ -1,0 +1,14 @@
+[
+    {
+        "type": "title",
+        "title": "Windows"
+    },
+    {
+        "type": "bool",
+        "title": "setting1",
+        "desc": "Set the window in windowed or fullscreen",
+        "section": "Panel Name",
+        "key": "setting1",
+        "true": "auto"
+    }
+]
