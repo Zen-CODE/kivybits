@@ -1,14 +1,16 @@
 [
     {
-        "type": "title",
-        "title": "My Button"
+        "type": "string",
+        "title": "Label caption",
+        "desc": "Choose the text that appears in the label",
+        "section": "My Label",
+        "key": "text"
     },
     {
-        "type": "bool",
-        "title": "Dark button",
-        "desc": "Choose between a dark and a light button",
-        "section": "My Button",
-        "key": "dark_button",
-        "true": "auto"
+        "type": "numeric",
+        "title": "Label font size",
+        "desc": "Choose the font size the label",
+        "section": "My Label",
+        "key": "font_size"
     }
 ]
