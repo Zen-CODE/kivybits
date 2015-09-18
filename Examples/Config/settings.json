@@ -1,14 +1,14 @@
 [
     {
         "type": "title",
-        "title": "Windows"
+        "title": "My Button"
     },
     {
         "type": "bool",
-        "title": "setting1",
-        "desc": "Set the window in windowed or fullscreen",
-        "section": "Panel Name",
-        "key": "setting1",
+        "title": "Dark button",
+        "desc": "Choose between a dark and a light button",
+        "section": "My Button",
+        "key": "dark_button",
         "true": "auto"
     }
 ]
