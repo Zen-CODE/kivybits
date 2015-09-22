@@ -2,9 +2,9 @@
 Config Example
 ==============
 
-This file contains a simple example of how the use the Kivy configuration and
-settings modules in a real app. It allows the user to change the caption and
-font_size of the label and stores these changes.
+This file contains a simple example of how the use the Kivy settings classes in
+a real app. It allows the user to change the caption and font_size of the label
+and stores these changes.
 
 When the user next runs the programs, their changes are restored.
 
