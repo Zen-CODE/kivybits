@@ -28,7 +28,7 @@ class DemoApp(App):
 
     def button_click(self, button):
         """ Fired, via binding, when the button is clicked. """
-        anim = Animation(x=0, y=0, duration=1)
+        anim = Animation(pos_hint={'x': 0, 'y': 0}, duration=1)
         anim += Animation(size_hint=(1, 1), duration=1, t='in_bounce')
         anim.start(self.image)
 
