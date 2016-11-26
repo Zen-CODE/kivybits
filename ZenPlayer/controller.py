@@ -196,7 +196,9 @@ class ZenKeyboardListener(EventDispatcher):
         self._keyboard = Window.request_keyboard(
             self._keyboard_closed, widget, 'text')
         self._keyboard.bind(on_key_down=callback)
+        self._cb = callback
 
     def _keyboard_closed(self):
-        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        self._keyboard.unbind(on_key_down=self._cb)
         self._keyboard = None
+        self._cb = None
