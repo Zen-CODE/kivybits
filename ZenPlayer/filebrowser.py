@@ -20,6 +20,9 @@ class ZenFileBrowser(Screen):
         self.playlist = playlist
         super(ZenFileBrowser, self).__init__(**kwargs)
         self._init(store)
+        sv = self.filechooser.layout.children[0].children[0]
+        sv.bar_width = 15
+        sv.scroll_type = ['bars', 'content']
 
     def _init(self, store):
         """
