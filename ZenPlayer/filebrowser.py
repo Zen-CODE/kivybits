@@ -20,6 +20,7 @@ class ZenFileBrowser(Screen):
         self.playlist = playlist
         super(ZenFileBrowser, self).__init__(**kwargs)
         self._init(store)
+        # Hack to make the ScrollView easier to do large scrolls on OSX
         sv = self.filechooser.layout.children[0].children[0]
         sv.bar_width = 15
         sv.scroll_type = ['bars', 'content']
