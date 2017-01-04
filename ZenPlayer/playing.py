@@ -4,6 +4,7 @@ from kivy.uix.screenmanager import Screen
 from audioplayer import Sound
 from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
+from kivy3dgui.layout3d import Layout3D
 
 
 class MediaButton(FloatLayout):
@@ -55,6 +56,12 @@ class PlayingScreen(Screen):
             self.info_label1.text = info["artist"]
             self.info_label2.text = info["album"]
             self.info_label3.text = info["file"]
+
+        from kivy.animation import Animation
+        anims = Animation(rotate=(360.0, 0, 1, 0), duration=5, t='in_quad') + \
+            Animation(rotate=(0.0, 0, 1, 0), duration=5, t='in_quad')
+        anims.repeat = True
+        anims.start(self.ids.node)
 
     def on_sound_state(self, state):
         """ React to the change of state of the sound """

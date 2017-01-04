@@ -10,6 +10,8 @@ __author__ = 'ZenCODE'
 
 from kivy.app import App
 from controller import Controller
+from kivy.config import Config
+Config.set('kivy', 'KIVY_AUDIO', 'ffpyplayer')
 
 
 class ZenPlayer(App):
