@@ -58,7 +58,9 @@ class PlayingScreen(Screen):
             self.info_label3.text = info["file"]
 
         from kivy.animation import Animation
-        anims = Animation(rotate=(360.0, 0, 1, 0), duration=5, t='in_quad') + \
+        anims = Animation(rotate=(360.0, 1, 0, 0), duration=5, t='in_quad') + \
+            Animation(rotate=(0.0, 1, 0, 0), duration=5, t='in_quad') + \
+            Animation(rotate=(360.0, 0, 1, 0), duration=5, t='in_quad') + \
             Animation(rotate=(0.0, 0, 1, 0), duration=5, t='in_quad')
         anims.repeat = True
         anims.start(self.ids.node)
