@@ -24,11 +24,18 @@
             id: node
             # rotate: (0.5, 0, 0)
             rotate: (-10.0, 1, 0.0, 0.0)
-            translate: (0, 0, -240)
+            translate: (0, 0, -120)
+            scale: (0.6, 0.6, 0.6)
             meshes: ('meshes/2dbox.obj',)
             size_hint: 1, 1
             BoxLayout:
                 orientation: 'horizontal'
+                canvas:
+                    Color:
+                        rgba: 0, 0, 0, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
                 BoxLayout:
                     size_hint_x: 0.1
                     BoxLayout:
