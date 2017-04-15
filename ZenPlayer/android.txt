@@ -1,3 +1,0 @@
-title=ZenPlayer
-author=ZenCODE
-orientation=portrait
