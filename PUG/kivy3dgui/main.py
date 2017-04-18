@@ -23,8 +23,8 @@ class DemoApp(App):
 
     def build(self):
         """ This method returns the root widget of your application. """
-
-        return self.get_grid()
+        grid = self.get_grid()
+        return grid
 
 if __name__ == "__main__":
     DemoApp().run()
