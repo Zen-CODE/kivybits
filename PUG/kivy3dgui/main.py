@@ -20,7 +20,7 @@ class DemoApp(App):
         grid.add_widget(
             TextInput(text='Click me'))
         grid.add_widget(
-            Image(source='audio_icon.png', allow_swtretch=True))
+            Image(source='audio_icon.png', allow_stretch=True))
         return grid
 
     def build(self):
