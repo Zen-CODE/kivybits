@@ -10,6 +10,8 @@ and manage the machine optimally.
 
 Download link: https://mega.nz/#!YuIymALI!AT7scnLjlX9uqjhHEQc49TwVTyYnbB0IFPPCEFU2kOs
 
+md5 checksum: ebf7f6b7e985c7d64db54450f20b0ba8
+
 Checkouts
 ---------
 
