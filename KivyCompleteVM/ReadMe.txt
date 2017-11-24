@@ -1,4 +1,4 @@
-Kivy Complete VM - 0.1
+Kivy Complete VM - 0.2
 ======================
 
 Greetings. This VM is intented to provide a complete Kivy launch and development
@@ -8,9 +8,11 @@ flexible.
 This document outlines the configuration and use of the VM, so that you can use
 and manage the machine optimally.
 
-Download link: https://mega.nz/#!YuIymALI!AT7scnLjlX9uqjhHEQc49TwVTyYnbB0IFPPCEFU2kOs
+    Download link: http://www.camiweb.com/zenkey/kivy/Kivy_Complete_VM_0.2.ova
 
-md5 checksum: ebf7f6b7e985c7d64db54450f20b0ba8
+    md5 checksum: 18a3d0fccf9a66173ae79ed72db26b7a
+
+Please consult the readme.txt on the VM's desktop for more information.
 
 Checkouts
 ---------
@@ -39,8 +41,6 @@ touchtracer APK. These lie here:
     Python2: /home/kivy/Repos/kivy/examples/demo/touchtracer/
 
     Python3: /home/kivy/Repos/Python3/kivy/examples/demo/touchtracer/ 
-
-TODO: The Python3 building is a WIP and not yet functional.
 
 The VM comes with pre-installed with support (specified in your
 buildozer.spec file) support for:
