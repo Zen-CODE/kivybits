@@ -8,8 +8,7 @@ flexible.
 This document outlines the configuration and use of the VM, so that you can use
 and manage the machine optimally.
 
-    Download link: http://www.camiweb.com/zenkey/kivy/Kivy_Complete_VM_0.2.ova
-    MD5: http://www.camiweb.com/zenkey/kivy/Kivy_Complete_VM_0.2.md5
+    Download link: http://kivy.braintrainerplus.com/Kivy_Complete_VM_0.2.ova
 
     md5 checksum: 18a3d0fccf9a66173ae79ed72db26b7a
 

@@ -46,7 +46,7 @@ class DemoApp(App):
         """ Return an animation object setting the rotation."""
         ani = Animation(rotate=(360, 0.3, 1, 0), duration=3) +\
             Animation(rotate=(0, 0.3, 1, 0), duration=3)
-        ani.repeat = True
+        # ani.repeat = True
         return ani
 
 if __name__ == "__main__":
