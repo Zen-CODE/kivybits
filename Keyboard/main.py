@@ -148,7 +148,7 @@ class ModeScreen(Screen):
 
     def next(self):
         """ Continue to the main screen """
-        self.manager.switch_to(KeyboardScreen())
+        self.manager.current = "keyboard"
 
 
 class KeyboardScreen(Screen):
