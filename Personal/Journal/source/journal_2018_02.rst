@@ -133,7 +133,7 @@ improved and did better.
 Dr. Marcel Kinsbourne, a neuroscientist, explains that our expectations create
 brain patterns that can be a real as those created by the outside world. These
 neurons fire as if the event was taking place. What this means is important:
-*the mental construction of our daily activities, more than the activity
+the mental construction of our daily activities, more than the activity
 itself, defines our realiy.
 
 Positivty makes us spend our time more effectively, more efficiently and more
