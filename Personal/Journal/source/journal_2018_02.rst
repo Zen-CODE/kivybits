@@ -151,3 +151,39 @@ effect others, and the Rosenthal-Jacobson study documented how even teachers
 non-verbalisied expectations dramatically effected childrens performance.
 
 
+05/02/2018 - Giovanni
+^^^^^^^^^^^^^^^^^^^^^
+
+Today, I had a half session with Judith, then saw Giovanni. I got back very
+late, so was not really able to Journal. What I can say is that, after the
+"soccer field" incident, it was really hard. Luckily Marilie has bought some
+sanity to the party and restored my visitation rights to Stuart.
+
+06/02/2018 - The Tetris Effect
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The *Tetris effect* refers to the phenomenon of being stuck in a pattern of
+thinking or behaving. Its name comes from a Harvard Medical School expriment
+where 27 people were asked to play multiple hours of tetris each day. For days
+after the study, many could not stop dreaming of shapes falling from the sky.
+Some saw shapes everywhere.
+
+The teris effect shows our mind gets locked into patterns of thinking. If we
+train our minds to look for the negative, even pardise can become a hell. Your
+brain acts as a spam filter, and literally filters out the things you are not
+looking for. This is demonstrated perfectly the the "Basktball and Gorilla"
+video experiment.
+
+When our brains scan for and focus on the positive, we profit from the three
+most important tools available: happiness, gratituide and optimism.
+Psychologist Robert Emmons has found that few things are as important to our
+well being as gratitude: they are more energetic, emotionally intelligent and
+forgiving. Gratitude is a *cause* of positive outcomes.
+
+Maintaining a "Gratitude Journal" is a profoundly effective wayu to train our
+brains to look for the positive. By writing down "Three good things" each day,
+you train your brain to scan for positive things. This develops your skill for
+finding possibilities and opportunities, simultaneously making less room for
+frustrations and annoyances. The effects have also been shown to be long
+lasting and broad, having a dramatic effect on long term happiness and
+optimism.
