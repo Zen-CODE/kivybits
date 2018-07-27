@@ -8,7 +8,7 @@ flexible.
 This document outlines the configuration and use of the VM, so that you can use
 and manage the machine optimally.
 
-    Download link: http://http://www.camiweb.com/kivy/Kivy_Complete_VM_0.4.ova
+    Download link: http://www.camiweb.com/kivy/Kivy_Complete_VM_0.4.ova
 
     md5 checksum: 7d562c9d79444306d400aab9b4133ed2
 
