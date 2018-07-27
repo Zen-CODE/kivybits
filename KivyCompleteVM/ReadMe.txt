@@ -54,9 +54,9 @@ The VM comes pre-installed with for:
 Other versions can be specified, but will result in the downloading and
 installation of these packages.
 
-Note: It appears that builds for later API's only succeed if you uid for API 19
-first. Please first build for API 19, then your desired API level. This will
-hopefully be resolved in later releases.
+Note: It appears that builds for later API's only succeed if you build for
+API 19 first. So please build for API 19 first, then your desired API level.
+This will hopefully be resolved in later releases.
 
 Android SDK
 ------------
