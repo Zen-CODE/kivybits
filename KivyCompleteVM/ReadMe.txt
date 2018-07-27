@@ -8,9 +8,9 @@ flexible.
 This document outlines the configuration and use of the VM, so that you can use
 and manage the machine optimally.
 
-    Download link: http://kivy.braintrainerplus.com/Kivy_Complete_VM_0.3.ova
+    Download link: http://http://www.camiweb.com/kivy/Kivy_Complete_VM_0.4.ova
 
-    md5 checksum: 665e2b5a7ed206ede13890c46609bf06
+    md5 checksum: 7d562c9d79444306d400aab9b4133ed2
 
 Please consult the readme.txt on the VM's desktop for more information.
 
@@ -53,6 +53,10 @@ The VM comes pre-installed with for:
 
 Other versions can be specified, but will result in the downloading and
 installation of these packages.
+
+Note: It appears that builds for later API's only succeed if you uid for API 19
+first. Please first build for API 19, then your desired API level. This will
+hopefully be resolved in later releases.
 
 Android SDK
 ------------
