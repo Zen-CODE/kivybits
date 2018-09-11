@@ -1,4 +1,4 @@
-Kivy Complete VM - 0.3
+Kivy Complete VM - 0.4
 ======================
 
 Greetings. This VM is intended to provide a complete Kivy launch and development
