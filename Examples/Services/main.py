@@ -12,9 +12,13 @@ kv = dedent('''
                 markup: True
                 halign: "center"
             Button:
+                id: btn1
                 text: "Start service 1"
+                on_press: root.toggle_service(1)
             Button:
+                id: btn2
                 text: "Start service 2"
+                on_press: root.toggle_service(2)
 
     ''')
 
@@ -27,6 +31,9 @@ class ServiceUI(BoxLayout):
         super(ServiceUI, self).__init__(**kwargs)
         self.ids.label.text = info_text
 
+    def toggle_service(self, number):
+        """ Start/Stop the specified server """
+        print("Start/stop service {0}".format(number))
 
 class ServiceExample(App):
     def build(self):
