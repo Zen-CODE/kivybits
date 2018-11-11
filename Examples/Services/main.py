@@ -1,11 +1,10 @@
 from kivy.app import App
 from kivy.lang.builder import Builder
 from textwrap import dedent
+from kivy.uix.boxlayout import BoxLayout
 
-class Constants:
-    """ A class holding declarations of constants. """
-    kv = dedent('''
-        BoxLayout:
+kv = dedent('''
+        <ServiceUI>:
             orientation: "vertical"
             padding: [20, 10, 20, 10]
             Label:
@@ -19,16 +18,20 @@ class Constants:
 
     ''')
 
-    info_text = '''[b]Service Example[/b]\n\n'''\
-        '''In Kivy, Android services are separate, independant processes.'''\
-        '''differs from typical Android services.'''
+info_text = '''[b]Service Example[/b]\n\n'''\
+    '''In Kivy, Android services are separate, independant processes.'''\
+    '''differs from typical Android services.'''
+
+class ServiceUI(BoxLayout):
+    def __init__(self, **kwargs):
+        super(ServiceUI, self).__init__(**kwargs)
+        self.ids.label.text = info_text
 
 
 class ServiceExample(App):
     def build(self):
-        box = Builder.load_string(Constants.kv)
-        box.ids.label.text = Constants.info_text
-        return box
+        Builder.load_string(kv)
+        return ServiceUI()
 
 ServiceExample().run()
 
