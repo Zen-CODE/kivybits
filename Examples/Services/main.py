@@ -26,7 +26,11 @@ kv = dedent('''
     ''')
 
 class OS(object):
-    """ A convenience class for handling OS specific sunctionality."""
+    """
+    A convenience class for handling OS specific sunctionality.
+    """
+    
+    @staticmethod
     def get_user_path():
         """
         Return a path that is writable by the current process and can
