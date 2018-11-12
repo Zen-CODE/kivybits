@@ -1,6 +1,6 @@
 from os import environ
 from time import sleep
-
+from kivy.logger import Logger
 
 class Waiter(object):
     """
@@ -14,7 +14,7 @@ class Waiter(object):
     def wait(self):
         """ Start the loop where we wait for messages. """
         while self.counter < 10:
-            print("service1/main.py: counter = {0}".format(self.counter))
+            Logger.info("service1/main.py: counter = {0}".format(self.counter))
             sleep(.5)
             self.counter += 1 
 
