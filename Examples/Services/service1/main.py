@@ -1,6 +1,6 @@
-from os import environ
 from time import sleep
 from kivy.logger import Logger
+
 
 class Waiter(object):
     """
@@ -18,6 +18,7 @@ class Waiter(object):
             sleep(.5)
             self.counter += 1 
         Logger.info("service1/main.py: Exiting")
+
 
 if __name__ == '__main__':
     Waiter().wait()
