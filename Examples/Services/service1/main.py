@@ -17,6 +17,7 @@ class Waiter(object):
             Logger.info("service1/main.py: counter = {0}".format(self.counter))
             sleep(.5)
             self.counter += 1 
+        Logger.info("service1/main.py: Exiting")
 
 if __name__ == '__main__':
     Waiter().wait()
