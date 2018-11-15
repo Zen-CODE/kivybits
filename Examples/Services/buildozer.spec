@@ -16,10 +16,10 @@ source.dir = ./
 version = 1.0.0
 
 # (list) Application requirements
-requirements = python2, kivy==1.10.0, pyjnius
+requirements = python2,kivy==1.10.0,pyjnius
 
 # (str) Icon of the application
-icon.filename = %(source.dir)sicon.png
+# icon.filename = %(source.dir)sicon.png
 
 # (str) Supported orientation (one of landscape, portrait or all)
 # orientation = landscape
@@ -42,11 +42,11 @@ android.sdk = 23
 # android.sdk = 28
 
 # (str) Android NDK version to use
-#android.ndk = 16b
+android.ndk = 16b
 
-android.ndk_path = /home/richard/Android/android-ndk-r16b/
-android.sdk_path = /home/richard/.buildozer/android/platform/android-sdk-28/
-android.p4a_dir = ~/Repos/python-for-android
+android.ndk_path = ~/.buildozer/android/platform/android-ndk-r16b/
+# android.sdk_path = ~/.buildozer/android/platform/android-sdk-28/
+p4a.source_dir = ~/Repos/python-for-android
 
 [buildozer]
 
