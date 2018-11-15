@@ -26,44 +26,26 @@ icon.filename = %(source.dir)sicon.png
 
 # (list) List of service to declare
 #services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY
-services = servicedemo:service1/main.py
+services = serviceone:service_one/main.py
 
 #
 # Android specific
 #
 
-# (bool) Indicate if the application should be fullscreen or not
 fullscreen = 1
-
-# (list) Permissions
 # android.permissions = INTERNET
 
 # (int) Android API to use
 android.api = 19
-
-# (int) Minimum API required
 android.minapi = 19
-
-# (int) Android SDK version to use
-# android.sdk = 20
-android.sdk = 28
+android.sdk = 23
+# android.sdk = 28
 
 # (str) Android NDK version to use
-#android.ndk = 9c
+#android.ndk = 16b
 
-# (bool) Use --private data storage (True) or --dir public storage (False)
-#android.private_storage = True
-
-# (str) Android NDK directory (if empty, it will be automatically downloaded.)
 android.ndk_path = /home/richard/Android/android-ndk-r16b/
-
-# (str) Android SDK directory (if empty, it will be automatically downloaded.)
 android.sdk_path = /home/richard/.buildozer/android/platform/android-sdk-28/
-
-# (str) ANT directory (if empty, it will be automatically downloaded.)
-#android.ant_path =
-
-# (str) python-for-android git clone directory (if empty, it will be automatically cloned from github)
 android.p4a_dir = ~/Repos/python-for-android
 
 [buildozer]
