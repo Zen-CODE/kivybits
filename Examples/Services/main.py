@@ -51,10 +51,10 @@ class ServiceUI(BoxLayout):
 
     def _start_android_service(self, name):
         """ Toggle the android service on and off """
-
-        from jnius import autoclass
         srv_name = "service.demo.zencode.kivy.org.Service" + name
         Logger.info("main.py: Starting service {0}".format(srv_name))
+
+        from jnius import autoclass
         service = autoclass(srv_name)
         mActivity = autoclass(
             'org.kivy.android.PythonActivity').mActivity
