@@ -19,7 +19,7 @@ kv = dedent('''
         Button:
             id: btn1
             text: ("Start" if root.service_one else "Stop") + " service one"
-            on_press: root.start_service_one = not root.service_one 
+            on_press: root.start_service_one() 
         Button:
             id: btn2
             text: ("Start" if root.service_two else "Stop") + " service two"
@@ -45,7 +45,7 @@ class ServiceUI(BoxLayout):
             "In Kivy, Android services are separate, independent processes."\
             " This differs from typical Android services."
 
-    def start_service_one(self, widget, value):
+    def start_service_one(self):
         """ Start the service """
         self._start_android_service("Serviceone")
 

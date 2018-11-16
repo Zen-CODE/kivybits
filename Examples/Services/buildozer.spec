@@ -16,7 +16,7 @@ source.dir = ./
 version = 1.0.0
 
 # (list) Application requirements
-requirements = python2,kivy==1.10.0,pyjnius
+requirements = python2, kivy==1.10.0, pyjnius
 
 # (str) Icon of the application
 # icon.filename = %(source.dir)sicon.png
@@ -38,14 +38,14 @@ fullscreen = 1
 # (int) Android API to use
 android.api = 19
 android.minapi = 19
-android.sdk = 23
-# android.sdk = 28
+# android.sdk = 23
+android.sdk = 28
 
 # (str) Android NDK version to use
-android.ndk = 16b
+# android.ndk = 16b
 
-android.ndk_path = ~/.buildozer/android/platform/android-ndk-r16b/
-# android.sdk_path = ~/.buildozer/android/platform/android-sdk-28/
+android.ndk_path = /home/richard/Android/android-ndk-r16b/
+android.sdk_path = /home/richard/.buildozer/android/platform/android-sdk-28/
 p4a.source_dir = ~/Repos/python-for-android
 
 [buildozer]
