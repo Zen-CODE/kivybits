@@ -4,6 +4,9 @@ from textwrap import dedent
 from kivy.uix.boxlayout import BoxLayout
 from kivy.logger import Logger
 from kivy.properties import BooleanProperty
+import zipfile
+from kivy.uix.popup import Popup
+from kivy.uix.label import Label
 
 
 kv = dedent('''
@@ -18,15 +21,12 @@ kv = dedent('''
             halign: "center"
         Button:
             id: btn1
-            text: ("Start" if root.service_one else "Stop") + " service one"
+            text: "Open zip in service"
             on_press: root.start_service_one() 
         Button:
             id: btn2
-            text: ("Start" if root.service_two else "Stop") + " service two"
-            on_press:
-                Popup(title="Not implemented",
-                content=Label(text="Not yet implemented"),
-                size_hint=(0.5, 0.3)).open()
+            text: "Open zip"
+            on_press: root.open_zip()
 
     ''')
 
@@ -36,14 +36,23 @@ class ServiceUI(BoxLayout):
     service_one = BooleanProperty(False)
     """ Indicates the running status of Serviceone"""
 
-    service_two = BooleanProperty(False)
-    """ Indicates the running status of Servicetwo"""
-
     def __init__(self, **kwargs):
         super(ServiceUI, self).__init__(**kwargs)
         self.ids.label.text = "[b]Service Example[/b]\n\n"\
-            "In Kivy, Android services are separate, independent processes."\
-            " This differs from typical Android services."
+            "The process can open the zip. The service cannot."
+
+        # self.ids.label.text = "[b]Service Example[/b]\n\n"\
+        #     "In Kivy, Android services are separate, independent processes."\
+        #     " This differs from typical Android services."
+
+    def open_zip(self):
+        """ Open the zip file that cannot be opened by the service. """
+        file_name = "service_one/main.zip"
+        my_zip = zipfile.ZipFile(file_name, "r")
+        msg = "zip opened . contains {0}".format(my_zip.filelist[0].filename)
+        Popup(title="Zip file",
+              content=Label(text=msg),
+              size_hint=(0.9, 0.5)).open()
 
     def start_service_one(self):
         """ Start the service """

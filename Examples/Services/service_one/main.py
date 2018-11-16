@@ -19,8 +19,9 @@ class Waiter(object):
             Logger.info("service_one/main.py: counter = {0}".format(
                 self.counter))
             sleep(.5)
-            self.counter += 1 
-        
+            self.counter += 1
+
+        Logger.info("service_one/main.py: count ended. About to open")
         self.open_zip()
 
     def open_zip(self):
