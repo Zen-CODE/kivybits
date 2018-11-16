@@ -8,21 +8,11 @@ package.domain = service.demo
 # (str) Source code where the main.py live
 source.dir = ./
 
-# source.include_exts = py,png,jpg,kv,atlas,ini
-#source.exclude_exts = spec
-#source.exclude_patterns = license,images/*/*.jpg
-
 # (str) Application versioning (method 1)
 version = 1.0.0
 
 # (list) Application requirements
 requirements = python2, kivy==1.10.0, pyjnius
-
-# (str) Icon of the application
-# icon.filename = %(source.dir)sicon.png
-
-# (str) Supported orientation (one of landscape, portrait or all)
-# orientation = landscape
 
 # (list) List of service to declare
 #services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY
@@ -38,14 +28,13 @@ fullscreen = 1
 # (int) Android API to use
 android.api = 19
 android.minapi = 19
-# android.sdk = 23
 android.sdk = 28
 
 # (str) Android NDK version to use
 # android.ndk = 16b
 
-android.ndk_path = /home/richard/Android/android-ndk-r16b/
-android.sdk_path = /home/richard/.buildozer/android/platform/android-sdk-28/
+android.ndk_path = ~/Android/android-ndk-r16b/
+android.sdk_path = ~/Android/android-sdk-28/
 p4a.source_dir = ~/Repos/python-for-android
 
 [buildozer]

@@ -16,13 +16,14 @@ class Waiter(object):
     def wait(self):
         """ Start the loop where we wait for messages. """
         while self.counter < 3:
-            Logger.info("service_one/main.py: counter = {0}".format(self.counter))
+            Logger.info("service_one/main.py: counter = {0}".format(
+                self.counter))
             sleep(.5)
             self.counter += 1 
         
-        Logger.info("service_one/main.py: About to open zip")
+        self.open_zip()
 
-    def open_zip():
+    def open_zip(self):
         """ Open a standard zip file. """
         file_name = "service_one/main.zip"
         if exists(file_name):
@@ -35,7 +36,6 @@ class Waiter(object):
         else:
             Logger.info("service_one/main.py: zip not found. Exiting.")
             
-
 
 if __name__ == '__main__':
     Waiter().wait()
