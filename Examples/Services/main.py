@@ -7,6 +7,7 @@ from kivy.properties import BooleanProperty
 import zipfile
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
+from os.path  import exists
 
 
 kv = dedent('''
@@ -48,11 +49,19 @@ class ServiceUI(BoxLayout):
     def open_zip(self):
         """ Open the zip file that cannot be opened by the service. """
         file_name = "service_one/main.zip"
+
+        if not exists(file_name):
+            Logger.info("main.py: Zip not found. Aborting...")
+            return
+        else:
+            Logger.info("main.py: Zip found. About to open in main process.")
+
         my_zip = zipfile.ZipFile(file_name, "r")
         msg = "zip opened . contains {0}".format(my_zip.filelist[0].filename)
         Popup(title="Zip file",
               content=Label(text=msg),
               size_hint=(0.9, 0.5)).open()
+        Logger.info("main.py: About to open zip file from service.")
 
     def start_service_one(self):
         """ Start the service """
