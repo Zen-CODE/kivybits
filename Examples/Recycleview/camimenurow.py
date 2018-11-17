@@ -13,10 +13,10 @@ Builder.load_string('''
         Rectangle:
             size: self.size
             pos: self.pos
-    value: ''
+    text: ''
     number: 0
     Label:
-        text: root.value + " - " + str(root.number)
+        text: root.text + " - " + str(root.number)
 ''')
 
 class CAMIMenuRow(BoxLayout):

@@ -79,22 +79,22 @@ Builder.load_string(kv)
 class Test(BoxLayout):
 
     def populate(self):
-        self.rv.data = [{'value': ''.join(sample(ascii_lowercase, 6)),
+        self.rv.data = [{'text': ''.join(sample(ascii_lowercase, 6)),
                          'number': randint(0, 7)}
                         for x in range(50)]
 
     def sort(self):
-        self.rv.data = sorted(self.rv.data, key=lambda x: x['value'])
+        self.rv.data = sorted(self.rv.data, key=lambda x: x['text'])
 
     def clear(self):
         self.rv.data = []
 
     def insert(self, value):
-        self.rv.data.insert(0, {'value': value or 'default value'})
+        self.rv.data.insert(0, {'text': value or 'default value'})
 
     def update(self, value):
         if self.rv.data:
-            self.rv.data[0]['value'] = value or 'default new value'
+            self.rv.data[0]['text'] = value or 'default new value'
             self.rv.refresh_from_data()
 
     def remove(self):
