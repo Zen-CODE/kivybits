@@ -7,18 +7,18 @@ from kivy.lang import Builder
 
 Builder.load_string('''
 <CAMIMenuRow>
-    canvas.before:
-        Color:
-            rgba: 0.5, 0.5, 0.5, 1
-        Rectangle:
-            size: self.size
-            pos: self.pos
     text: ''
     number: 0
     BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 0.7, 0.7, 0.1, 0.5
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+
         padding: 5, 5, 5, 5        
-        width: 0.7 * root.width
-        size_hint_x: None
+        size_hint_x: 1
         Label:
             text: root.text + " - " + str(root.number)
             text_size: self.size
@@ -27,6 +27,8 @@ Builder.load_string('''
 
     Button:
         text: "Button"
+        # width: self.height
+        size_hint_x: 1
 ''')
 
 class CAMIMenuRow(BoxLayout):
