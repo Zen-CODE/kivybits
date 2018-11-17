@@ -6,6 +6,9 @@ from kivy.lang import Builder
 
 
 Builder.load_string('''
+#: import Window kivy.core.window.Window
+#: set gap 0.015 * Window.width
+
 <CAMIMenuRow>
     text: ''
     number: 0
@@ -17,7 +20,7 @@ Builder.load_string('''
                 size: self.size
                 pos: self.pos
 
-        padding: 5, 5, 5, 5        
+        padding: gap, 0, 0, 0
         size_hint_x: 1
         Label:
             text: root.text + " - " + str(root.number)
@@ -27,8 +30,8 @@ Builder.load_string('''
 
     Button:
         text: "Button"
-        # width: self.height
-        size_hint_x: 1
+        width: self.height
+        size_hint_x: None
 ''')
 
 class CAMIMenuRow(BoxLayout):
