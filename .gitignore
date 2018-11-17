@@ -4,3 +4,6 @@
 .project
 ZenPlayer/zenplayer.json
 Personal/Journal/build/
+__pycache__
+Examples/Services/.buildozer/
+Examples/Services/.buildozer_python2
