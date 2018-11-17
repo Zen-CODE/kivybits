@@ -15,8 +15,18 @@ Builder.load_string('''
             pos: self.pos
     text: ''
     number: 0
-    Label:
-        text: root.text + " - " + str(root.number)
+    BoxLayout:
+        padding: 5, 5, 5, 5        
+        width: 0.7 * root.width
+        size_hint_x: None
+        Label:
+            text: root.text + " - " + str(root.number)
+            text_size: self.size
+            halign: 'left'
+            valign: 'center'
+
+    Button:
+        text: "Button"
 ''')
 
 class CAMIMenuRow(BoxLayout):
