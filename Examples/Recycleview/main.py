@@ -78,9 +78,13 @@ Builder.load_string(kv)
 
 class Test(BoxLayout):
 
+    def callback(self, *args):
+        print("Callback fired with {0}".format(args))
+
     def populate(self):
         self.rv.data = [{'text': ''.join(sample(ascii_lowercase, 6)),
-                         'number': randint(0, 7)}
+                        'callback': lambda y=x: self.callback(y),
+                        'number': x}
                         for x in range(50)]
 
     def sort(self):

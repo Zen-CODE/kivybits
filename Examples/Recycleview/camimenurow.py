@@ -11,17 +11,32 @@ Builder.load_string('''
 
 <CAMIMenuRow>
     text: ''
+    callback: None
     number: 0
+    spacing: 5
+    Label:
+        canvas:
+            Color:
+                rgba: 0.5, 1, 0.5, 0.5
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+
+        # Houses the number image before the label
+        text: str(root.number)
+        size_hint_x: None
+        width: self.height
+        on_touch_down: self.collide_point(*args[1].pos) and root.callback()
+
     BoxLayout:
         canvas.before:
             Color:
-                rgba: 0.7, 0.7, 0.1, 0.5
+                rgba: 0.75, 0.75, 0.1, 0.5
             RoundedRectangle:
                 size: self.size
                 pos: self.pos
 
         padding: gap, 0, 0, 0
-        size_hint_x: 1
         Label:
             text: root.text + " - " + str(root.number)
             text_size: self.size
