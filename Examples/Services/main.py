@@ -54,10 +54,14 @@ class ServiceUI(BoxLayout):
             Logger.info("main.py: Zip not found. Aborting...")
             return
         else:
-            Logger.info("main.py: Zip found. About to open in main process.")
+            Logger.info("main.py: Zip found. About to open as binary.")
 
         my_zip = zipfile.ZipFile(file_name, "r")
         msg = "zip opened . contains {0}".format(my_zip.filelist[0].filename)
+        # with open(file_name, 'rb') as f:
+        #     text = str(f.read(10))
+        # msg = "Text read = " + text
+
         Popup(title="Zip file",
               content=Label(text=msg),
               size_hint=(0.9, 0.5)).open()

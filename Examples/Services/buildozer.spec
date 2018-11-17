@@ -12,7 +12,7 @@ source.dir = ./
 version = 1.0.0
 
 # (list) Application requirements
-requirements = python2, kivy==1.10.0, pyjnius
+requirements = python3, kivy==1.10.0, pyjnius
 
 # (list) List of service to declare
 #services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY
@@ -26,7 +26,7 @@ fullscreen = 1
 # android.permissions = INTERNET
 
 # (int) Android API to use
-android.api = 19
+android.api = 27
 android.minapi = 19
 android.sdk = 28
 
