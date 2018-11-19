@@ -3,19 +3,32 @@ This module houses the class that defines the row in our RecycleView
 """
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
-from kivy.properties import ListProperty
+from kivy.properties import (ListProperty, BooleanProperty, ObjectProperty,
+                             StringProperty)
 from kivy.core.window import Window
+from kivy.uix.label import Label
 
 Builder.load_string('''
 #: import Window kivy.core.window.Window
 #: set gap 0.015 * Window.width
+<CAMIMenuBlock>:
+    canvas:
+
+        Color:
+            rgba: [0, 0, 0, 0] if not self.pressed else [0, 0.5, 0.5, 0.25]
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+    size_hint_x: None
+    width: self.height
+    
 
 <CAMIMenuRow>
     text: ''
     callback: None
     number: 0
     spacing: 5
-    Label:
+    CAMIMenuBlock:
         canvas:
             Color:
                 rgba: 0.5, 1, 0.5, 0.5
@@ -25,9 +38,7 @@ Builder.load_string('''
 
         # Houses the number image before the label
         text: str(root.number)
-        size_hint_x: None
-        width: self.height
-        on_touch_down: self.collide_point(*args[1].pos) and root.callback()
+        callback: root.callback() if root.callback else None
 
     BoxLayout:
         canvas.before:
@@ -49,13 +60,28 @@ Builder.load_string('''
         width: 0
 ''')
 
+class CAMIMenuBlock(Label):
+    """
+    An item appearing in a CAMIMenuRow. It adds press highlights, callback
+    functionality and 
+    """
+    callback = ObjectProperty(None)
+    """ The callback to fire or press """
+
+    pressed = BooleanProperty(False)
+    """ Indicates whether the block has been tapped or not. """
+
+    source = StringProperty('graphics/blank.png')
+    """ The graphics to be drawn for the block """
+
+
 class CAMIMenuRow(BoxLayout):
     """
     The display class for CAMI Menu rows, optimized for the RecycleView.
     """
     post_icons = ListProperty(None)
     """ A list of dictionaries containing:
-        icon: a path to the image
+        source: a path to the image
         callback: the callback to be fired on clicking
     """
 

@@ -87,8 +87,8 @@ class Test(BoxLayout):
         self.rv.data = [{'text': ''.join(sample(ascii_lowercase, 6)),
                         'callback': lambda y=x: self.callback(y),
                         'post_icons': [
-                            {'icon': 'graphics/trophy.png',
-                            'callback': lambda y=x: self.callback(
+                            {'source': 'graphics/trophy.png',
+                             'callback': lambda y=x: self.callback(
                                 "trophy " + str(x))}
                         ],
                         'number': x}
