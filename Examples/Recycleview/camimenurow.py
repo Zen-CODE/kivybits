@@ -8,11 +8,13 @@ from kivy.lang import Builder
 Builder.load_string('''
 #: import Window kivy.core.window.Window
 #: set gap 0.015 * Window.width
+#: set height 0.1 * Window.height
 
 <CAMIMenuRow>
     text: ''
     callback: None
     number: 0
+    row_height: height
     spacing: 5
     Label:
         canvas:
