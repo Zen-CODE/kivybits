@@ -8,6 +8,8 @@ from kivy.uix.boxlayout import BoxLayout
 
 kv = """
 #: import CAMIMenuRow camimenurow.CAMIMenuRow
+#: import Window kivy.core.window.Window
+#: set row_height 0.1 * Window.height
 
 <Test>:
     canvas:
@@ -65,7 +67,7 @@ kv = """
         bar_width: dp(10)
         viewclass: 'CAMIMenuRow'
         RecycleBoxLayout:
-            default_size: None, dp(56)
+            default_size: None, row_height
             default_size_hint: 1, None
             size_hint_y: None
             height: self.minimum_height
@@ -84,6 +86,11 @@ class Test(BoxLayout):
     def populate(self):
         self.rv.data = [{'text': ''.join(sample(ascii_lowercase, 6)),
                         'callback': lambda y=x: self.callback(y),
+                        'post_icons': [
+                            {'icon': 'graphics/trophy.png',
+                            'callback': lambda y=x: self.callback(
+                                "trophy " + str(x))}
+                        ],
                         'number': x}
                         for x in range(50)]
 

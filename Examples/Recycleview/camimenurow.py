@@ -3,18 +3,17 @@ This module houses the class that defines the row in our RecycleView
 """
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
-
+from kivy.properties import ListProperty
+from kivy.core.window import Window
 
 Builder.load_string('''
 #: import Window kivy.core.window.Window
 #: set gap 0.015 * Window.width
-#: set height 0.1 * Window.height
 
 <CAMIMenuRow>
     text: ''
     callback: None
     number: 0
-    row_height: height
     spacing: 5
     Label:
         canvas:
@@ -44,14 +43,22 @@ Builder.load_string('''
             text_size: self.size
             halign: 'left'
             valign: 'center'
-
-    Button:
-        text: "Button"
-        width: self.height
+    Widget:
+        # Handles the placement of extra items in the row e.g. trophy/send
         size_hint_x: None
+        width: 0
 ''')
 
 class CAMIMenuRow(BoxLayout):
-    pass
+    """
+    The display class for CAMI Menu rows, optimized for the RecycleView.
+    """
+    post_icons = ListProperty(None)
+    """ A list of dictionaries containing:
+        icon: a path to the image
+        callback: the callback to be fired on clicking
+    """
 
-    
+    def on_post_icons(self, widget, icon_list):
+        print("camimenurow.py: on_post_icons fired with {0}".format(icon_list))
+
