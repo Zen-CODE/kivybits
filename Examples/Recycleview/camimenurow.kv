@@ -2,15 +2,11 @@
 #: set gap 0.015 * Window.width
 <CAMIMenuBlock>:
     canvas.before:
+        # Draw the image underneath the touch highlighting
+        Color:
+            rgba: 1, 1, 1, 1
         Rectangle:
             source: self.source
-            size: self.size
-            pos: self.pos
-    canvas:
-
-        Color:
-            rgba: [0, 0, 0, 0] if not self.pressed else [0.75, 0.75, 0, 0.65]
-        Rectangle:
             size: self.size
             pos: self.pos
     size_hint_x: None
@@ -22,14 +18,22 @@
     callback: None
     number: None
     spacing: 5
+    canvas.after:
+        # Draw the touch highlighting
+        Color:
+            rgba: [0, 0, 0, 0] if not self.pressed else [0.75, 0.75, 0, 0.65]
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
     CAMIMenuBlock:
         # Houses the number image before the label
         text: str(root.number)
-        callback: root.callback() if root.callback else None
+        callback: root.callback
         source: "graphics/menuicon{0}.png".format(root.number % 6) if root.number is not None else "graphics/blank.png"
 
     BoxLayout:
-        canvas.before:
+        canvas:
             Color:
                 rgba: 0.75, 0.75, 0.1, 0.5
             RoundedRectangle:
