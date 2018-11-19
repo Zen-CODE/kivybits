@@ -25,6 +25,18 @@ class CAMIMenuBlock(Label):
     source = StringProperty('graphics/blank.png')
     """ The graphics to be drawn for the block """
 
+    def on_touch_down(self, touch):
+        """ Respond to the touch down event """
+        if self.collide_point(*touch.pos):
+            self.pressed = True
+        return super(CAMIMenuBlock, self).on_touch_down(touch)
+
+    def on_touch_up(self, touch):
+        """ Respond to the touch up event """
+        if self.pressed:
+            self.pressed = False
+        return super(CAMIMenuBlock, self).on_touch_up(touch)
+
 
 class CAMIMenuRow(BoxLayout):
     """
@@ -38,10 +50,3 @@ class CAMIMenuRow(BoxLayout):
 
     def on_post_icons(self, widget, icon_list):
         print("camimenurow.py: on_post_icons fired with {0}".format(icon_list))
-
-
-
-        def get_icon(number):
-            index = number % 6
-            return "graphics/menuicon{0}.png".format(index)
-
