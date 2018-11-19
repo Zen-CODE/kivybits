@@ -39,3 +39,9 @@ class CAMIMenuRow(BoxLayout):
     def on_post_icons(self, widget, icon_list):
         print("camimenurow.py: on_post_icons fired with {0}".format(icon_list))
 
+
+
+        def get_icon(number):
+            index = number % 6
+            return "graphics/menuicon{0}.png".format(index)
+

@@ -1,6 +1,11 @@
 #: import Window kivy.core.window.Window
 #: set gap 0.015 * Window.width
 <CAMIMenuBlock>:
+    canvas.before:
+        Rectangle:
+            source: self.source
+            size: self.size
+            pos: self.pos
     canvas:
 
         Color:
@@ -15,19 +20,13 @@
 <CAMIMenuRow>
     text: ''
     callback: None
-    number: 0
+    number: None
     spacing: 5
     CAMIMenuBlock:
-        canvas:
-            Color:
-                rgba: 0.5, 1, 0.5, 0.5
-            RoundedRectangle:
-                size: self.size
-                pos: self.pos
-
         # Houses the number image before the label
         text: str(root.number)
         callback: root.callback() if root.callback else None
+        source: "graphics/menuicon{0}.png".format(root.number % 6) if root.number is not None else "graphics/blank.png"
 
     BoxLayout:
         canvas.before:
