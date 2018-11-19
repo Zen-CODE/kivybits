@@ -10,7 +10,7 @@
             size: self.size
             pos: self.pos
     size_hint_x: None
-    width: self.height
+    width: 0
 
 
 <CAMIMenuRow>
@@ -31,6 +31,7 @@
         text: str(root.number)
         callback: root.callback
         source: "graphics/menuicon{0}.png".format(root.number % 6) if root.number is not None else "graphics/blank.png"
+        width: self.height
 
     BoxLayout:
         canvas:
@@ -46,7 +47,8 @@
             text_size: self.size
             halign: 'left'
             valign: 'center'
-    Widget:
-        # Handles the placement of extra items in the row e.g. trophy/send
-        size_hint_x: None
-        width: 0
+    CAMIMenuBlock:
+        width: self.height if len(root.post_icons) > 0 else 0
+        source: root.post_icons[0]['source'] if len(root.post_icons) else 'graphics/blank.py'
+    CAMIMenuBlock:
+        width: self.height if len(root.post_icons) > 1 else 0
