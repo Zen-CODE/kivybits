@@ -35,6 +35,7 @@
         width: self.height
 
     BoxLayout:
+        id: box
         canvas:
             Color:
                 rgba: 0.75, 0.75, 0.1, 0.5
@@ -49,10 +50,12 @@
             halign: 'left'
             valign: 'center'
     CAMIMenuBlock:
+        id: block0
         visible: len(root.post_icons) > 0
         width: self.height if self.visible else 0
         source: root.post_icons[0]['source'] if self.visible else 'graphics/blank.py'
     CAMIMenuBlock:
+        id: block1
         visible: len(root.post_icons) > 1
         width: self.height if self.visible else 0
         source: root.post_icons[1]['source'] if self.visible else 'graphics/blank.py'
