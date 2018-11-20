@@ -11,6 +11,7 @@
             pos: self.pos
     size_hint_x: None
     width: 0
+    visible: False
 
 
 <CAMIMenuRow>
@@ -48,7 +49,10 @@
             halign: 'left'
             valign: 'center'
     CAMIMenuBlock:
-        width: self.height if len(root.post_icons) > 0 else 0
-        source: root.post_icons[0]['source'] if len(root.post_icons) else 'graphics/blank.py'
+        visible: len(root.post_icons) > 0
+        width: self.height if self.visible else 0
+        source: root.post_icons[0]['source'] if self.visible else 'graphics/blank.py'
     CAMIMenuBlock:
-        width: self.height if len(root.post_icons) > 1 else 0
+        visible: len(root.post_icons) > 1
+        width: self.height if self.visible else 0
+        source: root.post_icons[1]['source'] if self.visible else 'graphics/blank.py'
