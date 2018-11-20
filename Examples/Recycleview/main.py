@@ -89,7 +89,10 @@ class Test(BoxLayout):
                         'post_icons': [
                             {'source': 'graphics/trophy.png',
                              'callback': lambda y=x: self.callback(
-                                "trophy " + str(x))}
+                                "trophy " + str(x))},
+                            {'source': 'graphics/group.png',
+                             'callback': lambda y=x: self.callback(
+                                 "group " + str(x))}
                         ],
                         'number': x}
                         for x in range(50)]
