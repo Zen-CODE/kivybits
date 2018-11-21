@@ -5,10 +5,10 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivy.properties import (ListProperty, BooleanProperty, ObjectProperty,
                              StringProperty)
-from kivy.core.window import Window
 from kivy.uix.label import Label
+from kivy.uix.recycleview import RecycleView
 
-Builder.load_file("camimenurow.kv")
+Builder.load_file("camimenu.kv")
 
 
 class CAMIMenuBlock(Label):
@@ -54,7 +54,7 @@ class CAMIMenuRow(BoxLayout):
     """
 
     def on_post_icons(self, widget, icon_list):
-        # print("camimenurow.py: on_post_icons fired with {0}".format(icon_list))
+        """ Respond to the setting of the icon_list property. """
         post0, post1 = len(icon_list) > 0, len(icon_list) > 1
         w_post0, w_post1 = self.ids.mb_post0, self.ids.mb_post1
         w_post0.visible = post0
@@ -62,3 +62,8 @@ class CAMIMenuRow(BoxLayout):
         w_post0.callback = icon_list[0]['callback'] if post0 else None
         w_post1.callback = icon_list[1]['callback'] if post1 else None
 
+
+class CAMIMenu(RecycleView):
+    """ An implementation of the RecycleView, to handle the menu area as a
+    scollview.
+    """

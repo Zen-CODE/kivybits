@@ -1,13 +1,13 @@
 from random import sample
 from string import ascii_lowercase
-from random import randint
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 
 
 kv = """
-#: import CAMIMenuRow camimenurow.CAMIMenuRow
+#: import CAMIMenuRow camimenu.CAMIMenuRow
+#: import CAMIMenu camimenu.CAMIMenu
 #: import Window kivy.core.window.Window
 #: set row_height 0.1 * Window.height
 
@@ -60,19 +60,8 @@ kv = """
             text: 'Remove first item'
             on_press: root.remove()
 
-    RecycleView:
+    CAMIMenu:
         id: rv
-        scroll_type: ['bars', 'content']
-        scroll_wheel_distance: dp(114)
-        bar_width: dp(10)
-        viewclass: 'CAMIMenuRow'
-        RecycleBoxLayout:
-            default_size: None, row_height
-            default_size_hint: 1, None
-            size_hint_y: None
-            height: self.minimum_height
-            orientation: 'vertical'
-            spacing: dp(2)
 """
 
 Builder.load_string(kv)

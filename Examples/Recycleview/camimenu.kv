@@ -65,3 +65,16 @@
         width: self.height if self.visible else 0
         source: root.post_icons[1]['source'] if self.visible else 'graphics/blank.py'
         # callback: root.post_icons[1]['callback']() if self.visible else None
+
+<CAMIMenu>
+    scroll_type: ['bars', 'content']
+    scroll_wheel_distance: 10 * gap
+    bar_width: gap
+    viewclass: 'CAMIMenuRow'
+    RecycleBoxLayout:
+        default_size: None, row_height
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+        spacing: 0.5 * gap
