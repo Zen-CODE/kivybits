@@ -32,6 +32,7 @@ class CAMIMenuBlock(Label):
         """ Respond to the touch down event """
         if self.collide_point(*touch.pos) and self.visible:
             self.pressed = True
+            self.callback()
 
         return super(CAMIMenuBlock, self).on_touch_down(touch)
 
@@ -58,6 +59,6 @@ class CAMIMenuRow(BoxLayout):
         w_post0, w_post1 = self.ids.mb_post0, self.ids.mb_post1
         w_post0.visible = post0
         w_post1.visible = post1
-        w_post0.callback = icon_list[0]['callback'] if w_post0 else None
-        w_post1.callback = icon_list[1]['callback'] if w_post0 else None
+        w_post0.callback = icon_list[0]['callback'] if post0 else None
+        w_post1.callback = icon_list[1]['callback'] if post1 else None
 
