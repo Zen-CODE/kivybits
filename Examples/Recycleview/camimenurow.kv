@@ -9,16 +9,6 @@
             source: self.source
             size: self.size
             pos: self.pos
-    size_hint_x: None
-    width: 0
-    visible: False
-
-
-<CAMIMenuRow>
-    text: ''
-    callback: None
-    number: None
-    spacing: 5
     canvas.after:
         # Draw the touch highlighting
         Color:
@@ -26,6 +16,15 @@
         Rectangle:
             size: self.size
             pos: self.pos
+    size_hint_x: None
+    width: 0
+
+
+<CAMIMenuRow>
+    text: ''
+    callback: None
+    number: None
+    spacing: 5
 
     CAMIMenuBlock:
         # Houses the number image before the label
@@ -34,6 +33,7 @@
         callback: root.callback
         source: "graphics/menuicon{0}.png".format(root.number % 6) if root.number is not None else "graphics/blank.png"
         width: self.height
+        visible: True
 
     Widget:
         canvas:
@@ -51,14 +51,17 @@
             valign: 'center'
             pos: (self.parent.x + gap, self.parent.y)
             size: (self.parent.width - gap, self.parent.height)
+            visible: True
 
     CAMIMenuBlock:
         id: mb_post0
-        visible: len(root.post_icons) > 0
+        # visible: len(root.post_icons) > 0
         width: self.height if self.visible else 0
         source: root.post_icons[0]['source'] if self.visible else 'graphics/blank.py'
+        # callback: root.post_icons[0]['callback']() if self.visible else None
     CAMIMenuBlock:
         id: mb_post1
-        visible: len(root.post_icons) > 1
+        # visible: len(root.post_icons) > 1
         width: self.height if self.visible else 0
         source: root.post_icons[1]['source'] if self.visible else 'graphics/blank.py'
+        # callback: root.post_icons[1]['callback']() if self.visible else None
