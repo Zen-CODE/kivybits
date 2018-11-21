@@ -39,9 +39,13 @@ class CAMIMenuRow(BoxLayout):
     def on_touch_down(self, touch):
         """ Respond to the touch down event """
         if self.collide_point(*touch.pos):
-            self.pressed = True
-            if self.callback:
-                self.callback()
+            ids = self.ids
+            for name in ids.keys():
+                if ids[name].collide_point(*touch.pos):
+                    ids[name].callback()
+            # self.pressed =  True
+            # if self.callback:
+            #     self.callback()
         return super(CAMIMenuRow, self).on_touch_down(touch)
 
     def on_touch_up(self, touch):

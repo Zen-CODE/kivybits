@@ -29,33 +29,36 @@
 
     CAMIMenuBlock:
         # Houses the number image before the label
+        id: mb_number
         text: str(root.number)
         callback: root.callback
         source: "graphics/menuicon{0}.png".format(root.number % 6) if root.number is not None else "graphics/blank.png"
         width: self.height
 
-    BoxLayout:
-        id: box
+    Widget:
         canvas:
             Color:
                 rgba: 0.75, 0.75, 0.1, 0.5
             RoundedRectangle:
                 size: self.size
                 pos: self.pos
-
-        padding: gap, 0, 0, 0
-        Label:
-            text: root.text + " - " + str(root.number)
+        CAMIMenuBlock:
+            id: mb_text
+            callback: root.callback
+            text: root.text
             text_size: self.size
             halign: 'left'
             valign: 'center'
+            pos: (self.parent.x + gap, self.parent.y)
+            size: (self.parent.width - gap, self.parent.height)
+
     CAMIMenuBlock:
-        id: block0
+        id: mb_post0
         visible: len(root.post_icons) > 0
         width: self.height if self.visible else 0
         source: root.post_icons[0]['source'] if self.visible else 'graphics/blank.py'
     CAMIMenuBlock:
-        id: block1
+        id: mb_post1
         visible: len(root.post_icons) > 1
         width: self.height if self.visible else 0
         source: root.post_icons[1]['source'] if self.visible else 'graphics/blank.py'
