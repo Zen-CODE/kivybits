@@ -55,16 +55,12 @@
 
     CAMIMenuBlock:
         id: mb_post0
-        # visible: len(root.post_icons) > 0
         width: self.height if self.visible else 0
         source: root.post_icons[0]['source'] if self.visible else 'graphics/blank.py'
-        # callback: root.post_icons[0]['callback']() if self.visible else None
     CAMIMenuBlock:
         id: mb_post1
-        # visible: len(root.post_icons) > 1
         width: self.height if self.visible else 0
         source: root.post_icons[1]['source'] if self.visible else 'graphics/blank.py'
-        # callback: root.post_icons[1]['callback']() if self.visible else None
 
 <CAMIMenu>
     scroll_type: ['bars', 'content']

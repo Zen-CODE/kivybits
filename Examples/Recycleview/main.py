@@ -3,7 +3,7 @@ from string import ascii_lowercase
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
-
+from kivy.uix.label import Label
 
 kv = """
 #: import CAMIMenuRow camimenu.CAMIMenuRow
@@ -83,8 +83,13 @@ class Test(BoxLayout):
                              'callback': lambda y=x: self.callback(
                                  "group " + str(x))}
                         ],
+                        'delayed_overlay': lambda y=x: self.get_progress(y),
                         'number': x}
                         for x in range(50)]
+
+    @staticmethod
+    def get_progress(number):
+        return Label(text="Delayed content {0}".format(number))
 
     def sort(self):
         self.rv.data = sorted(self.rv.data, key=lambda x: x['text'])
