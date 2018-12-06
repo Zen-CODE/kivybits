@@ -1,4 +1,4 @@
-Kivy Complete VM - 0.4
+Kivy Complete VM - 0.5
 ======================
 
 Greetings. This VM is intended to provide a complete Kivy launch and development
@@ -8,9 +8,9 @@ flexible.
 This document outlines the configuration and use of the VM, so that you can use
 and manage the machine optimally.
 
-    Download link: http://kivy.braintrainerplus.com/Kivy_Complete_VM_0.4.ova
+    Download link: http://kivy.braintrainerplus.com/Kivy_Complete_VM_0.5.ova
 
-    md5 checksum: 7d562c9d79444306d400aab9b4133ed2
+    md5 checksum: 3533d0571838f406797ca75a0b636130
 
 Please consult the readme.txt on the VM's desktop for more information.
 
@@ -29,8 +29,8 @@ This means that in order to build and run a new/old version, you can simply
 checkout the tag (or master for latest) you wish to use, recompile and it's
 ready to use.
 
-The Kivy installations are built using the 1.10.1 tag, but buildozer is built
-from master in order to support Python3 (pythoncrystax).
+The Kivy installations are built using the master branch, any buildozer is built
+from master in order to support Python3.
 
 Buildozer projects
 ------------------
@@ -47,23 +47,19 @@ settings.
 
 The VM comes pre-installed with for:
 
-    android.sdk = 23
+    android.sdk = 28
 
     android.api = 19 or android.api = 27
 
-Other versions can be specified, but will result in the downloading and
+Other versions can be specified, but might result in the downloading and
 installation of these packages.
-
-Note: It appears that builds for later API's only succeed if you build for
-API 19 first. So please build for API 19 first, then your desired API level.
-This will hopefully be resolved in later releases.
 
 Android SDK
 ------------
 
-The VM comes with SDK 23 pre-installed. To update or reconfigure it:
+The VM comes with SDK 28 pre-installed. To update or reconfigure it:
 
-    $ cd /home/kivy/.buildozer/android/platform/android-sdk-23/tools/
+    $ cd /home/kivy/Android/android-sdk-28/tools/
     $ ./android
 
 Android Debugging with buildozer
@@ -79,7 +75,7 @@ attach a USB filter that allows the VM to pick up your devices.
 
 In order to start the adb server:
 
-    $ cd /home/kivy/.buildozer/android/platform/android-sdk-23/platform-tools/
+    $ cd /home/kivy/Android/android-sdk-28/platform-tools/
     $ sudo ./adb start-server
     $ sudo ./adb start-server
     $ ./adb devices
