@@ -12,7 +12,7 @@ source.dir = ./
 version = 1.0.0
 
 # (list) Application requirements
-requirements = python3, kivy==1.10.0, pyjnius
+requirements = python3, kivy==1.10.1, pyjnius
 
 # (list) List of service to declare
 #services = NAME:ENTRYPOINT_TO_PY,NAME2:ENTRYPOINT2_TO_PY
@@ -33,7 +33,7 @@ android.sdk = 28
 # (str) Android NDK version to use
 # android.ndk = 16b
 
-android.ndk_path = ~/Android/android-ndk-r16b/
+# android.ndk_path = ~/Android/android-ndk-r16b/
 android.sdk_path = ~/Android/android-sdk-28/
 p4a.source_dir = ~/Repos/python-for-android
 
