@@ -17,7 +17,7 @@ Please consult the ReadMe.txt on the VM's desktop for more information.
 Checkouts
 ---------
 
-The built and checkout versions of the packages are as follows:
+The build/checkout versions of the packages are as follows:
 * Kivy version - 1.11.1
 * Ubuntu 18.04.02
 * buildozer - latest (as of 2019/08/22)
