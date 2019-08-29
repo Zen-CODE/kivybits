@@ -1,4 +1,4 @@
-Kivy Complete VM - 0.5
+Kivy Complete VM - 0.6
 ======================
 
 Greetings. This VM is intended to provide a complete Kivy launch and development
@@ -8,29 +8,33 @@ flexible.
 This document outlines the configuration and use of the VM, so that you can use
 and manage the machine optimally.
 
-    Download link: http://kivy.braintrainerplus.com/Kivy_Complete_VM_0.5.ova
+    Download link: http://kivy.braintrainerplus.com/Kivy_Complete_VM_0.6.ova
 
-    md5 checksum: 3533d0571838f406797ca75a0b636130
+    md5 checksum: edd474d1f8bd01d518550d0652716e8a
 
-Please consult the readme.txt on the VM's desktop for more information.
+Please consult the ReadMe.txt on the VM's desktop for more information.
 
 Checkouts
 ---------
 
-Kivy and Buildozer have both been built from source. They are checked out in
-the ~/Repos folder. For Python 3, they are checkout out in ~/Repos/Python3.
-Kivy is built in these folders, using a symlinks below.
+The built and checkout versions of the packages are as follows:
+* Kivy version - 1.11.1
+* Ubuntu 18.04.02
+* buildozer - latest (as of 2019/08/22)
+* Python-for-android - 2019.07.08
+* Android NDK - 17c
+* Android SDK - 28
+
+ These are checked out in the ~/Repos folder. For Python 3, they are checked out
+ in ~/Repos/Python3. Kivy is built in these folders, using the symlinks below.
 
   /usr/local/lib/python2.7/distpackages/kivy -> /home/kivy/Repos/kivy/kivy
 
-  /usr/local/lib/python3.5/distpackages/kivy -> /home/kivy/Repos/Python3/kivy/kivy
+  /usr/local/lib/python3.6/distpackages/kivy -> /home/kivy/Repos/Python3/kivy/kivy
 
 This means that in order to build and run a new/old version, you can simply
 checkout the tag (or master for latest) you wish to use, recompile and it's
 ready to use.
-
-The Kivy installations are built using the master branch, any buildozer is built
-from master in order to support Python3.
 
 Buildozer projects
 ------------------
@@ -40,7 +44,7 @@ touchtracer APK. These lie here:
 
     Python2: /home/kivy/Repos/kivy/examples/demo/touchtracer/
 
-    Python3: /home/kivy/Repos/Python3/kivy/examples/demo/touchtracer/ 
+    Python3: /home/kivy/Repos/Python3/kivy/examples/demo/touchtracer/
 
 Please see the buildozer.spec files in these folder for the appropriate
 settings.
@@ -71,7 +75,7 @@ you first need to give permissions. Un linux hosts, this means running
     $ sudo adduser $USER vboxusers
 
 where user is your identity in the host machine. You should then be able
-attach a USB filter that allows the VM to pick up your devices. 
+attach a USB filter that allows the VM to pick up your devices.
 
 In order to start the adb server:
 
