@@ -1,4 +1,4 @@
-Kivy Complete VM - 0.6
+Kivy Complete VM - 0.7
 ======================
 
 Greetings. This VM is intended to provide a complete Kivy launch and development
@@ -8,29 +8,28 @@ flexible.
 This document outlines the configuration and use of the VM, so that you can use
 and manage the machine optimally.
 
-    Download link: http://kivy.braintrainerplus.com/Kivy_Complete_VM_0.6.ova
+    Download link: http://kivy.braintrainerplus.com/Kivy_Complete_VM_0.7.ova
 
-    md5 checksum: edd474d1f8bd01d518550d0652716e8a
+    md5 checksum: 68a062c935afd88df9c9ddbe9e28a700
 
 Please consult the ReadMe.txt on the VM's desktop for more information.
 
 Checkouts
 ---------
 
-The build/checkout versions of the packages are as follows:
+The VM is configured for Python 3.6 support. The build/checkout versions of the
+packages are as follows:
 * Kivy version - 1.11.1
-* Ubuntu 18.04.02
-* buildozer - latest (as of 2019/08/22)
-* Python-for-android - 2019.07.08
+* Ubuntu 18.04.03
+* buildozer - latest (as of 2019/12/12)
+* Python-for-android - latest (as on 2019/12/12)
 * Android NDK - 17c
 * Android SDK - 28
 
- These are checked out in the ~/Repos folder. For Python 3, they are checked out
- in ~/Repos/Python3. Kivy is built in these folders, using the symlinks below.
+ These are checked out in the ~/Repos folder. Kivy is built in these folders,
+ using the symlinks below.
 
-  /usr/local/lib/python2.7/distpackages/kivy -> /home/kivy/Repos/kivy/kivy
-
-  /usr/local/lib/python3.6/distpackages/kivy -> /home/kivy/Repos/Python3/kivy/kivy
+  /usr/local/lib/python3.6/distpackages/kivy -> /home/kivy/Repos/kivy/kivy
 
 This means that in order to build and run a new/old version, you can simply
 checkout the tag (or master for latest) you wish to use, recompile and it's
@@ -42,9 +41,7 @@ Buildozer projects
 The VM contains two sample buildozer spec files that successfully build the
 touchtracer APK. These lie here:
 
-    Python2: /home/kivy/Repos/kivy/examples/demo/touchtracer/
-
-    Python3: /home/kivy/Repos/Python3/kivy/examples/demo/touchtracer/
+    Python3: /home/kivy/Repos/kivy/examples/demo/touchtracer/
 
 Please see the buildozer.spec files in these folder for the appropriate
 settings.
