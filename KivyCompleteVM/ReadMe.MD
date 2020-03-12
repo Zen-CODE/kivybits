@@ -9,9 +9,9 @@ flexible.
 This document outlines the configuration and use of the VM, so that you can use
 and manage the machine optimally.
 
-    Download [Kivy_Complete_VM_0.7](http://kivy.braintrainerplus.com/latest.ova)
+Download [Kivy_Complete_VM_0.7](http://kivy.braintrainerplus.com/latest.ova)
 
-    md5 checksum: 68a062c935afd88df9c9ddbe9e28a700
+md5 checksum: 68a062c935afd88df9c9ddbe9e28a700
 
 Please consult the ReadMe.txt on the VM's desktop for more information.
 
