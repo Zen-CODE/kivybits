@@ -1,4 +1,5 @@
-![Kivy logo](Kivy_3D_Input/logo-kivy.png?raw=true)
+![Kivy logo](https://github.com/Zen-CODE/kivybits/blob/master/Talks/2020/Kivy_3D_Input/logo-kivy.png?raw=true)
+
 # Kivy 3D Motion Input
 
 ## Preface
