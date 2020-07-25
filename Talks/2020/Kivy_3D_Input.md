@@ -51,13 +51,29 @@ Before diving into the technical details of what this proposal would require,
 we should first clearly define and establish the technical assumptions and \
 language which we will use to describe the requirements.
 
-The context to the solution is to be built upon:
+The context to the solution be built upon:
 * [Kivy Input Management](https://kivy.org/doc/stable-1.10.1/api-kivy.input.html),
 * which provides a mechanism to register [Motion Event Providers](https://kivy.org/doc/stable-1.10.1/api-kivy.input.provider.html)
 * for instantiation via a [Motion Event Factory](https://kivy.org/doc/stable-1.10.1/api-kivy.input.factory.html)
 * which then creates [Motion Events](https://kivy.org/doc/stable-1.10.1/api-kivy.input.motionevent.html)
 
+The concrete input providers are typically written in C/C++ and then made
+available to the Python application via Cython wrappers. Although the scope of
+this proposal shall only require a functional Linux implementation, the long
+term goal would be to support Windows and Mac as well, all of which are already
+supported by both Kivy and Leap Motion drivers.
+
 ## Technical Requirements
+
+To lay claim to the bounty, we would require all the conditions of the 
+*definition of done* be satified. Specifically, our definition of done shall
+be:
+* all the required code to implenment device support and the accompanying kivy
+ artifacts shall be commited to a branch on the [Kivy github repo](https://github.com/kivy/kivy)
+* the Leap Motion event provider shall support 10 simultaneous inputs, one for
+  each finger.
+* the MotionEvent shall be properly populated with the corresponding `pos3d` values. 
+  Please see the [MotionEvent documentation](https://kivy.org/doc/stable-1.10.1/api-kivy.input.motionevent.html)
 
 
 ## Bounty and Compensation
