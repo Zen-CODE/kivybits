@@ -1,4 +1,4 @@
-![Kivy logo](Kivy_3D_Input/logo-kivy.png?raw=true)
+<img align="right" width="128" height="128" src="Kivy_3D_Input/logo-kivy.png">
 # Kivy 3D Motion Input
 
 ## Preface
