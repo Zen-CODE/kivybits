@@ -1,4 +1,4 @@
-![Kivy logo](Kivy_3D_Input/logo-kivy.png)
+![Kivy logo](Kivy_3D_Input/logo-kivy.png?raw=true)
 # Kivy 3D Motion Input
 
 ## Preface
