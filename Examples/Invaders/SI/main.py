@@ -402,7 +402,7 @@ class Levels(BoxLayout):
     def resize(self):
         self.calcVelocity()
         self.pos = self.calcPos(self.current)
-#        print "width=%s; height=%s" % (self.x, self.y)
+#        print("width=%s; height=%s" % (self.x, self.y))
 
     def speed(self, completion):
         return (1+completion)*self.direction
@@ -1105,7 +1105,7 @@ class SIApp(App):
         ]''')
 
     def on_config_change(self, config, section, key, value):
-        print "setting %s to %s" % (key, value)
+        print("setting %s to %s" % (key, value))
         GlobalParams[key] = value
         saveGlobalParams()
         GlobalParams['Restarting'] = True
