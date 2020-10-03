@@ -11,6 +11,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.properties import StringProperty
 from kivy.animation import Animation
 from kivy.core.audio import SoundLoader
+from unittest.mock import Mock
 
 from math import sqrt
 from random import randint
@@ -20,17 +21,19 @@ from random import randint
 AliensPerRow = 11
 AlienRows = 5
 
+# SoundLoader = Mock()
 #______________________________________________________________________________
 # Sounds are loaded globally on startup, and referenced where needed
 Sounds = dict(explosion     = SoundLoader.load('sounds/explosion.wav'),
-              fastinvader1  = SoundLoader.load('sounds/fastinvader1.wav'),
-              fastinvader2  = SoundLoader.load('sounds/fastinvader2.wav'),
-              fastinvader3  = SoundLoader.load('sounds/fastinvader3.wav'),
-              fastinvader4  = SoundLoader.load('sounds/fastinvader4.wav'),
-              invaderkilled = SoundLoader.load('sounds/invaderkilled.wav'),
-              shoot         = SoundLoader.load('sounds/shoot.wav'),
-              ufo_lowpitch  = SoundLoader.load('sounds/ufo_lowpitch.wav'),
-              ufo_highpitch = SoundLoader.load('sounds/ufo_highpitch.wav'))
+                fastinvader1  = SoundLoader.load('sounds/fastinvader1.wav'),
+                fastinvader2  = SoundLoader.load('sounds/fastinvader2.wav'),
+                fastinvader3  = SoundLoader.load('sounds/fastinvader3.wav'),
+                fastinvader4  = SoundLoader.load('sounds/fastinvader4.wav'),
+                invaderkilled = SoundLoader.load('sounds/invaderkilled.wav'),
+                shoot         = SoundLoader.load('sounds/shoot.wav'),
+                ufo_lowpitch  = SoundLoader.load('sounds/ufo_lowpitch.wav'),
+                ufo_highpitch = SoundLoader.load('sounds/ufo_highpitch.wav'))
+
 
 #______________________________________________________________________________
 #  Run time parameters; kept here for easy reference in the code
